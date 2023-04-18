@@ -331,6 +331,7 @@ outputs:
         - {{ compiler('c') }}
         - cmake >=3.13
       host:
+        - tbb-devel =2021.5
         - {{ pin_subpackage('libopenvino', exact=True) }}
       run:
         - {{ pin_subpackage('libopenvino', exact=True) }}
