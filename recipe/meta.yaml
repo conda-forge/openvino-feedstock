@@ -466,7 +466,7 @@ about:
     applications and solutions based on deep learning tasks, such as:
     emulation of human vision, automatic speech recognition, natural
     language processing, recommendation systems, etc. It provides
-    high-performance and rich deployment options, from edge to cloud
+    high-performance and rich deployment options, from edge to cloud.
 
     Installing OpenVINO Runtime from Conda Forge is recommended for C++ developers,
     as it provides only the C++ Runtime API. 
