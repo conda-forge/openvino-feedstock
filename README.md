@@ -21,7 +21,12 @@ optimizing and deploying AI inference. It can be used to develop
 applications and solutions based on deep learning tasks, such as:
 emulation of human vision, automatic speech recognition, natural
 language processing, recommendation systems, etc. It provides
-high-performance and rich deployment options, from edge to cloud
+high-performance and rich deployment options, from edge to cloud.
+
+Installing OpenVINO Runtime from Conda Forge is recommended for C++ developers,
+as it provides only the C++ Runtime API. 
+If you work with Python or aim at GPU inference, consider other OpenVINO distribution channels:
+https://www.intel.com/content/www/us/en/developer/tools/openvino-toolkit/download.html
 
 About libopenvino
 -----------------
@@ -87,6 +92,31 @@ About libopenvino-tensorflow-frontend
 Package license: 
 
 Summary: OpenVINO TensorFlow Frontend
+About openvino
+--------------
+
+Home: https://github.com/openvinotoolkit/openvino
+
+Package license: Apache-2.0
+
+Summary: Intel® Distribution of OpenVINO™ Toolkit
+
+Development: https://github.com/openvinotoolkit/openvino
+
+Documentation: https://docs.openvino.ai/latest/index.html
+
+Intel® Distribution of OpenVINO™ toolkit is an open-source toolkit for
+optimizing and deploying AI inference. It can be used to develop
+applications and solutions based on deep learning tasks, such as:
+emulation of human vision, automatic speech recognition, natural
+language processing, recommendation systems, etc. It provides
+high-performance and rich deployment options, from edge to cloud.
+
+Installing OpenVINO Runtime from Conda Forge is recommended for C++ developers,
+as it provides only the C++ Runtime API.
+If you work with Python or aim at GPU inference, consider other OpenVINO distribution channels:
+https://www.intel.com/content/www/us/en/developer/tools/openvino-toolkit/download.html
+
 About libopenvino-arm-cpu-plugin
 --------------------------------
 
@@ -118,6 +148,13 @@ Current build status
               <td>
                 <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=19204&branchName=main">
                   <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/openvino-feedstock?branchName=main&jobName=linux&configuration=linux%20linux_64_" alt="variant">
+                </a>
+              </td>
+            </tr><tr>
+              <td>linux_aarch64</td>
+              <td>
+                <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=19204&branchName=main">
+                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/openvino-feedstock?branchName=main&jobName=linux&configuration=linux%20linux_aarch64_" alt="variant">
                 </a>
               </td>
             </tr><tr>
