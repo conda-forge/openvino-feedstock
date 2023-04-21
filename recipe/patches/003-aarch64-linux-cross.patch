@@ -1,0 +1,29 @@
+diff --git a/modules/arm_plugin/thirdparty/CMakeLists.txt b/modules/arm_plugin/thirdparty/CMakeLists.txt
+index c199492..7addc72 100644
+--- a/modules/arm_plugin/thirdparty/CMakeLists.txt
++++ b/modules/arm_plugin/thirdparty/CMakeLists.txt
+@@ -88,7 +88,7 @@ else()
+              asserts=1
+              logging=1)
+     endif()
+-
++    
+     if(EMSCRIPTEN)
+         list(APPEND ARM_COMPUTE_OPTIONS os=linux)
+     elseif(ANDROID)
+@@ -135,6 +135,15 @@ else()
+ 
+         set(extra_link_flags "${extra_link_flags} ${extra_flags}")
+         set(extra_cxx_flags "${extra_cxx_flags} ${extra_flags}")
++    elseif(CMAKE_CROSSCOMPILING AND LINUX)
++        get_filename_component(cxx_compiler "${CMAKE_CXX_COMPILER}" NAME)
++        get_filename_component(c_compiler "${CMAKE_C_COMPILER}" NAME)
++        get_filename_component(compiler_prefix "${CMAKE_CXX_COMPILER}" DIRECTORY)
++
++        set(cmake_build_env
++            CC=${c_compiler}
++            CXX=${cxx_compiler})
++        list(APPEND ARM_COMPUTE_OPTIONS compiler_prefix="${compiler_prefix}/")    
+     elseif(EMSCRIPTEN)
+         set(cmake_build_env
+             CC=emcc
