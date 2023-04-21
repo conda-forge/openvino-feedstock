@@ -17,7 +17,7 @@ source:
     sha256: a6bd13848443a2e8f15ea8c24fb049935753157d233913a2174e5cf080c98c90  # [aarch64 or arm64]
     folder: openvino_contrib  # [aarch64 or arm64]
     patches:
-    - patch/003-aarch64-linux-cross.patch  # [aarch64]
+    - patches/003-aarch64-linux-cross.patch  # [aarch64]
   - url: https://github.com/ARM-software/ComputeLibrary/archive/1b3192e8a23513031163dc14d248f47671986121.tar.gz  # [aarch64 or arm64]
     sha256: 7244013364f4f52341cdaed0d7995e6cd93def542388b9b0b5662e0799fc93de  # [aarch64 or arm64]
     folder: openvino_contrib/modules/arm_plugin/thirdparty/ComputeLibrary  # [aarch64 or arm64]
