@@ -27,6 +27,9 @@ source:
   - url: https://github.com/openvinotoolkit/oneDNN/archive/26ad0022000d8de10a683efb175c2acbf064e81b.tar.gz  # [x86_64]
     sha256: 02fd8af9a6dcdd0e2a12a0c4aac49067d6b898439c6406ffa1edf586d53aecf8  # [x86_64]
     folder: openvino_sources/src/plugins/intel_cpu/thirdparty/onednn  # [x86_64]
+  - url: https://github.com/oneapi-src/oneDNN/archive/ad34c124895690bafd2b110577639824899ecbca.tar.gz  # [win64 or linux64]
+    sha256: 2f92bb73647f562d19f9b74a9b16c341b67ce95aee194f8499311613f5c729be  # [win64 or linux64]
+    folder: openvino_sources/src/plugins/intel_gpu/thirdparty/onednn_gpu  # [win64 or linux64]  
   - url: https://github.com/opencv/ade/archive/refs/tags/v0.1.2a.tar.gz
     sha256: c022a688b0554017e46e1cbdeb0105e625ca090fc3755c15df8c4451a304e084
     folder: openvino_sources/thirdparty/ade
@@ -73,7 +76,6 @@ requirements:
     - python >=3.7
     - libprotobuf
     - scons  # [aarch64 or arm64]
-    - onednn =3.1
     - flatbuffers =23.3.3
     - sysroot_linux-64 =2.17  # [linux64]
     - cross-python_{{ target_platform }}     # [build_platform != target_platform]
