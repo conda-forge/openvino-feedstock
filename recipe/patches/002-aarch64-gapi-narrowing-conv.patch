@@ -1,8 +1,8 @@
 diff --git a/thirdparty/ocv/opencv_hal_neon.hpp b/thirdparty/ocv/opencv_hal_neon.hpp
-index 83d561d211..ad15737802 100644
+index 83d561d211..af5e788569 100644
 --- a/thirdparty/ocv/opencv_hal_neon.hpp
 +++ b/thirdparty/ocv/opencv_hal_neon.hpp
-@@ -2563,13 +2563,15 @@ CV_ALWAYS_INLINE void v_deinterleave_expand(const v_uint8x16& src,
+@@ -2563,14 +2563,17 @@ CV_ALWAYS_INLINE void v_deinterleave_expand(const v_uint8x16& src,
                                              v_int16x8& even, v_int16x8& odd)
  {
      constexpr int nlanes = static_cast<int>(v_uint8x16::nlanes);
@@ -15,9 +15,12 @@ index 83d561d211..ad15737802 100644
                              9, -1, 11, -1, 13, -1, 15, -1 };
 +    
 +    const uint8_t* mask_e_uint8 = reinterpret_cast<const uint8_t*>(mask_e);
++    const uint8_t* mask_o_uint8 = reinterpret_cast<const uint8_t*>(mask_o);
  
 -    uint8x16_t mask_even = vld1q_u8(mask_e);
+-    uint8x16_t mask_odd = vld1q_u8(mask_o);
 +    uint8x16_t mask_even = vld1q_u8(mask_e_uint8);
-     uint8x16_t mask_odd = vld1q_u8(mask_o);
++    uint8x16_t mask_odd = vld1q_u8(mask_o_uint8);
  
      v_uint8x16 res1 = v_shuffle(src, v_uint8x16(mask_even));
+     v_uint8x16 res2 = v_shuffle(src, v_uint8x16(mask_odd));
