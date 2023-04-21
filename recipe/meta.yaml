@@ -12,6 +12,7 @@ source:
     folder: openvino_sources
     patches:
     - patches/001-gflags.patch
+    - patches/002-aarch64-gapi-narrowing-conv.patch  # [aarch64]
   - url: https://github.com/openvinotoolkit/openvino_contrib/archive/13025cfb0a98a5eb0ed531ea922dcb567b879902.tar.gz  # [aarch64 or arm64]
     sha256: a6bd13848443a2e8f15ea8c24fb049935753157d233913a2174e5cf080c98c90  # [aarch64 or arm64]
     folder: openvino_contrib  # [aarch64 or arm64]
