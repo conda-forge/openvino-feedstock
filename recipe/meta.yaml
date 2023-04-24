@@ -39,9 +39,6 @@ source:
   - url: https://github.com/KhronosGroup/OpenCL-CLHPP/archive/refs/tags/v2023.02.06.tar.gz  # [win64 or linux64]
     sha256: 2726106df611fb5cb65503a52df27988d80c0b8844c8f0901c6092ab43701e8c  # [win64 or linux64]
     folder: openvino_sources/thirdparty/ocl/clhpp_headers  # [win64 or linux64]
-  - url: https://github.com/KhronosGroup/OpenCL-ICD-Loader/archive/refs/tags/v2023.02.06.tar.gz  # [win64 or linux64]
-    sha256: f31a932b470c1e115d6a858b25c437172809b939953dc1cf20a3a15e8785d698  # [win64 or linux64]
-    folder: openvino_sources/thirdparty/ocl/icd_loader  # [win64 or linux64]
 
 build:
   number: 0
@@ -51,7 +48,7 @@ build:
     - {{ pin_subpackage('libopenvino', max_pin='x.x.x') }}
     - {{ pin_subpackage('libopenvino-intel-cpu-plugin', max_pin='x.x.x') }}  # [x86_64]
     - {{ pin_subpackage('libopenvino-arm-cpu-plugin', max_pin='x.x.x') }}  # [aarch64 or arm64]
-    - {{ pin_subpackage('libopenvino-intel-gpu-plugin', max_pin='x.x.x') }}
+    - {{ pin_subpackage('libopenvino-intel-gpu-plugin', max_pin='x.x.x') }}  # [win64 or linux64]
     - {{ pin_subpackage('libopenvino-auto-plugin', max_pin='x.x.x') }}
     - {{ pin_subpackage('libopenvino-hetero-plugin', max_pin='x.x.x') }}
     - {{ pin_subpackage('libopenvino-auto-batch-plugin', max_pin='x.x.x') }}
@@ -75,6 +72,8 @@ requirements:
     - ninja
     - python >=3.7
     - libprotobuf
+    - ocl-icd  # [linux64]
+    - khronos-opencl-icd-loader  # [win64]
     - scons  # [aarch64 or arm64]
     - flatbuffers =23.3.3
     - sysroot_linux-64 =2.17  # [linux64]
