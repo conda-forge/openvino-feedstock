@@ -1,14 +1,14 @@
 diff --git a/modules/arm_plugin/thirdparty/CMakeLists.txt b/modules/arm_plugin/thirdparty/CMakeLists.txt
-index c199492..a334f05 100644
+index c199492..76a13fa 100644
 --- a/modules/arm_plugin/thirdparty/CMakeLists.txt
 +++ b/modules/arm_plugin/thirdparty/CMakeLists.txt
 @@ -1,4 +1,4 @@
 -# Copyright (C) 2020-2022 Intel Corporation
-+# Copyright (C) 2018-2023 Intel Corporation
++# Copyright (C) 2020-2023 Intel Corporation
  # SPDX-License-Identifier: Apache-2.0
  #
  
-@@ -22,23 +22,57 @@ if(ARM_COMPUTE_INCLUDE_DIR OR ARM_COMPUTE_LIB_DIR)
+@@ -22,22 +22,12 @@ if(ARM_COMPUTE_INCLUDE_DIR OR ARM_COMPUTE_LIB_DIR)
          set_target_properties(arm_compute PROPERTIES
              IMPORTED_LOCATION ${ARM_COMPUTE_LIB}
              INTERFACE_INCLUDE_DIRECTORIES ${ARM_COMPUTE_INCLUDE_DIR})
@@ -26,70 +26,14 @@ index c199492..a334f05 100644
  
      add_library(half INTERFACE IMPORTED GLOBAL)
      set_target_properties(half PROPERTIES
--        INTERFACE_INCLUDE_DIRECTORIES  ${ARM_COMPUTE_INCLUDE_DIR})
-+        INTERFACE_INCLUDE_DIRECTORIES ${ARM_COMPUTE_INCLUDE_DIR})
-+elseif(ENABLE_ARM_COMPUTE_CMAKE)
-+    set(ARM_COMPUTE_SOURCE_DIR "${intel_cpu_thirdparty_SOURCE_DIR}/ComputeLibrary")
-+    set(ARM_COMPUTE_BINARY_DIR "${intel_cpu_thirdparty_BINARY_DIR}/ComputeLibrary")
-+
-+    function(ov_build_compute_library)
-+        # build ComputeLibrary as static libraries
-+        set(BUILD_SHARED_LIBS OFF)
-+        # ComputeLibrary settings
-+        set(ARM_COMPUTE_GRAPH_ENABLED OFF CACHE BOOL "" FORCE)
-+        # disable OpenMP
-+        set(OPENMP OFF CACHE BOOL "" FORCE)
-+        # and use std::threads instead
-+        set(CPPTHREADS OFF CACHE BOOL "" FORCE)
-+        # SVE is not supported on Darwin
-+        if(CMAKE_HOST_APPLE)
-+            set(ENABLE_SVE OFF CACHE BOOL "" FORCE)
-+            set(ARM_COMPUTE_ENABLE_SVE OFF CACHE BOOL "" FORCE)
-+            set(ARM_COMPUTE_ENABLE_SVEF32MM OFF CACHE BOOL "" FORCE)
-+        endif()
-+
-+        add_subdirectory(${ARM_COMPUTE_SOURCE_DIR} ${ARM_COMPUTE_BINARY_DIR} EXCLUDE_FROM_ALL)
-+
-+        add_library(ArmCompute::Half INTERFACE IMPORTED GLOBAL)
-+        set_target_properties(ArmCompute::Half PROPERTIES
-+            INTERFACE_INCLUDE_DIRECTORIES "${ARM_COMPUTE_SOURCE_DIR}/include")
-+    endfunction()
-+
-+    ov_build_compute_library()
-+
-+    # Helpers for oneDNN intergation
-+
-+    set(ACL_FOUND ON)
-+    set(ACL_LIBRARIES arm_compute_core ArmCompute::Half)
-+
-+    foreach(acl_library IN LISTS ACL_LIBRARIES)
-+        list(APPEND ACL_INCLUDE_DIRS
-+                $<TARGET_PROPERTY:${acl_library},INTERFACE_INCLUDE_DIRECTORIES>)
-+    endforeach()
-+
-+    # required by oneDNN to attempt to parse ACL version
-+    set(ENV{ACL_ROOT_DIR} "${ARM_COMPUTE_SOURCE_DIR}")
- else()
--    message(STATUS "Configure to build ${CMAKE_CURRENT_SOURCE_DIR}/ComputeLibrary")
-+    set(ARM_COMPUTE_SOURCE_DIR "${intel_cpu_thirdparty_SOURCE_DIR}/ComputeLibrary")
-+    set(ARM_COMPUTE_BINARY_DIR "${intel_cpu_thirdparty_BINARY_DIR}/ComputeLibrary")
-+
-+    message(STATUS "Configure to build ${ARM_COMPUTE_SOURCE_DIR}")
+         INTERFACE_INCLUDE_DIRECTORIES  ${ARM_COMPUTE_INCLUDE_DIR})
+-else()
++elseif(NOT TARGET arm_compute_static_libs)
+     message(STATUS "Configure to build ${CMAKE_CURRENT_SOURCE_DIR}/ComputeLibrary")
  
      find_host_program(SCONS scons)
- 
-@@ -46,14 +80,20 @@ else()
-         message(FATAL_ERROR "Scons tool is not found!")
-     endif()
- 
--    set(ARM_COMPURE_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/ComputeLibrary)
-     file(GLOB_RECURSE SOURCES
--        ${ARM_COMPURE_SOURCE_DIR}/*.cpp
--        ${ARM_COMPURE_SOURCE_DIR}/*.hpp
--        ${ARM_COMPURE_SOURCE_DIR}/*.h
-+        ${ARM_COMPUTE_SOURCE_DIR}/*.cpp
-+        ${ARM_COMPUTE_SOURCE_DIR}/*.hpp
-+        ${ARM_COMPUTE_SOURCE_DIR}/*.h
+@@ -53,7 +43,14 @@ else()
+         ${ARM_COMPURE_SOURCE_DIR}/*.h
      )
  
 -    set(extra_cxx_flags "-fPIC ${CMAKE_CXX_FLAGS} -Wno-undef")
@@ -104,22 +48,19 @@ index c199492..a334f05 100644
  
      set(ARM_COMPUTE_OPTIONS
          neon=1
-@@ -71,30 +111,43 @@ else()
-         # TODO: use CC for ARM compute library to minimize binary size
-         # build_config=<file>
+@@ -73,28 +70,42 @@ else()
          # TODO: use data_type_support to disable useless kernels
--        # TODO: switch to NHWC layout later
--        data_layout_support=nchw
+         # TODO: switch to NHWC layout later
+         data_layout_support=nchw
 -        build_dir=${CMAKE_CURRENT_BINARY_DIR}
 -        install_dir=${CMAKE_CURRENT_BINARY_DIR}/install
-+        data_layout_support=all
          arch=${ARM_COMPUTE_TARGET_ARCH}
      )
  
 +    if(NOT MSVC64)
 +        list(APPEND ARM_COMPUTE_OPTIONS
-+            build_dir=${ARM_COMPUTE_BINARY_DIR}
-+            install_dir=${ARM_COMPUTE_BINARY_DIR}/install)
++             build_dir=${CMAKE_CURRENT_BINARY_DIR}
++             install_dir=${CMAKE_CURRENT_BINARY_DIR}/install)
 +    endif()
 +
      if(ARM_COMPUTE_SCONS_JOBS)
@@ -158,7 +99,7 @@ index c199492..a334f05 100644
      endif()
  
      if(CMAKE_CROSSCOMPILING)
-@@ -135,6 +188,15 @@ else()
+@@ -135,6 +146,15 @@ else()
  
          set(extra_link_flags "${extra_link_flags} ${extra_flags}")
          set(extra_cxx_flags "${extra_cxx_flags} ${extra_flags}")
@@ -174,7 +115,7 @@ index c199492..a334f05 100644
      elseif(EMSCRIPTEN)
          set(cmake_build_env
              CC=emcc
-@@ -176,17 +238,29 @@ else()
+@@ -176,17 +196,29 @@ else()
                  set(extra_cxx_flags "${extra_cxx_flags} -arch ${arch}")
              endforeach()
          endif()
@@ -207,7 +148,7 @@ index c199492..a334f05 100644
      if(extra_link_flags)
          list(APPEND ARM_COMPUTE_OPTIONS extra_link_flags=${extra_link_flags})
      endif()
-@@ -198,46 +272,57 @@ else()
+@@ -198,17 +230,20 @@ else()
          list(APPEND ARM_COMPUTE_OPTIONS --silent)
      endif()
  
@@ -215,47 +156,38 @@ index c199492..a334f05 100644
 -    set(arm_compute_core ${CMAKE_CURRENT_BINARY_DIR}/libarm_compute_core-static.a)
 +    if(MSVC64)
 +        set(arm_compute build/arm_compute-static.lib)
-+        set(arm_compute_full_path "${ARM_COMPUTE_SOURCE_DIR}/${arm_compute}")
++        set(arm_compute_full "${CMAKE_CURRENT_SOURCE_DIR}/ComputeLibrary/${arm_compute}")
 +    else()
-+        set(arm_compute ${ARM_COMPUTE_BINARY_DIR}/libarm_compute-static.a)
-+        set(arm_compute_full_path "${arm_compute}")
++        set(arm_compute ${CMAKE_CURRENT_BINARY_DIR}/libarm_compute-static.a)
++        set(arm_compute_full "${arm_compute}")
 +    endif()
  
      add_custom_command(
          OUTPUT
 -            ${arm_compute}
 -            ${arm_compute_core}
-+            ${arm_compute_full_path}
++            ${arm_compute_full}
          COMMAND ${CMAKE_COMMAND} -E env ${cmake_build_env}
              ${SCONS} ${ARM_COMPUTE_OPTIONS}
                  ${arm_compute}
 -                ${arm_compute_core}
--        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/ComputeLibrary
-+        WORKING_DIRECTORY ${ARM_COMPUTE_SOURCE_DIR}
+         WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/ComputeLibrary
          COMMENT "Build Arm Compute Library"
          DEPENDS ${SOURCES}
-                 ${CMAKE_CURRENT_LIST_FILE}
--                ${ARM_COMPURE_SOURCE_DIR}/SConscript
--                ${ARM_COMPURE_SOURCE_DIR}/SConstruct
--                )
-+                ${ARM_COMPUTE_SOURCE_DIR}/SConscript
-+                ${ARM_COMPUTE_SOURCE_DIR}/SConstruct)
+@@ -221,23 +256,24 @@ else()
  
-     # Import targets
- 
--    add_custom_target(arm_compute_static_libs
--        DEPENDS
+     add_custom_target(arm_compute_static_libs
+         DEPENDS
 -            ${arm_compute}
 -            ${arm_compute_core}
--    )
-+    add_custom_target(arm_compute_static_libs DEPENDS ${arm_compute_full_path})
++            ${arm_compute_full}
+     )
  
      add_library(arm_compute::arm_compute STATIC IMPORTED GLOBAL)
      set_target_properties(arm_compute::arm_compute PROPERTIES
 -        IMPORTED_LOCATION ${arm_compute}
--        INTERFACE_INCLUDE_DIRECTORIES ${CMAKE_CURRENT_SOURCE_DIR}/ComputeLibrary)
-+        IMPORTED_LOCATION ${arm_compute_full_path}
-+        INTERFACE_INCLUDE_DIRECTORIES ${ARM_COMPUTE_SOURCE_DIR})
++        IMPORTED_LOCATION ${arm_compute_full}
+         INTERFACE_INCLUDE_DIRECTORIES ${CMAKE_CURRENT_SOURCE_DIR}/ComputeLibrary)
      add_dependencies(arm_compute::arm_compute arm_compute_static_libs)
  
 -    add_library(arm_compute::arm_compute_core STATIC IMPORTED GLOBAL)
@@ -266,27 +198,14 @@ index c199492..a334f05 100644
 -
      add_library(arm_compute::half INTERFACE IMPORTED GLOBAL)
      set_target_properties(arm_compute::half PROPERTIES
--        INTERFACE_INCLUDE_DIRECTORIES ${CMAKE_CURRENT_SOURCE_DIR}/ComputeLibrary/include)
--endif()
-+        INTERFACE_INCLUDE_DIRECTORIES ${ARM_COMPUTE_SOURCE_DIR}/include)
+         INTERFACE_INCLUDE_DIRECTORIES ${CMAKE_CURRENT_SOURCE_DIR}/ComputeLibrary/include)
 +
 +    # Compute Library uses cppthreads=1
 +    # if one day will rely on TBB only, we can omit this dependency
 +    find_package(Threads REQUIRED)
 +    set_target_properties(arm_compute::arm_compute PROPERTIES
 +        INTERFACE_LINK_LIBRARIES Threads::Threads)
+ endif()
 +
-+    # Helpers for oneDNN intergation
-+
-+    set(ACL_FOUND ON)
-+    set(ACL_LIBRARIES arm_compute::arm_compute arm_compute::half)
-+
-+    foreach(acl_library IN LISTS ACL_LIBRARIES)
-+        list(APPEND ACL_INCLUDE_DIRS
-+                $<TARGET_PROPERTY:${acl_library},INTERFACE_INCLUDE_DIRECTORIES>)
-+    endforeach()
-+
-+    # required by oneDNN to attempt to parse ACL version
-+    set(ENV{ACL_ROOT_DIR} "${ARM_COMPUTE_SOURCE_DIR}")
-+endif()
++add_subdirectory(external_kernels)
 \ No newline at end of file
