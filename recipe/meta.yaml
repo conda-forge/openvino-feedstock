@@ -76,7 +76,6 @@ requirements:
     - numpy                                  # [build_platform != target_platform]
   host:
     - tbb-devel =2021.5
-    - intel-compute-runtime  # [linux64 or win64]
     - ocl-icd  # [linux64]
     - khronos-opencl-icd-loader  # [win64]
     - clhpp  # [linux64 or win64]
