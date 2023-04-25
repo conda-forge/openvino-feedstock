@@ -36,9 +36,6 @@ source:
   - url: https://github.com/KhronosGroup/OpenCL-Headers/archive/refs/tags/v2023.02.06.tar.gz  # [win64 or linux64]
     sha256: 464d1b04a5e185739065b2d86e4cebf02c154c416d63e6067a5060d7c053c79a  # [win64 or linux64]
     folder: openvino_sources/thirdparty/ocl/cl_headers  # [win64 or linux64]
-  - url: https://github.com/KhronosGroup/OpenCL-CLHPP/archive/refs/tags/v2023.02.06.tar.gz  # [win64 or linux64]
-    sha256: 2726106df611fb5cb65503a52df27988d80c0b8844c8f0901c6092ab43701e8c  # [win64 or linux64]
-    folder: openvino_sources/thirdparty/ocl/clhpp_headers  # [win64 or linux64]
 
 build:
   number: 0
@@ -72,8 +69,6 @@ requirements:
     - ninja
     - python >=3.7
     - libprotobuf
-    - ocl-icd  # [linux64]
-    - khronos-opencl-icd-loader  # [win64]
     - scons  # [aarch64 or arm64]
     - flatbuffers =23.3.3
     - sysroot_linux-64 =2.17  # [linux64]
@@ -81,13 +76,17 @@ requirements:
     - numpy                                  # [build_platform != target_platform]
   host:
     - tbb-devel =2021.5
+    - intel-compute-runtime  # [linux64 or win64]
+    - ocl-icd  # [linux64]
+    - khronos-opencl-icd-loader  # [win64]
+    - clhpp  # [linux64 or win64]
     - pugixml # note: only static version is provided
     - libprotobuf-static
   run:
     - {{ pin_subpackage('libopenvino', max_pin='x.x.x') }}
     - {{ pin_subpackage('libopenvino-intel-cpu-plugin', max_pin='x.x.x') }}  # [x86_64]
     - {{ pin_subpackage('libopenvino-arm-cpu-plugin', max_pin='x.x.x') }}  # [aarch64 or arm64]
-    - {{ pin_subpackage('libopenvino-intel-gpu-plugin', max_pin='x.x.x') }}
+    - {{ pin_subpackage('libopenvino-intel-gpu-plugin', max_pin='x.x.x') }}  # [win64 or linux64]
     - {{ pin_subpackage('libopenvino-auto-plugin', max_pin='x.x.x') }}
     - {{ pin_subpackage('libopenvino-hetero-plugin', max_pin='x.x.x') }}
     - {{ pin_subpackage('libopenvino-auto-batch-plugin', max_pin='x.x.x') }}
@@ -415,6 +414,7 @@ outputs:
         - runtime-third-party-programs.txt
         - tbb_third-party-programs.txt
     build:
+      skip: True  # [not linux64 and not win64]
       run_exports:
         - {{ pin_subpackage('libopenvino-intel-gpu-plugin', max_pin='x.x.x') }}
     requirements:
@@ -424,6 +424,9 @@ outputs:
         - cmake >=3.13
       host:
         - tbb-devel =2021.5
+        - ocl-icd  # [linux64]
+        - khronos-opencl-icd-loader  # [win64]
+        - clhpp
         - {{ pin_subpackage('libopenvino', exact=True) }}
       run:
         - {{ pin_subpackage('libopenvino', exact=True) }}
