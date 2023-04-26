@@ -10,6 +10,7 @@ cmake                                                                        ^
     -DENABLE_OV_ONNX_FRONTEND=OFF                                            ^
     -DENABLE_SYSTEM_TBB=ON                                                   ^
     -DENABLE_SYSTEM_PUGIXML=ON                                               ^
+    -DENABLE_SYSTEM_OPENCL=ON                                                ^
     -DENABLE_SYSTEM_PROTOBUF=ON                                              ^
     -DENABLE_COMPILE_TOOL=OFF                                                ^
     -DENABLE_PYTHON=OFF                                                      ^
