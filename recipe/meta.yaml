@@ -72,13 +72,13 @@ requirements:
     - libprotobuf
     - scons  # [aarch64 or arm64]
     - flatbuffers =23.3.3
-    - clhpp  # [linux64 or win64]
     - sysroot_linux-64 =2.17  # [linux64]
     - cross-python_{{ target_platform }}     # [build_platform != target_platform]
     - numpy                                  # [build_platform != target_platform]
   host:
     - tbb-devel =2021.5
     - ocl-icd  # [linux64]
+    - clhpp  # [linux64 or win64]
     - khronos-opencl-icd-loader  # [win64]
     - pugixml # note: only static version is provided
     - libprotobuf-static
@@ -424,6 +424,7 @@ outputs:
       host:
         - tbb-devel =2021.5
         - ocl-icd  # [linux64]
+        - clhpp
         - khronos-opencl-icd-loader  # [win64]
         - {{ pin_subpackage('libopenvino', exact=True) }}
       run:
