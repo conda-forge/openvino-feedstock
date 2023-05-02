@@ -7,35 +7,29 @@ package:
   version: {{ version }}
 
 source:
-  - url: https://github.com/openvinotoolkit/openvino/archive/3ec386a74190ca967da82467de6f212f7c8181c7.tar.gz
-    sha256: 0293be981d3217f6cfa112a4821285121efd84f27910262e95426d162ffa33f6
+  - url: https://github.com/openvinotoolkit/openvino/archive/bba9f3094b1426a68f09503a451742c675fa3519.tar.gz
+    sha256: 852434b6bafb0e9d9429288c2787eac8a5d191910e0053b8511c6cc2528126d0
     folder: openvino_sources
-    patches:
-    - patches/0001-fix-tbb-win.patch
-    - patches/002-win64-find-ocl.patch
-  - url: https://github.com/openvinotoolkit/openvino_contrib/archive/5556f70f2208849530cfdd7c1b93ea5ac89c2018.tar.gz  # [aarch64 or arm64]
-    sha256: 5b8cb5ab05796935f9964b982d63691659eb085dc1bf86fec3103952387dfc1b  # [aarch64 or arm64]
-    folder: openvino_contrib  # [aarch64 or arm64]
-  - url: https://github.com/ARM-software/ComputeLibrary/archive/refs/tags/v23.02.tar.gz  # [aarch64 or arm64]
-    sha256: 86baaee540e8b5672a425d3f62aa51f240b1a0f63601163d9a5a8f72f6df8b4a  # [aarch64 or arm64]
-    folder: openvino_contrib/modules/arm_plugin/thirdparty/ComputeLibrary  # [aarch64 or arm64]
+  - url: https://github.com/ARM-software/ComputeLibrary/archive/refs/tags/v23.02.1.tar.gz  # [aarch64 or arm64]
+    sha256: c3a443e26539f866969242e690cf0651ef629149741ee18732f954c734da6763  # [aarch64 or arm64]
+    folder: openvino_sources/src/plugins/intel_cpu/thirdparty/ComputeLibrary  # [aarch64 or arm64]
   - url: https://github.com/herumi/xbyak/archive/refs/tags/v6.69.tar.gz
     sha256: 7eb64e2c18527824402b16f26c6118ba82f40f57fe6e3ab05c6e2883246a04f1
     folder: openvino_sources/thirdparty/xbyak
   - url: https://github.com/intel/ittapi/archive/refs/tags/v3.24.0.tar.gz
     sha256: 36c42d3f2446ddfaa2d7dfa02dfaa79615933f1a68a72d7e4f1d70de7b56e2c9
     folder: openvino_sources/thirdparty/ittapi/ittapi
-  - url: https://github.com/openvinotoolkit/oneDNN/archive/26ad0022000d8de10a683efb175c2acbf064e81b.tar.gz  # [x86_64]
-    sha256: 02fd8af9a6dcdd0e2a12a0c4aac49067d6b898439c6406ffa1edf586d53aecf8  # [x86_64]
+  - url: https://github.com/openvinotoolkit/oneDNN/archive/f887bcdf0fb6da674fbc7923891919d1444b25ff.tar.gz  # [x86_64]
+    sha256: 4b86aedb1b88ce44fe295effbce29af3c463e9f25ef98123ea5e8daf1edd1040  # [x86_64]
     folder: openvino_sources/src/plugins/intel_cpu/thirdparty/onednn  # [x86_64]
-  - url: https://github.com/oneapi-src/oneDNN/archive/ad34c124895690bafd2b110577639824899ecbca.tar.gz  # [win64 or linux64]
-    sha256: 2f92bb73647f562d19f9b74a9b16c341b67ce95aee194f8499311613f5c729be  # [win64 or linux64]
+  - url: https://github.com/oneapi-src/oneDNN/archive/f27dedbfc093f51032a4580198bb80579440dc15.tar.gz  # [win64 or linux64]
+    sha256: da57c2298a8e001718902f0b65b6d92c4a7897b35467e23bc24996dde43ec47b  # [win64 or linux64]
     folder: openvino_sources/src/plugins/intel_gpu/thirdparty/onednn_gpu  # [win64 or linux64]  
-  - url: https://github.com/opencv/ade/archive/refs/tags/v0.1.2a.tar.gz
-    sha256: c022a688b0554017e46e1cbdeb0105e625ca090fc3755c15df8c4451a304e084
+  - url: https://github.com/opencv/ade/archive/58b2595a1a95cc807be8bf6222f266a9a1f393a9.tar.gz
+    sha256: db7759cc32107e713b9e503ddf71a54ba2c80de07daefcb1aa315507e706ce07
     folder: openvino_sources/thirdparty/ade
-  - url: https://github.com/KhronosGroup/OpenCL-Headers/archive/refs/tags/v2023.02.06.tar.gz  # [win64 or linux64]
-    sha256: 464d1b04a5e185739065b2d86e4cebf02c154c416d63e6067a5060d7c053c79a  # [win64 or linux64]
+  - url: https://github.com/KhronosGroup/OpenCL-Headers/archive/refs/tags/v2022.09.30.tar.gz  # [win64 or linux64]
+    sha256: 0ae857ecb28af95a420c800b21ed2d0f437503e104f841ab8db249df5f4fbe5c  # [win64 or linux64]
     folder: openvino_sources/thirdparty/ocl/cl_headers  # [win64 or linux64]
 
 build:
@@ -77,6 +71,7 @@ requirements:
     - numpy                                  # [build_platform != target_platform]
   host:
     - tbb-devel =2021.5
+    - snappy =1.1.10
     - ocl-icd  # [linux64]
     - clhpp  # [linux64 or win64]
     - khronos-opencl-icd-loader  # [win64]
@@ -305,6 +300,7 @@ outputs:
         - cmake >=3.13
       host:
         - {{ pin_subpackage('libopenvino', exact=True) }}
+        - snappy =1.1.10
       run:
         - {{ pin_subpackage('libopenvino', exact=True) }}
     test:
