@@ -19,9 +19,9 @@ source:
   - url: https://github.com/intel/ittapi/archive/refs/tags/v3.24.0.tar.gz
     sha256: 36c42d3f2446ddfaa2d7dfa02dfaa79615933f1a68a72d7e4f1d70de7b56e2c9
     folder: openvino_sources/thirdparty/ittapi/ittapi
-  - url: https://github.com/openvinotoolkit/oneDNN/archive/f887bcdf0fb6da674fbc7923891919d1444b25ff.tar.gz  # [x86_64]
-    sha256: 4b86aedb1b88ce44fe295effbce29af3c463e9f25ef98123ea5e8daf1edd1040  # [x86_64]
-    folder: openvino_sources/src/plugins/intel_cpu/thirdparty/onednn  # [x86_64]
+  - url: https://github.com/openvinotoolkit/oneDNN/archive/f887bcdf0fb6da674fbc7923891919d1444b25ff.tar.gz
+    sha256: 4b86aedb1b88ce44fe295effbce29af3c463e9f25ef98123ea5e8daf1edd1040
+    folder: openvino_sources/src/plugins/intel_cpu/thirdparty/onednn
   - url: https://github.com/oneapi-src/oneDNN/archive/f27dedbfc093f51032a4580198bb80579440dc15.tar.gz  # [win64 or linux64]
     sha256: da57c2298a8e001718902f0b65b6d92c4a7897b35467e23bc24996dde43ec47b  # [win64 or linux64]
     folder: openvino_sources/src/plugins/intel_gpu/thirdparty/onednn_gpu  # [win64 or linux64]  
@@ -31,6 +31,9 @@ source:
   - url: https://github.com/KhronosGroup/OpenCL-Headers/archive/refs/tags/v2022.09.30.tar.gz  # [win64 or linux64]
     sha256: 0ae857ecb28af95a420c800b21ed2d0f437503e104f841ab8db249df5f4fbe5c  # [win64 or linux64]
     folder: openvino_sources/thirdparty/ocl/cl_headers  # [win64 or linux64]
+  - url: https://github.com/onnx/onnx/archive/refs/tags/v1.13.1.tar.gz
+    sha256: 090d3e10ec662a98a2a72f1bf053f793efc645824f0d4b779e0ce47468a0890e
+    folder: openvino_sources/thirdparty/onnx/onnx
 
 build:
   number: 0
@@ -45,6 +48,7 @@ build:
     - {{ pin_subpackage('libopenvino-hetero-plugin', max_pin='x.x.x') }}
     - {{ pin_subpackage('libopenvino-auto-batch-plugin', max_pin='x.x.x') }}
     - {{ pin_subpackage('libopenvino-ir-frontend', max_pin='x.x.x') }}
+    - {{ pin_subpackage('libopenvino-onnx-frontend', max_pin='x.x.x') }}
     - {{ pin_subpackage('libopenvino-paddle-frontend', max_pin='x.x.x') }}
     - {{ pin_subpackage('libopenvino-pytorch-frontend', max_pin='x.x.x') }}
     - {{ pin_subpackage('libopenvino-tensorflow-frontend', max_pin='x.x.x') }}
@@ -117,6 +121,7 @@ test:
     {{ openvino_libs.append("_c") or "" }}  # [unix]
     {{ openvino_libs.append("_paddle_frontend") or "" }}  # [unix]
     {{ openvino_libs.append("_pytorch_frontend") or "" }}  # [unix]
+    {{ openvino_libs.append("_onnx_frontend") or "" }}  # [unix]
     {{ openvino_libs.append("_tensorflow_frontend") or "" }}  # [unix]
     {{ openvino_libs.append("_tensorflow_lite_frontend") or "" }}  # [unix]
     {% for openvino_lib in openvino_libs %}  # [unix]
@@ -155,7 +160,7 @@ test:
     # check that frontends are found using OpenVINO C++ API
     - cmake -S snippets -B snippets_build
     - cmake --build snippets_build --config Release --verbose
-    - if [[ $(./snippets_build/openvino_frontends_test) != 5 ]]; then exit 1 ; fi  # [unix]
+    - if [[ $(./snippets_build/openvino_frontends_test) != 6 ]]; then exit 1 ; fi  # [unix]
 
 
 outputs:
@@ -219,6 +224,36 @@ outputs:
         - test -f $PREFIX/lib/libopenvino_ir_frontend${SHLIB_EXT}.{{ version }}  # [linux]
         - test -f $PREFIX/lib/libopenvino_ir_frontend.{{ version }}${SHLIB_EXT}  # [osx]
         - if not exist %PREFIX%\\Library\\bin\\openvino_ir_frontend.dll exit 1  # [win]
+
+
+  - name: libopenvino-onnx-frontend
+    version: {{ version }}
+    script: install/install_onnx.sh
+    about:
+      summary: OpenVINO ONNX Frontend
+      license_file:
+        - LICENSE
+        - third-party-programs.txt
+        - onednn_third-party-programs.txt
+        - runtime-third-party-programs.txt
+        - tbb_third-party-programs.txt
+    build:
+      run_exports:
+        - {{ pin_subpackage('libopenvino', max_pin='x.x.x') }}
+    requirements:
+      build:
+        - {{ compiler('cxx') }}
+        - {{ compiler('c') }}
+        - cmake >=3.13
+      host:
+        - {{ pin_subpackage('libopenvino', exact=True) }}
+      run:
+        - {{ pin_subpackage('libopenvino', exact=True) }}
+    test:
+      commands:
+        - test -f $PREFIX/lib/libopenvino_onnx_frontend${SHLIB_EXT}.{{ version }}  # [linux]
+        - test -f $PREFIX/lib/libopenvino_onnx_frontend.{{ version }}${SHLIB_EXT}  # [osx]
+        - if not exist %PREFIX%\\Library\\bin\\openvino_onnx_frontend.dll exit 1  # [win]
 
 
   - name: libopenvino-paddle-frontend
