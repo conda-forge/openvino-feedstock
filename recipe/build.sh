@@ -13,7 +13,6 @@ mkdir -p openvino-build
 
 cmake ${CMAKE_ARGS}                                                          \
     -DCMAKE_BUILD_TYPE=Release                                               \
-    -DOPENVINO_EXTRA_MODULES="$SRC_DIR/openvino_contrib/modules/arm_plugin"  \
     -DENABLE_INTEL_GNA=OFF                                                   \
     -DENABLE_SYSTEM_TBB=ON                                                   \
     -DENABLE_SYSTEM_PUGIXML=ON                                               \
