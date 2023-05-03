@@ -90,6 +90,7 @@ requirements:
     - {{ pin_subpackage('libopenvino-hetero-plugin', max_pin='x.x.x') }}
     - {{ pin_subpackage('libopenvino-auto-batch-plugin', max_pin='x.x.x') }}
     - {{ pin_subpackage('libopenvino-ir-frontend', max_pin='x.x.x') }}
+    - {{ pin_subpackage('libopenvino-onnx-frontend', max_pin='x.x.x') }}
     - {{ pin_subpackage('libopenvino-paddle-frontend', max_pin='x.x.x') }}
     - {{ pin_subpackage('libopenvino-pytorch-frontend', max_pin='x.x.x') }}
     - {{ pin_subpackage('libopenvino-tensorflow-frontend', max_pin='x.x.x') }}
@@ -564,6 +565,11 @@ about:
     emulation of human vision, automatic speech recognition, natural
     language processing, recommendation systems, etc. It provides
     high-performance and rich deployment options, from edge to cloud
+    
+    Installing OpenVINO Runtime from Conda Forge is recommended for C++ developers,
+    as it provides only the C++ Runtime API. 
+    If you work with Python, consider other OpenVINO distribution channels:
+    https://www.intel.com/content/www/us/en/developer/tools/openvino-toolkit/download.html
   license: Apache-2.0
   license_family: Apache
   license_file:
