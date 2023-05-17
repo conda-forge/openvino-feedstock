@@ -68,7 +68,7 @@ requirements:
     - cmake >=3.13
     - ninja
     - python >=3.7
-    - libprotobuf
+    - libprotobuf =3.20.3
     - scons  # [aarch64 or arm64]
     - flatbuffers =23.3.3
     - sysroot_linux-64 =2.17  # [linux64]
@@ -81,7 +81,7 @@ requirements:
     - clhpp  # [linux64 or win64]
     - khronos-opencl-icd-loader  # [win64]
     - pugixml # note: only static version is provided
-    - libprotobuf-static
+    - libprotobuf-static =3.20.3
   run:
     - {{ pin_subpackage('libopenvino', max_pin='x.x.x') }}
     - {{ pin_subpackage('libopenvino-intel-cpu-plugin', max_pin='x.x.x') }}  # [x86_64]
