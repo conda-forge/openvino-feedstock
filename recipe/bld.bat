@@ -18,7 +18,6 @@ cmake                                                                        ^
     -DENABLE_CLANG_FORMAT=OFF                                                ^
     -DENABLE_NCC_STYLE=OFF                                                   ^
     -DENABLE_TEMPLATE=OFF                                                    ^
-    -DENABLE_REQUIREMENTS_INSTALL=OFF                                        ^
     -DENABLE_SAMPLES=OFF                                                     ^
     -DENABLE_DATA=OFF                                                        ^
     -DCPACK_GENERATOR=CONDA-FORGE                                            ^
