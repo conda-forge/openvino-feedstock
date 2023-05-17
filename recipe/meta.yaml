@@ -7,8 +7,8 @@ package:
   version: {{ version }}
 
 source:
-  - url: https://github.com/openvinotoolkit/openvino/archive/bba9f3094b1426a68f09503a451742c675fa3519.tar.gz
-    sha256: 852434b6bafb0e9d9429288c2787eac8a5d191910e0053b8511c6cc2528126d0
+  - url: https://github.com/openvinotoolkit/openvino/archive/b4452d5630442e91cf84db5acd3d991f3d1f34c2.tar.gz
+    sha256: 35438d079e82312366f694865f653c8c4748f9e0b18b10914cf6303ffd1aba29
     folder: openvino_sources
     patches:
     - patches/001-win64-find-ocl.patch  # [win64]
@@ -23,8 +23,8 @@ source:
   - url: https://github.com/intel/ittapi/archive/refs/tags/v3.24.0.tar.gz
     sha256: 36c42d3f2446ddfaa2d7dfa02dfaa79615933f1a68a72d7e4f1d70de7b56e2c9
     folder: openvino_sources/thirdparty/ittapi/ittapi
-  - url: https://github.com/openvinotoolkit/oneDNN/archive/f887bcdf0fb6da674fbc7923891919d1444b25ff.tar.gz
-    sha256: 4b86aedb1b88ce44fe295effbce29af3c463e9f25ef98123ea5e8daf1edd1040
+  - url: https://github.com/openvinotoolkit/oneDNN/archive/1c7bfabf1b26e6fb95fea1613e1d3d2bef1f6b54.tar.gz
+    sha256: 52921b3efab33d1710971c67318e8c00ee102b6369e4e9cea8fdf91a1d68e38e
     folder: openvino_sources/src/plugins/intel_cpu/thirdparty/onednn
   - url: https://github.com/oneapi-src/oneDNN/archive/f27dedbfc093f51032a4580198bb80579440dc15.tar.gz  # [win64 or linux64]
     sha256: da57c2298a8e001718902f0b65b6d92c4a7897b35467e23bc24996dde43ec47b  # [win64 or linux64]
