@@ -18,3 +18,4 @@ conda_build:
 conda_forge_output_validation: true
 remote_ci_setup:
   - liblief=0.11.5
+  - conda-forge-ci-setup=3
