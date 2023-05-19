@@ -14,8 +14,6 @@ cxx_compiler_version:
 - '15'
 gflags:
 - '2.2'
-libprotobuf:
-- '3.21'
 macos_machine:
 - x86_64-apple-darwin13.4.0
 snappy:
