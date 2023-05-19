@@ -16,3 +16,5 @@ github:
 conda_build:
   error_overlinking: true
 conda_forge_output_validation: true
+remote_ci_setup:
+  - liblief=0.11.5
