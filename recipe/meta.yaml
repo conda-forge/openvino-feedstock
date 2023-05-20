@@ -81,7 +81,8 @@ requirements:
     - clhpp  # [linux64 or win64]
     - khronos-opencl-icd-loader  # [win64]
     - pugixml # note: only static version is provided
-    - libprotobuf-static
+    - libprotobuf-static =3.20.3  # [not win64]
+    - libprotobuf-static  # [win64]
   run:
     - {{ pin_subpackage('libopenvino', max_pin='x.x.x') }}
     - {{ pin_subpackage('libopenvino-intel-cpu-plugin', max_pin='x.x.x') }}  # [x86_64]
