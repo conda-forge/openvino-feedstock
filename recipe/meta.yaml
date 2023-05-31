@@ -1,14 +1,14 @@
 {% set name = "openvino" %}
 {% set version = "2023.0.0" %}
-{% set commit_number = "10052" %}
+{% set commit_number = "10926" %}
 
 package:
   name: {{ name|lower }}
   version: {{ version }}
 
 source:
-  - url: https://github.com/openvinotoolkit/openvino/archive/b4452d5630442e91cf84db5acd3d991f3d1f34c2.tar.gz
-    sha256: 35438d079e82312366f694865f653c8c4748f9e0b18b10914cf6303ffd1aba29
+  - url: https://github.com/openvinotoolkit/openvino/archive/refs/tags/2023.0.0.tar.gz
+    sha256: f2787851d9012813b2bbc888b5bb01c5f6f0ab222783acfb8e1e55ea41d0026b
     folder: openvino_sources
     patches:
     - patches/001-win64-find-ocl.patch  # [win64]
