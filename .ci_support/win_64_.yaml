@@ -8,8 +8,8 @@ cxx_compiler:
 - vs2019
 gflags:
 - '2.2'
-libprotobuf:
-- '3.21'
+snappy:
+- '1'
 target_platform:
 - win-64
 tbb_devel:

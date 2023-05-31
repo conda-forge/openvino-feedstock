@@ -1,7 +1,11 @@
+BUILD:
+- aarch64-conda_cos7-linux-gnu
 c_compiler:
 - gcc
 c_compiler_version:
 - '12'
+cdt_arch:
+- aarch64
 cdt_name:
 - cos7
 channel_sources:
@@ -19,7 +23,7 @@ gflags:
 snappy:
 - '1'
 target_platform:
-- linux-64
+- linux-aarch64
 tbb_devel:
 - '2021'
 zip_keys:

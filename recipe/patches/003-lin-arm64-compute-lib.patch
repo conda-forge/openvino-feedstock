@@ -1,0 +1,13 @@
+diff --git a/src/plugins/intel_cpu/thirdparty/FindACL.cmake b/src/plugins/intel_cpu/thirdparty/FindACL.cmake
+index 61772f39a9..61c8718354 100644
+--- a/src/plugins/intel_cpu/thirdparty/FindACL.cmake
++++ b/src/plugins/intel_cpu/thirdparty/FindACL.cmake
+@@ -156,7 +156,7 @@ else()
+         list(APPEND ARM_COMPUTE_OPTIONS os=windows)
+     endif()
+ 
+-    if(CMAKE_CROSSCOMPILING)
++    if(CMAKE_CROSSCOMPILING AND NOT CPACK_GENERATOR STREQUAL "CONDA-FORGE")
+         list(APPEND ARM_COMPUTE_OPTIONS build=cross_compile)
+     else()
+         list(APPEND ARM_COMPUTE_OPTIONS build=native)
