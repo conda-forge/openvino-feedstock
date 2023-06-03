@@ -65,7 +65,7 @@ requirements:
     - {{ compiler('c') }}
     - {{ compiler('cxx') }}
     - git
-    - cmake >=3.13
+    - cmake >=3.15
     - ninja
     - python >=3.7
     - libprotobuf =3.20.3
@@ -103,7 +103,7 @@ test:
     - {{ compiler('cxx') }}
     - {{ compiler('c') }}
     - ninja
-    - cmake >=3.13
+    - cmake >=3.15
     - pkg-config # to find zlib
     - zlib
     - nlohmann_json
@@ -185,7 +185,7 @@ outputs:
       build:
         - {{ compiler('cxx') }}
         - {{ compiler('c') }}
-        - cmake >=3.13
+        - cmake >=3.15
       host:
         - tbb-devel =2021.5 # starting from this version TBB uses hwloc in conda
     test:
@@ -217,7 +217,7 @@ outputs:
       build:
         - {{ compiler('cxx') }}
         - {{ compiler('c') }}
-        - cmake >=3.13
+        - cmake >=3.15
       host:
         - {{ pin_subpackage('libopenvino', exact=True) }}
       run:
@@ -247,7 +247,7 @@ outputs:
       build:
         - {{ compiler('cxx') }}
         - {{ compiler('c') }}
-        - cmake >=3.13
+        - cmake >=3.15
       host:
         - {{ pin_subpackage('libopenvino', exact=True) }}
       run:
@@ -277,7 +277,7 @@ outputs:
       build:
         - {{ compiler('cxx') }}
         - {{ compiler('c') }}
-        - cmake >=3.13
+        - cmake >=3.15
       host:
         - {{ pin_subpackage('libopenvino', exact=True) }}
       run:
@@ -306,7 +306,7 @@ outputs:
       build:
         - {{ compiler('cxx') }}
         - {{ compiler('c') }}
-        - cmake >=3.13
+        - cmake >=3.15
       host:
         - {{ pin_subpackage('libopenvino', exact=True) }}
       run:
@@ -335,7 +335,7 @@ outputs:
       build:
         - {{ compiler('cxx') }}
         - {{ compiler('c') }}
-        - cmake >=3.13
+        - cmake >=3.15
       host:
         - {{ pin_subpackage('libopenvino', exact=True) }}
         - snappy =1.1.10
@@ -365,7 +365,7 @@ outputs:
       build:
         - {{ compiler('cxx') }}
         - {{ compiler('c') }}
-        - cmake >=3.13
+        - cmake >=3.15
       host:
         - {{ pin_subpackage('libopenvino', exact=True) }}
       run:
@@ -395,7 +395,7 @@ outputs:
       build:
         - {{ compiler('cxx') }}
         - {{ compiler('c') }}
-        - cmake >=3.13
+        - cmake >=3.15
       host:
         - tbb-devel =2021.5
         - {{ pin_subpackage('libopenvino', exact=True) }}
@@ -425,7 +425,7 @@ outputs:
       build:
         - {{ compiler('cxx') }}
         - {{ compiler('c') }}
-        - cmake >=3.13
+        - cmake >=3.15
       host:
         - tbb-devel =2021.5
         - {{ pin_subpackage('libopenvino', exact=True) }}
@@ -454,7 +454,7 @@ outputs:
       build:
         - {{ compiler('cxx') }}
         - {{ compiler('c') }}
-        - cmake >=3.13
+        - cmake >=3.15
       host:
         - tbb-devel =2021.5
         - ocl-icd  # [linux64]
@@ -487,7 +487,7 @@ outputs:
       build:
         - {{ compiler('cxx') }}
         - {{ compiler('c') }}
-        - cmake >=3.13
+        - cmake >=3.15
       host:
         - tbb-devel =2021.5
         - {{ pin_subpackage('libopenvino', exact=True) }}
@@ -516,7 +516,7 @@ outputs:
       build:
         - {{ compiler('cxx') }}
         - {{ compiler('c') }}
-        - cmake >=3.13
+        - cmake >=3.15
       host:
         - {{ pin_subpackage('libopenvino', exact=True) }}
       run:
@@ -544,7 +544,7 @@ outputs:
       build:
         - {{ compiler('cxx') }}
         - {{ compiler('c') }}
-        - cmake >=3.13
+        - cmake >=3.15
       host:
         - {{ pin_subpackage('libopenvino', exact=True) }}
       run:
