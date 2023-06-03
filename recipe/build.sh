@@ -11,7 +11,7 @@ export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:$PREFIX/lib/pkgconfig:$BUILD_PREFIX/lib/
 
 mkdir -p openvino-build
 
-cmake ${CMAKE_ARGS}                                                          \
+cmake "${CMAKE_ARGS}"                                                        \
     -DCMAKE_BUILD_TYPE=Release                                               \
     -DENABLE_INTEL_GNA=OFF                                                   \
     -DENABLE_SYSTEM_TBB=ON                                                   \

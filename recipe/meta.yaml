@@ -11,15 +11,10 @@ source:
     sha256: f2787851d9012813b2bbc888b5bb01c5f6f0ab222783acfb8e1e55ea41d0026b
     folder: openvino_sources
     patches:
-    - patches/001-win64-find-ocl.patch  # [win64]
-    - patches/002-win-tbb.patch  # [win64]
     - patches/003-lin-arm64-compute-lib.patch  # [aarch64]
   - url: https://github.com/ARM-software/ComputeLibrary/archive/refs/tags/v23.02.1.tar.gz  # [aarch64 or arm64]
     sha256: c3a443e26539f866969242e690cf0651ef629149741ee18732f954c734da6763  # [aarch64 or arm64]
     folder: openvino_sources/src/plugins/intel_cpu/thirdparty/ComputeLibrary  # [aarch64 or arm64]
-  - url: https://github.com/herumi/xbyak/archive/refs/tags/v6.69.tar.gz
-    sha256: 7eb64e2c18527824402b16f26c6118ba82f40f57fe6e3ab05c6e2883246a04f1
-    folder: openvino_sources/thirdparty/xbyak
   - url: https://github.com/intel/ittapi/archive/refs/tags/v3.24.0.tar.gz
     sha256: 36c42d3f2446ddfaa2d7dfa02dfaa79615933f1a68a72d7e4f1d70de7b56e2c9
     folder: openvino_sources/thirdparty/ittapi/ittapi
@@ -28,7 +23,7 @@ source:
     folder: openvino_sources/src/plugins/intel_cpu/thirdparty/onednn
   - url: https://github.com/oneapi-src/oneDNN/archive/f27dedbfc093f51032a4580198bb80579440dc15.tar.gz  # [win64 or linux64]
     sha256: da57c2298a8e001718902f0b65b6d92c4a7897b35467e23bc24996dde43ec47b  # [win64 or linux64]
-    folder: openvino_sources/src/plugins/intel_gpu/thirdparty/onednn_gpu  # [win64 or linux64]  
+    folder: openvino_sources/src/plugins/intel_gpu/thirdparty/onednn_gpu  # [win64 or linux64]
   - url: https://github.com/opencv/ade/archive/58b2595a1a95cc807be8bf6222f266a9a1f393a9.tar.gz
     sha256: db7759cc32107e713b9e503ddf71a54ba2c80de07daefcb1aa315507e706ce07
     folder: openvino_sources/thirdparty/ade
@@ -81,6 +76,7 @@ requirements:
     - clhpp  # [linux64 or win64]
     - khronos-opencl-icd-loader  # [win64]
     - pugixml # note: only static version is provided
+    - xbyak >= 6.69.1
     - libprotobuf-static =3.20.3  # [not win64]
     - libprotobuf-static  # [win64]
   run:
@@ -116,6 +112,7 @@ test:
     - snippets/
   commands:
     - export MACOSX_DEPLOYMENT_TARGET={{ MACOSX_DEPLOYMENT_TARGET }}  # [osx]
+    - export CONDA_BUILD_SYSROOT={{ CONDA_BUILD_SYSROOT }}            # [osx]
     - export CMAKE_GENERATOR=Ninja  # [unix]
 
     # check symlinks on Unix systems
@@ -129,6 +126,7 @@ test:
     {{ openvino_libs.append("_tensorflow_lite_frontend") or "" }}  # [unix]
     {% for openvino_lib in openvino_libs %}  # [unix]
     - test -f $PREFIX/lib/libopenvino{{ openvino_lib }}${SHLIB_EXT}  # [unix]
+    - if not exist %LIBRARY_BIN%\\openvino{{ openvino_lib }}%SHLIB_EXT% exit 1  # [win]
     {% endfor %}  # [unix]
 
     # C++ samples on Unix
@@ -156,9 +154,8 @@ test:
     - cmake --build samples_c_build --config Release --verbose  # [win]
 
     # check that devices are found using OpenVINO C API
-    # TODO: fix for OSX and Linux64: currently, the application cannot be run because of RPATH
-    # - $CC snippets/openvino_available_devices.c $(pkg-config --cflags --libs openvino) -o openvino_devices_test  # [linux]
-    # - if [[ $(./openvino_devices_test) != "passed" ]]; then exit 1 ; fi  # [linux]
+    - $CC snippets/openvino_available_devices.c $(pkg-config --cflags --libs openvino) -o openvino_devices_test  # [unix]
+    - if [[ $(./openvino_devices_test) != "passed" ]]; then exit 1 ; fi  # [unix]
 
     # check that frontends are found using OpenVINO C++ API
     - cmake -S snippets -B snippets_build
@@ -196,7 +193,7 @@ outputs:
         {% for openvino_lib in openvino_libs %}
         - test -f $PREFIX/lib/libopenvino{{ openvino_lib }}${SHLIB_EXT}.{{ version }}  # [linux]
         - test -f $PREFIX/lib/libopenvino{{ openvino_lib }}.{{ version }}${SHLIB_EXT}  # [osx]
-        - if not exist %PREFIX%\\Library\\bin\\openvino{{ openvino_lib }}.dll exit 1  # [win]
+        - if not exist %LIBRARY_BIN%\\openvino{{ openvino_lib }}%SHLIB_EXT% exit 1  # [win]
         {% endfor %}
 
   - name: libopenvino-ir-frontend
@@ -226,8 +223,7 @@ outputs:
       commands:
         - test -f $PREFIX/lib/libopenvino_ir_frontend${SHLIB_EXT}.{{ version }}  # [linux]
         - test -f $PREFIX/lib/libopenvino_ir_frontend.{{ version }}${SHLIB_EXT}  # [osx]
-        - if not exist %PREFIX%\\Library\\bin\\openvino_ir_frontend.dll exit 1  # [win]
-
+        - if not exist %LIBRARY_BIN%\\openvino_ir_frontend%SHLIB_EXT% exit 1  # [win]
 
   - name: libopenvino-onnx-frontend
     version: {{ version }}
@@ -256,8 +252,7 @@ outputs:
       commands:
         - test -f $PREFIX/lib/libopenvino_onnx_frontend${SHLIB_EXT}.{{ version }}  # [linux]
         - test -f $PREFIX/lib/libopenvino_onnx_frontend.{{ version }}${SHLIB_EXT}  # [osx]
-        - if not exist %PREFIX%\\Library\\bin\\openvino_onnx_frontend.dll exit 1  # [win]
-
+        - if not exist %LIBRARY_BIN%\\openvino_onnx_frontend%SHLIB_EXT% exit 1  # [win]
 
   - name: libopenvino-paddle-frontend
     version: {{ version }}
@@ -286,7 +281,7 @@ outputs:
       commands:
         - test -f $PREFIX/lib/libopenvino_paddle_frontend${SHLIB_EXT}.{{ version }}  # [linux]
         - test -f $PREFIX/lib/libopenvino_paddle_frontend.{{ version }}${SHLIB_EXT}  # [osx]
-        - if not exist %PREFIX%\\Library\\bin\\openvino_paddle_frontend.dll exit 1  # [win]
+        - if not exist %LIBRARY_BIN%\\openvino_paddle_frontend%SHLIB_EXT% exit 1  # [win]
 
   - name: libopenvino-pytorch-frontend
     version: {{ version }}
@@ -315,7 +310,7 @@ outputs:
       commands:
         - test -f $PREFIX/lib/libopenvino_pytorch_frontend${SHLIB_EXT}.{{ version }}  # [linux]
         - test -f $PREFIX/lib/libopenvino_pytorch_frontend.{{ version }}${SHLIB_EXT}  # [osx]
-        - if not exist %PREFIX%\\Library\\bin\\openvino_pytorch_frontend.dll exit 1  # [win]
+        - if not exist %LIBRARY_BIN%\\openvino_pytorch_frontend%SHLIB_EXT% exit 1  # [win]
 
   - name: libopenvino-tensorflow-frontend
     version: {{ version }}
@@ -345,7 +340,7 @@ outputs:
       commands:
         - test -f $PREFIX/lib/libopenvino_tensorflow_frontend${SHLIB_EXT}.{{ version }}  # [linux]
         - test -f $PREFIX/lib/libopenvino_tensorflow_frontend.{{ version }}${SHLIB_EXT}  # [osx]
-        - if not exist %PREFIX%\\Library\\bin\\openvino_tensorflow_frontend.dll exit 1  # [win]
+        - if not exist %LIBRARY_BIN%\\openvino_tensorflow_frontend%SHLIB_EXT% exit 1  # [win]
 
   - name: libopenvino-tensorflow-lite-frontend
     version: {{ version }}
@@ -374,7 +369,7 @@ outputs:
       commands:
         - test -f $PREFIX/lib/libopenvino_tensorflow_lite_frontend${SHLIB_EXT}.{{ version }}  # [linux]
         - test -f $PREFIX/lib/libopenvino_tensorflow_lite_frontend.{{ version }}${SHLIB_EXT}  # [osx]
-        - if not exist %PREFIX%\\Library\\bin\\openvino_tensorflow_lite_frontend.dll exit 1  # [win]
+        - if not exist %LIBRARY_BIN%\\openvino_tensorflow_lite_frontend%SHLIB_EXT% exit 1  # [win]
 
   - name: libopenvino-intel-cpu-plugin
     version: {{ version }}
@@ -404,7 +399,7 @@ outputs:
     test:
       commands:
         - test -f $PREFIX/lib/openvino-{{ version }}/libopenvino_intel_cpu_plugin.so  # [unix]
-        - if not exist %PREFIX%\\Library\\bin\\openvino-{{ version }}\\openvino_intel_cpu_plugin.dll exit 1  # [win]
+        - if not exist %LIBRARY_BIN%\\openvino-{{ version }}\\openvino_intel_cpu_plugin%SHLIB_EXT% exit 1  # [win]
 
   - name: libopenvino-arm-cpu-plugin
     version: {{ version }}
@@ -467,7 +462,7 @@ outputs:
     test:
       commands:
         - test -f $PREFIX/lib/openvino-{{ version }}/libopenvino_intel_gpu_plugin.so  # [unix]
-        - if not exist %PREFIX%\\Library\\bin\\openvino-{{ version }}\\openvino_intel_gpu_plugin.dll exit 1  # [win]
+        - if not exist %LIBRARY_BIN%\\openvino-{{ version }}\\openvino_intel_gpu_plugin%SHLIB_EXT% exit 1  # [win]
 
   - name: libopenvino-auto-plugin
     version: {{ version }}
@@ -496,7 +491,7 @@ outputs:
     test:
       commands:
         - test -f $PREFIX/lib/openvino-{{ version }}/libopenvino_auto_plugin.so  # [unix]
-        - if not exist %PREFIX%\\Library\\bin\\openvino-{{ version }}\\openvino_auto_plugin.dll exit 1  # [win]
+        - if not exist %LIBRARY_BIN%\\openvino-{{ version }}\\openvino_auto_plugin%SHLIB_EXT% exit 1  # [win]
 
   - name: libopenvino-auto-batch-plugin
     version: {{ version }}
@@ -524,7 +519,7 @@ outputs:
     test:
       commands:
         - test -f $PREFIX/lib/openvino-{{ version }}/libopenvino_auto_batch_plugin.so  # [unix]
-        - if not exist %PREFIX%\\Library\\bin\\openvino-{{ version }}\\openvino_auto_batch_plugin.dll exit 1  # [win]
+        - if not exist %LIBRARY_BIN%\\openvino-{{ version }}\\openvino_auto_batch_plugin%SHLIB_EXT% exit 1  # [win]
 
   - name: libopenvino-hetero-plugin
     version: {{ version }}
@@ -552,8 +547,7 @@ outputs:
     test:
       commands:
         - test -f $PREFIX/lib/openvino-{{ version }}/libopenvino_hetero_plugin.so  # [unix]
-        - if not exist %PREFIX%\\Library\\bin\\openvino-{{ version }}\\openvino_hetero_plugin.dll exit 1  # [win]
-
+        - if not exist %LIBRARY_BIN%\\openvino-{{ version }}\\openvino_hetero_plugin%SHLIB_EXT% exit 1  # [win]
   - name: openvino
     script: install/install_dev.sh
 
@@ -567,9 +561,9 @@ about:
     emulation of human vision, automatic speech recognition, natural
     language processing, recommendation systems, etc. It provides
     high-performance and rich deployment options, from edge to cloud
-    
+
     Installing OpenVINO Runtime from Conda Forge is recommended for C++ developers,
-    as it provides only the C++ Runtime API. 
+    as it provides only the C++ / C Runtime API.
     If you work with Python, consider other OpenVINO distribution channels:
     https://www.intel.com/content/www/us/en/developer/tools/openvino-toolkit/download.html
   license: Apache-2.0
