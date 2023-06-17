@@ -151,7 +151,7 @@ test:
     - cmake --build samples_c_build --config Release --verbose  # [win]
 
     # check that devices are found using OpenVINO C API
-    - $CC snippets/openvino_available_devices.c $(pkg-config --cflags --libs openvino) -o openvino_devices_test  # [unix]
+    - $CC snippets/openvino_available_devices.c $(pkg-config --cflags --libs openvino) -Wl,-rpath,$(pkg-config --libs-only-L openvino) -o openvino_devices_test  # [unix]
     - if [[ $(./openvino_devices_test) != "passed" ]]; then exit 1 ; fi  # [unix]
 
     # check that frontends are found using OpenVINO C++ API
