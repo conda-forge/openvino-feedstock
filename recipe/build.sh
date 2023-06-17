@@ -26,6 +26,8 @@ cmake "${CMAKE_ARGS}"                                                        \
     -DENABLE_TEMPLATE=OFF                                                    \
     -DENABLE_SAMPLES=OFF                                                     \
     -DENABLE_DATA=OFF                                                        \
+    # -DCMAKE_CXX_COMPILER_LAUNCHER=ccache                                     \
+    # -DCMAKE_C_COMPILER_LAUNCHER=ccache                                       \
     -DCPACK_GENERATOR=CONDA-FORGE                                            \
     -G Ninja                                                                 \
     -S "$SRC_DIR/openvino_sources"                                           \

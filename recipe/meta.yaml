@@ -15,6 +15,9 @@ source:
   - url: https://github.com/ARM-software/ComputeLibrary/archive/refs/tags/v23.02.1.tar.gz  # [aarch64 or arm64]
     sha256: c3a443e26539f866969242e690cf0651ef629149741ee18732f954c734da6763  # [aarch64 or arm64]
     folder: openvino_sources/src/plugins/intel_cpu/thirdparty/ComputeLibrary  # [aarch64 or arm64]
+  - url: https://github.com/herumi/xbyak/archive/refs/tags/v6.69.tar.gz
+    sha256: 7eb64e2c18527824402b16f26c6118ba82f40f57fe6e3ab05c6e2883246a04f1
+    folder: openvino_sources/thirdparty/xbyak
   - url: https://github.com/openvinotoolkit/oneDNN/archive/1c7bfabf1b26e6fb95fea1613e1d3d2bef1f6b54.tar.gz
     sha256: 52921b3efab33d1710971c67318e8c00ee102b6369e4e9cea8fdf91a1d68e38e
     folder: openvino_sources/src/plugins/intel_cpu/thirdparty/onednn
@@ -29,7 +32,7 @@ source:
     folder: openvino_sources/thirdparty/onnx/onnx
 
 build:
-  number: 0
+  number: 1
   script_env:
     - CI_BUILD_NUMBER={{ commit_number }}
   run_exports:
@@ -49,31 +52,28 @@ build:
   ignore_run_exports_from:
     - {{ compiler('c') }}
     - {{ compiler('cxx') }}
-    - pugixml # static package mistakenly adds run_exports
-    - tbb-devel # libopenvino and libopenvino already depend on tbb
+    - tbb-devel # libopenvino and libopenvino-*-plugin already depend on tbb
 
 requirements:
   build:
     - {{ compiler('c') }}
     - {{ compiler('cxx') }}
     - git
-    - cmake >=3.15
+    - cmake >=3.15 # to have new cmake cmd interface (-S, --install and other options)
     - ninja
     - python >=3.7
-    - libprotobuf =3.20.3
+    - libprotobuf =3.20.3 # for protoc compiler, libraries are used from libprotobuf-static
     - scons  # [aarch64 or arm64]
     - flatbuffers =23.3.3
     - sysroot_linux-64 =2.17  # [linux64]
-    - cross-python_{{ target_platform }}     # [build_platform != target_platform]
-    - numpy                                  # [build_platform != target_platform]
   host:
-    - tbb-devel =2021.5
+    - tbb-devel =2021.5 # starting from this version TBB uses hwloc in conda
     - snappy
     - ocl-icd  # [linux64]
     - clhpp  # [linux64 or win64]
     - khronos-opencl-icd-loader  # [win64]
-    - pugixml # note: only static version is provided
-    - xbyak >= 6.69.1
+    - pugixml >=1.12.1 # starting from this version shared libraries are provided
+    - xbyak >=6.69.1
     - libprotobuf-static =3.20.3  # [not win64]
     - libprotobuf-static  # [win64]
   run:
@@ -96,7 +96,7 @@ test:
     - {{ compiler('cxx') }}
     - {{ compiler('c') }}
     - ninja
-    - cmake >=3.15
+    - cmake >=3.15 # to have new cmake cmd interface (-S, --install and other options)
     - pkg-config # to find zlib
     - zlib
     - nlohmann_json
@@ -109,22 +109,22 @@ test:
     - snippets/
   commands:
     - export MACOSX_DEPLOYMENT_TARGET={{ MACOSX_DEPLOYMENT_TARGET }}  # [osx]
-    - export CONDA_BUILD_SYSROOT={{ CONDA_BUILD_SYSROOT }}            # [osx]
+    # - export CONDA_BUILD_SYSROOT={{ CONDA_BUILD_SYSROOT }}            # [osx]
     - export CMAKE_GENERATOR=Ninja  # [unix]
 
-    # check symlinks on Unix systems
-    {% set openvino_libs = [] %}  # [unix]
-    {{ openvino_libs.append("") or "" }}  # [unix]
-    {{ openvino_libs.append("_c") or "" }}  # [unix]
-    {{ openvino_libs.append("_paddle_frontend") or "" }}  # [unix]
-    {{ openvino_libs.append("_pytorch_frontend") or "" }}  # [unix]
-    {{ openvino_libs.append("_onnx_frontend") or "" }}  # [unix]
-    {{ openvino_libs.append("_tensorflow_frontend") or "" }}  # [unix]
-    {{ openvino_libs.append("_tensorflow_lite_frontend") or "" }}  # [unix]
-    {% for openvino_lib in openvino_libs %}  # [unix]
+    # check libraries (symlinks)
+    {% set openvino_libs = [] %}
+    {{ openvino_libs.append("") or "" }}
+    {{ openvino_libs.append("_c") or "" }}
+    {{ openvino_libs.append("_paddle_frontend") or "" }}
+    {{ openvino_libs.append("_pytorch_frontend") or "" }}
+    {{ openvino_libs.append("_onnx_frontend") or "" }}
+    {{ openvino_libs.append("_tensorflow_frontend") or "" }}
+    {{ openvino_libs.append("_tensorflow_lite_frontend") or "" }}
+    {% for openvino_lib in openvino_libs %}
     - test -f $PREFIX/lib/libopenvino{{ openvino_lib }}${SHLIB_EXT}  # [unix]
     - if not exist %LIBRARY_BIN%\\openvino{{ openvino_lib }}%SHLIB_EXT% exit 1  # [win]
-    {% endfor %}  # [unix]
+    {% endfor %}
 
     # C++ samples on Unix
     - mkdir -p openvino_sources/samples/cpp/thirdparty  # [unix]
@@ -179,9 +179,9 @@ outputs:
       build:
         - {{ compiler('cxx') }}
         - {{ compiler('c') }}
-        - cmake >=3.15
+        - cmake >=3.15 # to have new cmake cmd interface (-S, --install and other options)
       host:
-        - tbb-devel =2021.5 # starting from this version TBB uses hwloc in conda
+        - tbb-devel =2021.5  # starting from this version TBB uses hwloc in conda
     test:
       commands:
         {% set openvino_libs = [] %}
@@ -211,7 +211,7 @@ outputs:
       build:
         - {{ compiler('cxx') }}
         - {{ compiler('c') }}
-        - cmake >=3.15
+        - cmake >=3.15 # to have new cmake cmd interface (-S, --install and other options)
       host:
         - {{ pin_subpackage('libopenvino', exact=True) }}
       run:
@@ -240,7 +240,7 @@ outputs:
       build:
         - {{ compiler('cxx') }}
         - {{ compiler('c') }}
-        - cmake >=3.15
+        - cmake >=3.15 # to have new cmake cmd interface (-S, --install and other options)
       host:
         - {{ pin_subpackage('libopenvino', exact=True) }}
       run:
@@ -269,7 +269,7 @@ outputs:
       build:
         - {{ compiler('cxx') }}
         - {{ compiler('c') }}
-        - cmake >=3.15
+        - cmake >=3.15 # to have new cmake cmd interface (-S, --install and other options)
       host:
         - {{ pin_subpackage('libopenvino', exact=True) }}
       run:
@@ -298,7 +298,7 @@ outputs:
       build:
         - {{ compiler('cxx') }}
         - {{ compiler('c') }}
-        - cmake >=3.15
+        - cmake >=3.15 # to have new cmake cmd interface (-S, --install and other options)
       host:
         - {{ pin_subpackage('libopenvino', exact=True) }}
       run:
@@ -327,7 +327,7 @@ outputs:
       build:
         - {{ compiler('cxx') }}
         - {{ compiler('c') }}
-        - cmake >=3.15
+        - cmake >=3.15 # to have new cmake cmd interface (-S, --install and other options)
       host:
         - {{ pin_subpackage('libopenvino', exact=True) }}
         - snappy =1.1.10
@@ -357,7 +357,7 @@ outputs:
       build:
         - {{ compiler('cxx') }}
         - {{ compiler('c') }}
-        - cmake >=3.15
+        - cmake >=3.15 # to have new cmake cmd interface (-S, --install and other options)
       host:
         - {{ pin_subpackage('libopenvino', exact=True) }}
       run:
@@ -387,9 +387,9 @@ outputs:
       build:
         - {{ compiler('cxx') }}
         - {{ compiler('c') }}
-        - cmake >=3.15
+        - cmake >=3.15 # to have new cmake cmd interface (-S, --install and other options)
       host:
-        - tbb-devel =2021.5
+        - tbb-devel =2021.5 # starting from this version TBB uses hwloc in conda
         - {{ pin_subpackage('libopenvino', exact=True) }}
       run:
         - {{ pin_subpackage('libopenvino', exact=True) }}
@@ -417,9 +417,9 @@ outputs:
       build:
         - {{ compiler('cxx') }}
         - {{ compiler('c') }}
-        - cmake >=3.15
+        - cmake >=3.15 # to have new cmake cmd interface (-S, --install and other options)
       host:
-        - tbb-devel =2021.5
+        - tbb-devel =2021.5 # starting from this version TBB uses hwloc in conda
         - {{ pin_subpackage('libopenvino', exact=True) }}
       run:
         - {{ pin_subpackage('libopenvino', exact=True) }}
@@ -446,9 +446,9 @@ outputs:
       build:
         - {{ compiler('cxx') }}
         - {{ compiler('c') }}
-        - cmake >=3.15
+        - cmake >=3.15 # to have new cmake cmd interface (-S, --install and other options)
       host:
-        - tbb-devel =2021.5
+        - tbb-devel =2021.5 # starting from this version TBB uses hwloc in conda
         - ocl-icd  # [linux64]
         - clhpp
         - khronos-opencl-icd-loader  # [win64]
@@ -479,9 +479,9 @@ outputs:
       build:
         - {{ compiler('cxx') }}
         - {{ compiler('c') }}
-        - cmake >=3.15
+        - cmake >=3.15 # to have new cmake cmd interface (-S, --install and other options)
       host:
-        - tbb-devel =2021.5
+        - tbb-devel =2021.5 # starting from this version TBB uses hwloc in conda
         - {{ pin_subpackage('libopenvino', exact=True) }}
       run:
         - {{ pin_subpackage('libopenvino', exact=True) }}
@@ -508,7 +508,7 @@ outputs:
       build:
         - {{ compiler('cxx') }}
         - {{ compiler('c') }}
-        - cmake >=3.15
+        - cmake >=3.15 # to have new cmake cmd interface (-S, --install and other options)
       host:
         - {{ pin_subpackage('libopenvino', exact=True) }}
       run:
@@ -536,7 +536,7 @@ outputs:
       build:
         - {{ compiler('cxx') }}
         - {{ compiler('c') }}
-        - cmake >=3.15
+        - cmake >=3.15 # to have new cmake cmd interface (-S, --install and other options)
       host:
         - {{ pin_subpackage('libopenvino', exact=True) }}
       run:
@@ -545,6 +545,7 @@ outputs:
       commands:
         - test -f $PREFIX/lib/openvino-{{ version }}/libopenvino_hetero_plugin.so  # [unix]
         - if not exist %LIBRARY_BIN%\\openvino-{{ version }}\\openvino_hetero_plugin%SHLIB_EXT% exit 1  # [win]
+
   - name: openvino
     script: install/install_dev.sh
 
