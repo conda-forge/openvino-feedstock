@@ -27,6 +27,9 @@ source:
   - url: https://github.com/opencv/ade/archive/58b2595a1a95cc807be8bf6222f266a9a1f393a9.tar.gz
     sha256: db7759cc32107e713b9e503ddf71a54ba2c80de07daefcb1aa315507e706ce07
     folder: openvino_sources/thirdparty/ade
+  - url: https://github.com/onnx/onnx/archive/refs/tags/v1.12.0.tar.gz
+    sha256: 052ad3d5dad358a33606e0fc89483f8150bb0655c99b12a43aa58b5b7f0cc507
+    folder: openvino_sources/thirdparty/onnx/onnx
 
 build:
   number: 0
