@@ -1,3 +1,3 @@
 # !/usr/bin/env bash
 
-cmake --install "$SRC_DIR/openvino-build" --component onnx
+cmake --install "$SRC_DIR/openvino_build" --component onnx

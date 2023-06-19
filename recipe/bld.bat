@@ -1,7 +1,7 @@
 echo ON
 setlocal enabledelayedexpansion
 
-mkdir -p openvino-build
+mkdir -p openvino_build
 
 cmake                                                                        ^
     -DCMAKE_INSTALL_PREFIX="%LIBRARY_PREFIX%"                                ^
@@ -18,16 +18,15 @@ cmake                                                                        ^
     -DENABLE_CLANG_FORMAT=OFF                                                ^
     -DENABLE_NCC_STYLE=OFF                                                   ^
     -DENABLE_TEMPLATE=OFF                                                    ^
-    -DENABLE_REQUIREMENTS_INSTALL=OFF                                        ^
     -DENABLE_SAMPLES=OFF                                                     ^
     -DENABLE_DATA=OFF                                                        ^
     -DCPACK_GENERATOR=CONDA-FORGE                                            ^
     -G Ninja                                                                 ^
     -S "%SRC_DIR%/openvino_sources"                                          ^
-    -B "%SRC_DIR%/openvino-build"
+    -B "%SRC_DIR%/openvino_build"
 if errorlevel 1 exit 1
 
-cmake --build "%SRC_DIR%/openvino-build" --config Release --parallel %CPU_COUNT% --verbose
+cmake --build "%SRC_DIR%/openvino_build" --config Release --parallel %CPU_COUNT% --verbose
 if errorlevel 1 exit 1
 
 cp "%SRC_DIR%/openvino_sources/LICENSE" LICENSE

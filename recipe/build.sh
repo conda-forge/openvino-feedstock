@@ -6,12 +6,9 @@ if [[ "$CONDA_BUILD_CROSS_COMPILATION" == 1 ]]; then
     CMAKE_ARGS="${CMAKE_ARGS} -DProtobuf_PROTOC_EXECUTABLE=$BUILD_PREFIX/bin/protoc"
 fi
 
-export PKG_CONFIG_LIBDIR=$PREFIX/lib:$BUILD_PREFIX/lib
-export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:$PREFIX/lib/pkgconfig:$BUILD_PREFIX/lib/pkgconfig
+mkdir -p openvino_build
 
-mkdir -p openvino-build
-
-cmake "${CMAKE_ARGS}"                                                        \
+cmake ${CMAKE_ARGS}                                                          \
     -DCMAKE_BUILD_TYPE=Release                                               \
     -DENABLE_INTEL_GNA=OFF                                                   \
     -DENABLE_SYSTEM_TBB=ON                                                   \
@@ -26,14 +23,12 @@ cmake "${CMAKE_ARGS}"                                                        \
     -DENABLE_TEMPLATE=OFF                                                    \
     -DENABLE_SAMPLES=OFF                                                     \
     -DENABLE_DATA=OFF                                                        \
-    # -DCMAKE_CXX_COMPILER_LAUNCHER=ccache                                     \
-    # -DCMAKE_C_COMPILER_LAUNCHER=ccache                                       \
     -DCPACK_GENERATOR=CONDA-FORGE                                            \
     -G Ninja                                                                 \
     -S "$SRC_DIR/openvino_sources"                                           \
-    -B "$SRC_DIR/openvino-build"
+    -B "$SRC_DIR/openvino_build"
 
-cmake --build "$SRC_DIR/openvino-build" --config Release --parallel $CPU_COUNT --verbose
+cmake --build "$SRC_DIR/openvino_build" --config Release --parallel $CPU_COUNT --verbose
 
 cp "$SRC_DIR/openvino_sources/LICENSE" LICENSE
 cp "$SRC_DIR/openvino_sources/licensing/third-party-programs.txt" third-party-programs.txt
