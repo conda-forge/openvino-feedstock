@@ -6,9 +6,6 @@ if [[ "$CONDA_BUILD_CROSS_COMPILATION" == 1 ]]; then
     CMAKE_ARGS="${CMAKE_ARGS} -DProtobuf_PROTOC_EXECUTABLE=$BUILD_PREFIX/bin/protoc"
 fi
 
-export PKG_CONFIG_LIBDIR=$PREFIX/lib:$BUILD_PREFIX/lib
-export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:$PREFIX/lib/pkgconfig:$BUILD_PREFIX/lib/pkgconfig
-
 mkdir -p openvino-build
 
 cmake ${CMAKE_ARGS}                                                          \
@@ -16,7 +13,7 @@ cmake ${CMAKE_ARGS}                                                          \
     -DOPENVINO_EXTRA_MODULES="$SRC_DIR/openvino_contrib/modules/arm_plugin"  \
     -DENABLE_INTEL_GNA=OFF                                                   \
     -DENABLE_INTEL_GPU=OFF                                                   \
-    -DENABLE_OV_ONNX_FRONTEND=OFF                                            \
+    -DENABLE_OV_ONNX_FRONTEND=ON                                             \
     -DENABLE_INTEL_MYRIAD_COMMON=OFF                                         \
     -DENABLE_SYSTEM_TBB=ON                                                   \
     -DENABLE_SYSTEM_PUGIXML=ON                                               \
