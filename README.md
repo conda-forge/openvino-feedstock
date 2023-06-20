@@ -21,7 +21,12 @@ optimizing and deploying AI inference. It can be used to develop
 applications and solutions based on deep learning tasks, such as:
 emulation of human vision, automatic speech recognition, natural
 language processing, recommendation systems, etc. It provides
-high-performance and rich deployment options, from edge to cloud
+high-performance and rich deployment options, from edge to cloud.
+
+Installing OpenVINO Runtime from Conda Forge is recommended for C++ developers,
+as it provides only the C++ Runtime API. 
+If you work with Python or aim at GPU inference, consider other OpenVINO distribution channels:
+https://www.intel.com/content/www/us/en/developer/tools/openvino-toolkit/download.html
 
 About libopenvino
 -----------------
@@ -71,6 +76,14 @@ About libopenvino-ir-frontend
 Package license: 
 
 Summary: OpenVINO IR Frontend
+About libopenvino-onnx-frontend
+-------------------------------
+
+
+
+Package license: 
+
+Summary: OpenVINO ONNX Frontend
 About libopenvino-paddle-frontend
 ---------------------------------
 
@@ -87,6 +100,31 @@ About libopenvino-tensorflow-frontend
 Package license: 
 
 Summary: OpenVINO TensorFlow Frontend
+About openvino
+--------------
+
+Home: https://github.com/openvinotoolkit/openvino
+
+Package license: Apache-2.0
+
+Summary: Intel® Distribution of OpenVINO™ Toolkit
+
+Development: https://github.com/openvinotoolkit/openvino
+
+Documentation: https://docs.openvino.ai/latest/index.html
+
+Intel® Distribution of OpenVINO™ toolkit is an open-source toolkit for
+optimizing and deploying AI inference. It can be used to develop
+applications and solutions based on deep learning tasks, such as:
+emulation of human vision, automatic speech recognition, natural
+language processing, recommendation systems, etc. It provides
+high-performance and rich deployment options, from edge to cloud.
+
+Installing OpenVINO Runtime from Conda Forge is recommended for C++ developers,
+as it provides only the C++ Runtime API.
+If you work with Python or aim at GPU inference, consider other OpenVINO distribution channels:
+https://www.intel.com/content/www/us/en/developer/tools/openvino-toolkit/download.html
+
 About libopenvino-arm-cpu-plugin
 --------------------------------
 
@@ -94,7 +132,7 @@ About libopenvino-arm-cpu-plugin
 
 Package license: 
 
-Summary: OpenVINO ARM® CPU plugin
+Summary: OpenVINO ARM CPU plugin
 
 Current build status
 ====================
@@ -161,6 +199,7 @@ Current release info
 | [![Conda Recipe](https://img.shields.io/badge/recipe-libopenvino--hetero--plugin-green.svg)](https://anaconda.org/conda-forge/libopenvino-hetero-plugin) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/libopenvino-hetero-plugin.svg)](https://anaconda.org/conda-forge/libopenvino-hetero-plugin) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/libopenvino-hetero-plugin.svg)](https://anaconda.org/conda-forge/libopenvino-hetero-plugin) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/libopenvino-hetero-plugin.svg)](https://anaconda.org/conda-forge/libopenvino-hetero-plugin) |
 | [![Conda Recipe](https://img.shields.io/badge/recipe-libopenvino--intel--cpu--plugin-green.svg)](https://anaconda.org/conda-forge/libopenvino-intel-cpu-plugin) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/libopenvino-intel-cpu-plugin.svg)](https://anaconda.org/conda-forge/libopenvino-intel-cpu-plugin) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/libopenvino-intel-cpu-plugin.svg)](https://anaconda.org/conda-forge/libopenvino-intel-cpu-plugin) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/libopenvino-intel-cpu-plugin.svg)](https://anaconda.org/conda-forge/libopenvino-intel-cpu-plugin) |
 | [![Conda Recipe](https://img.shields.io/badge/recipe-libopenvino--ir--frontend-green.svg)](https://anaconda.org/conda-forge/libopenvino-ir-frontend) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/libopenvino-ir-frontend.svg)](https://anaconda.org/conda-forge/libopenvino-ir-frontend) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/libopenvino-ir-frontend.svg)](https://anaconda.org/conda-forge/libopenvino-ir-frontend) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/libopenvino-ir-frontend.svg)](https://anaconda.org/conda-forge/libopenvino-ir-frontend) |
+| [![Conda Recipe](https://img.shields.io/badge/recipe-libopenvino--onnx--frontend-green.svg)](https://anaconda.org/conda-forge/libopenvino-onnx-frontend) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/libopenvino-onnx-frontend.svg)](https://anaconda.org/conda-forge/libopenvino-onnx-frontend) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/libopenvino-onnx-frontend.svg)](https://anaconda.org/conda-forge/libopenvino-onnx-frontend) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/libopenvino-onnx-frontend.svg)](https://anaconda.org/conda-forge/libopenvino-onnx-frontend) |
 | [![Conda Recipe](https://img.shields.io/badge/recipe-libopenvino--paddle--frontend-green.svg)](https://anaconda.org/conda-forge/libopenvino-paddle-frontend) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/libopenvino-paddle-frontend.svg)](https://anaconda.org/conda-forge/libopenvino-paddle-frontend) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/libopenvino-paddle-frontend.svg)](https://anaconda.org/conda-forge/libopenvino-paddle-frontend) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/libopenvino-paddle-frontend.svg)](https://anaconda.org/conda-forge/libopenvino-paddle-frontend) |
 | [![Conda Recipe](https://img.shields.io/badge/recipe-libopenvino--tensorflow--frontend-green.svg)](https://anaconda.org/conda-forge/libopenvino-tensorflow-frontend) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/libopenvino-tensorflow-frontend.svg)](https://anaconda.org/conda-forge/libopenvino-tensorflow-frontend) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/libopenvino-tensorflow-frontend.svg)](https://anaconda.org/conda-forge/libopenvino-tensorflow-frontend) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/libopenvino-tensorflow-frontend.svg)](https://anaconda.org/conda-forge/libopenvino-tensorflow-frontend) |
 | [![Conda Recipe](https://img.shields.io/badge/recipe-openvino-green.svg)](https://anaconda.org/conda-forge/openvino) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/openvino.svg)](https://anaconda.org/conda-forge/openvino) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/openvino.svg)](https://anaconda.org/conda-forge/openvino) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/openvino.svg)](https://anaconda.org/conda-forge/openvino) |
@@ -175,16 +214,16 @@ conda config --add channels conda-forge
 conda config --set channel_priority strict
 ```
 
-Once the `conda-forge` channel has been enabled, `libopenvino, libopenvino-arm-cpu-plugin, libopenvino-auto-batch-plugin, libopenvino-auto-plugin, libopenvino-hetero-plugin, libopenvino-intel-cpu-plugin, libopenvino-ir-frontend, libopenvino-paddle-frontend, libopenvino-tensorflow-frontend, openvino` can be installed with `conda`:
+Once the `conda-forge` channel has been enabled, `libopenvino, libopenvino-arm-cpu-plugin, libopenvino-auto-batch-plugin, libopenvino-auto-plugin, libopenvino-hetero-plugin, libopenvino-intel-cpu-plugin, libopenvino-ir-frontend, libopenvino-onnx-frontend, libopenvino-paddle-frontend, libopenvino-tensorflow-frontend, openvino` can be installed with `conda`:
 
 ```
-conda install libopenvino libopenvino-arm-cpu-plugin libopenvino-auto-batch-plugin libopenvino-auto-plugin libopenvino-hetero-plugin libopenvino-intel-cpu-plugin libopenvino-ir-frontend libopenvino-paddle-frontend libopenvino-tensorflow-frontend openvino
+conda install libopenvino libopenvino-arm-cpu-plugin libopenvino-auto-batch-plugin libopenvino-auto-plugin libopenvino-hetero-plugin libopenvino-intel-cpu-plugin libopenvino-ir-frontend libopenvino-onnx-frontend libopenvino-paddle-frontend libopenvino-tensorflow-frontend openvino
 ```
 
 or with `mamba`:
 
 ```
-mamba install libopenvino libopenvino-arm-cpu-plugin libopenvino-auto-batch-plugin libopenvino-auto-plugin libopenvino-hetero-plugin libopenvino-intel-cpu-plugin libopenvino-ir-frontend libopenvino-paddle-frontend libopenvino-tensorflow-frontend openvino
+mamba install libopenvino libopenvino-arm-cpu-plugin libopenvino-auto-batch-plugin libopenvino-auto-plugin libopenvino-hetero-plugin libopenvino-intel-cpu-plugin libopenvino-ir-frontend libopenvino-onnx-frontend libopenvino-paddle-frontend libopenvino-tensorflow-frontend openvino
 ```
 
 It is possible to list all of the versions of `libopenvino` available on your platform with `conda`:
