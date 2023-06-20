@@ -10,7 +10,7 @@ int main() {
     char* ret = NULL;
     OV_CALL(ov_core_create(&core));
     OV_CALL(ov_core_get_property(core, "CPU", "AVAILABLE_DEVICES", &ret));
-#if defined(OPENVINO_ARCH_64_BIT) && !defined(__APPLE__)
+#if defined(OPENVINO_ARCH_X86_64) && !defined(__APPLE__)
     OV_CALL(ov_core_get_property(core, "GPU", "AVAILABLE_DEVICES", &ret));
 #endif
     OV_CALL(ov_core_get_property(core, "AUTO", "SUPPORTED_METRICS", &ret));
