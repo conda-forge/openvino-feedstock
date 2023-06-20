@@ -1,3 +1,3 @@
 # !/usr/bin/env bash
 
-cmake --install "$SRC_DIR/openvino_build" --component ir
+cmake --install "$SRC_DIR/build" --component ir

@@ -1,3 +1,3 @@
 # !/usr/bin/env bash
 
-cmake --install "$SRC_DIR/openvino_build" --component paddle
+cmake --install "$SRC_DIR/build" --component paddle
