@@ -1,3 +1,3 @@
 # !/usr/bin/env bash
 
-cmake --install "$SRC_DIR/openvino-build" --component hetero
+cmake --install "$SRC_DIR/build" --component hetero
