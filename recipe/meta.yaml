@@ -1,6 +1,6 @@
 {% set name = "openvino" %}
-{% set version = "2023.0.0" %}
-{% set commit_number = "10926" %}
+{% set version = "2023.0.1" %}
+{% set commit_number = "11005" %}
 
 package:
   name: {{ name|lower }}
