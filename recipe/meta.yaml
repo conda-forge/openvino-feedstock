@@ -7,8 +7,8 @@ package:
   version: {{ version }}
 
 source:
-  - url: https://github.com/openvinotoolkit/openvino/archive/refs/tags/2023.0.0.tar.gz
-    sha256: 0d43c95a1acb4281f49b01faa16b3c6904a0c93190b62d2399052613fc5ee08c
+  - url: https://github.com/openvinotoolkit/openvino/archive/refs/tags/2023.0.1.tar.gz
+    sha256: c14cb22f5191a75ea15659c62baceb71333dc9ecf62139ce513f3e81e4544651
     patches:
     - patches/001-win64-find-ocl.patch  # [win64]
     - patches/003-lin-arm64-compute-lib.patch  # [aarch64]
