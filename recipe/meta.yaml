@@ -1,6 +1,5 @@
 {% set name = "openvino" %}
 {% set version = "2023.0.1" %}
-{% set commit_number = "11005" %}
 
 package:
   name: {{ name|lower }}
@@ -34,8 +33,6 @@ source:
 
 build:
   number: 1
-  script_env:
-    - CI_BUILD_NUMBER={{ commit_number }}
   run_exports:
     - {{ pin_subpackage('libopenvino', max_pin='x.x.x') }}
     - {{ pin_subpackage('libopenvino-intel-cpu-plugin', max_pin='x.x.x') }}  # [x86_64]
