@@ -1,3 +1,4 @@
 # !/usr/bin/env bash
 
-cmake --install "$SRC_DIR/build" --component paddle
+cmake --build "$SRC_DIR/../build" --config Release --verbose --parallel $CPU_COUNT --target openvino_paddle_frontend
+cmake --install "$SRC_DIR/../build" --component paddle

@@ -6,7 +6,7 @@ package:
   version: {{ version }}
 
 source:
-  - url: https://github.com/openvinotoolkit/openvino/archive/refs/tags/2023.0.1.tar.gz
+  - url: https://github.com/openvinotoolkit/{{ name }}/archive/refs/tags/{{ version }}.tar.gz
     sha256: c14cb22f5191a75ea15659c62baceb71333dc9ecf62139ce513f3e81e4544651
     patches:
     - patches/001-win64-find-ocl.patch  # [win64]
@@ -151,12 +151,13 @@ test:
 
     # check that devices are found using OpenVINO C API
     - $CC snippets/openvino_available_devices.c $(pkg-config --cflags --libs pugixml tbb openvino) -Wl,-rpath,$PREFIX/lib -o openvino_devices_test  # [unix]
-    - if [[ $(./openvino_devices_test) != "passed" ]]; then exit 1 ; fi  # [unix]
+    - ./openvino_devices_test  # [unix]
 
     # check that frontends are found using OpenVINO C++ API
     - cmake -S snippets -B snippets_build
     - cmake --build snippets_build --config Release --verbose
-    - if [[ $(./snippets_build/openvino_frontends_test) != 6 ]]; then exit 1 ; fi  # [unix]
+    - ./snippets_build/openvino_frontends_test  # [unix]
+    - .\\snippets_build\\openvino_frontends_test  # [win]
 
 
 outputs:
@@ -551,7 +552,7 @@ outputs:
         - test -f $PREFIX/lib/openvino-{{ version }}/libopenvino_hetero_plugin.so  # [unix]
         - if not exist %LIBRARY_BIN%\\openvino-{{ version }}\\openvino_hetero_plugin%SHLIB_EXT% exit 1  # [win]
 
-  - name: openvino
+  - name: {{ name }}
     script: install/install_dev.sh
 
 about:

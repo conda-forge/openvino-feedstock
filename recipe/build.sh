@@ -2,11 +2,7 @@
 
 set +ex
 
-if [[ "$CONDA_BUILD_CROSS_COMPILATION" == 1 ]]; then
-    CMAKE_ARGS="${CMAKE_ARGS} -DProtobuf_PROTOC_EXECUTABLE=$BUILD_PREFIX/bin/protoc"
-fi
-
-mkdir -p build
+mkdir -p "$SRC_DIR/../build"
 
 cmake ${CMAKE_ARGS}                                                          \
     -DCMAKE_BUILD_TYPE=Release                                               \
@@ -26,9 +22,7 @@ cmake ${CMAKE_ARGS}                                                          \
     -DCPACK_GENERATOR=CONDA-FORGE                                            \
     -G Ninja                                                                 \
     -S "$SRC_DIR"                                                            \
-    -B "$SRC_DIR/build"
-
-cmake --build "$SRC_DIR/build" --config Release --parallel $CPU_COUNT --verbose
+    -B "$SRC_DIR/../build"
 
 cp "$SRC_DIR/LICENSE" LICENSE
 cp "$SRC_DIR/licensing/third-party-programs.txt" third-party-programs.txt

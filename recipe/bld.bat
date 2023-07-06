@@ -1,7 +1,7 @@
 echo ON
 setlocal enabledelayedexpansion
 
-mkdir -p build
+mkdir -p "%BUILD_DIR%"
 
 cmake                                                                        ^
     -DCMAKE_INSTALL_PREFIX="%LIBRARY_PREFIX%"                                ^
@@ -23,10 +23,7 @@ cmake                                                                        ^
     -DCPACK_GENERATOR=CONDA-FORGE                                            ^
     -G Ninja                                                                 ^
     -S "%SRC_DIR%"                                                           ^
-    -B "%SRC_DIR%/build"
-if errorlevel 1 exit 1
-
-cmake --build "%SRC_DIR%/build" --config Release --parallel %CPU_COUNT% --verbose
+    -B "%BUILD_DIR%"
 if errorlevel 1 exit 1
 
 cp "%SRC_DIR%/LICENSE" LICENSE

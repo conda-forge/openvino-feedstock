@@ -18,6 +18,5 @@ int main() {
     OV_CALL(ov_core_get_property(core, "HETERO", "SUPPORTED_METRICS", &ret));
     OV_CALL(ov_core_get_property(core, "BATCH", "SUPPORTED_METRICS", &ret));
     ov_core_free(core);
-    printf("passed");
     return 0;
 }
