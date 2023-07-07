@@ -1,0 +1,37 @@
+diff --git a/src/bindings/python/wheel/setup.py b/src/bindings/python/wheel/setup.py
+index 6feaa81519..371f584557 100644
+--- a/src/bindings/python/wheel/setup.py
++++ b/src/bindings/python/wheel/setup.py
+@@ -52,6 +52,8 @@ TBB_LIBS_DIR = os.getenv("TBB_LIBS_DIR", f"runtime/3rdparty/tbb/{LIBS_DIR}")
+ PUGIXML_LIBS_DIR = os.getenv("PUGIXML_LIBS_DIR", f"runtime/3rdparty/pugixml/{LIBS_DIR}")
+ PY_PACKAGES_DIR = os.getenv("PY_PACKAGES_DIR", "python")
+ LIBS_RPATH = "$ORIGIN" if sys.platform == "linux" else "@loader_path"
++PYTHON_EXTENSIONS_ONLY = os.getenv("PYTHON_EXTENSIONS_ONLY")
++SKIP_RPATH = os.getenv("SKIP_RPATH")
+ 
+ LIB_INSTALL_CFG = {
+     "ie_libs": {
+@@ -238,6 +240,9 @@ class CustomBuild(build):
+             self.jobs = os.getenv("MAX_JOBS")
+         self.jobs = multiprocessing.cpu_count() if self.jobs is None else int(self.jobs)
+ 
++        if PYTHON_EXTENSIONS_ONLY is not None:
++            self.python_extensions_only = True
++
+         if self.cmake_args is None:
+             self.cmake_args = ""
+ 
+@@ -444,6 +449,13 @@ class CopyExt(build_ext):
+         super().initialize_options()
+         self.skip_rpath = False
+ 
++    def finalize_options(self):
++        """Set final values for all the options that this command supports."""
++        super().finalize_options()
++
++        if SKIP_RPATH is not None:
++            self.skip_rpath = True
++
+     def run(self):
+         if len(self.extensions) == 1:
+             self.extensions = find_prebuilt_extensions(get_install_dirs_list(PY_INSTALL_CFG))
