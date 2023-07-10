@@ -7,6 +7,15 @@ cmake                                                                        ^
     -DCMAKE_INSTALL_PREFIX="%LIBRARY_PREFIX%"                                ^
     -DCMAKE_BUILD_TYPE=Release                                               ^
     -DENABLE_INTEL_GNA=OFF                                                   ^
+    -DENABLE_INTEL_GPU=OFF                                                   ^
+    -DENABLE_INTEL_CPU=OFF                                                   ^
+    -DENABLE_GAPI_PREPROCESSING=OFF                                          ^
+    -DENABLE_OV_ONNX_FRONTEND=OFF                                            ^
+    -DENABLE_OV_IR_FRONTEND=OFF                                              ^
+    -DENABLE_OV_PADDLE_FRONTEND=OFF                                          ^
+    -DENABLE_OV_TF_FRONTEND=OFF                                              ^
+    -DENABLE_OV_TF_LITE_FRONTEND=OFF                                         ^
+    -DENABLE_OV_PYTORCH_FRONTEND=OFF                                         ^
     -DENABLE_SYSTEM_TBB=ON                                                   ^
     -DENABLE_SYSTEM_PUGIXML=ON                                               ^
     -DENABLE_SYSTEM_OPENCL=ON                                                ^

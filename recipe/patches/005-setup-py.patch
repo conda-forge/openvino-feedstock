@@ -1,17 +1,49 @@
+diff --git a/cmake/developer_package/packaging/common-libraries.cmake b/cmake/developer_package/packaging/common-libraries.cmake
+index 159dce21bb..1efab8576c 100644
+--- a/cmake/developer_package/packaging/common-libraries.cmake
++++ b/cmake/developer_package/packaging/common-libraries.cmake
+@@ -37,7 +37,7 @@ macro(ov_common_libraries_cpack_set_dirs)
+     ov_get_pyversion(pyversion)
+     if(pyversion)
+         # should not be used in production; only by setup.py install
+-        set(OV_CPACK_PYTHONDIR ${CMAKE_INSTALL_LIBDIR}/${pyversion}/site-packages)
++        set(OV_CPACK_PYTHONDIR lib/${pyversion}/site-packages)
+     endif()
+ 
+     # non-native stuff
+diff --git a/samples/cpp/CMakeLists.txt b/samples/cpp/CMakeLists.txt
+index 8849aaf47d..68b80b2336 100644
+--- a/samples/cpp/CMakeLists.txt
++++ b/samples/cpp/CMakeLists.txt
+@@ -100,12 +100,7 @@ endif()
+ if(TARGET gflags)
+     set(GFLAGS_TARGET gflags)
+ elseif(gflags_required)
+-    if(EXISTS /etc/debian_version)
+-        set(gflags_component nothreads_static)
+-    else()
+-        set(gflags_component shared)
+-    endif()
+-    find_package(gflags QUIET OPTIONAL_COMPONENTS ${gflags_component})
++    find_package(gflags QUIET)
+     if(gflags_FOUND)
+         if(TARGET ${GFLAGS_TARGET})
+             # nothing
 diff --git a/src/bindings/python/wheel/setup.py b/src/bindings/python/wheel/setup.py
-index 6feaa81519..371f584557 100644
+index 6feaa81519..1440bad222 100644
 --- a/src/bindings/python/wheel/setup.py
 +++ b/src/bindings/python/wheel/setup.py
-@@ -52,6 +52,8 @@ TBB_LIBS_DIR = os.getenv("TBB_LIBS_DIR", f"runtime/3rdparty/tbb/{LIBS_DIR}")
+@@ -52,6 +52,9 @@ TBB_LIBS_DIR = os.getenv("TBB_LIBS_DIR", f"runtime/3rdparty/tbb/{LIBS_DIR}")
  PUGIXML_LIBS_DIR = os.getenv("PUGIXML_LIBS_DIR", f"runtime/3rdparty/pugixml/{LIBS_DIR}")
  PY_PACKAGES_DIR = os.getenv("PY_PACKAGES_DIR", "python")
  LIBS_RPATH = "$ORIGIN" if sys.platform == "linux" else "@loader_path"
 +PYTHON_EXTENSIONS_ONLY = os.getenv("PYTHON_EXTENSIONS_ONLY")
 +SKIP_RPATH = os.getenv("SKIP_RPATH")
++CPACK_GENERATOR = os.getenv("CPACK_GENERATOR", "TGZ")
  
  LIB_INSTALL_CFG = {
      "ie_libs": {
-@@ -238,6 +240,9 @@ class CustomBuild(build):
+@@ -238,6 +241,9 @@ class CustomBuild(build):
              self.jobs = os.getenv("MAX_JOBS")
          self.jobs = multiprocessing.cpu_count() if self.jobs is None else int(self.jobs)
  
@@ -21,7 +53,15 @@ index 6feaa81519..371f584557 100644
          if self.cmake_args is None:
              self.cmake_args = ""
  
-@@ -444,6 +449,13 @@ class CopyExt(build_ext):
+@@ -267,6 +273,7 @@ class CustomBuild(build):
+                     self.announce(f"Configuring {comp} cmake project", level=3)
+                     self.spawn(["cmake", f"-DOpenVINODeveloperPackage_DIR={OPENVINO_BINARY_DIR}",
+                                          f"-DPYTHON_EXECUTABLE={sys.executable}",
++                                         f"-DCPACK_GENERATOR={CPACK_GENERATOR}",
+                                          "-DCMAKE_BUILD_TYPE=Release",
+                                          "-DENABLE_WHEEL=OFF",
+                                          self.cmake_args,
+@@ -444,6 +451,13 @@ class CopyExt(build_ext):
          super().initialize_options()
          self.skip_rpath = False
  
@@ -35,3 +75,48 @@ index 6feaa81519..371f584557 100644
      def run(self):
          if len(self.extensions) == 1:
              self.extensions = find_prebuilt_extensions(get_install_dirs_list(PY_INSTALL_CFG))
+diff --git a/thirdparty/dependencies.cmake b/thirdparty/dependencies.cmake
+index 3095e1c641..7b3d190ac4 100644
+--- a/thirdparty/dependencies.cmake
++++ b/thirdparty/dependencies.cmake
+@@ -369,20 +369,7 @@ endif()
+ #
+ 
+ if(ENABLE_SAMPLES OR ENABLE_TESTS)
+-    if(OV_VCPKG_BUILD OR OV_CONAN_BUILD)
+-        # vcpkg contains only libs compiled with threads
+-        # conan case
+-        find_package(gflags QUIET)
+-    elseif(APPLE OR WIN32)
+-        # on Windows and macOS we don't use gflags, because will be dynamically linked
+-    elseif(CMAKE_HOST_LINUX AND LINUX)
+-        if(OV_OS_RHEL)
+-            set(gflag_component nothreads_shared)
+-        elseif(OV_OS_DEBIAN)
+-            set(gflag_component nothreads_static)
+-        endif()
+-        find_package(gflags QUIET OPTIONAL_COMPONENTS ${gflag_component})
+-    endif()
++    find_package(gflags QUIET)
+ 
+     if(gflags_FOUND)
+         if(TARGET gflags)
+diff --git a/tools/ovc/CMakeLists.txt b/tools/ovc/CMakeLists.txt
+index 0d7f396c0b..02890c157d 100644
+--- a/tools/ovc/CMakeLists.txt
++++ b/tools/ovc/CMakeLists.txt
+@@ -15,10 +15,10 @@ if(NOT DEFINED OpenVINO_SOURCE_DIR)
+ endif()
+ 
+ if(NOT IEDevScripts_FOUND)
+-    find_package(IEDevScripts REQUIRED
+-                PATHS "${OpenVINO_SOURCE_DIR}/cmake/developer_package"
+-                NO_CMAKE_FIND_ROOT_PATH
+-                NO_DEFAULT_PATH)
++    find_package(OpenVINODeveloperPackage REQUIRED
++                 PATHS "${OpenVINO_SOURCE_DIR}/cmake/developer_package"
++                 NO_CMAKE_FIND_ROOT_PATH
++                 NO_DEFAULT_PATH)
+ endif()
+ 
+ #
