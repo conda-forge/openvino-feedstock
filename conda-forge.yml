@@ -1,5 +1,7 @@
 channel_priority: strict
-azure:
+provider:
+  win_64: appveyor
+appveyor:
   store_build_artifacts: True
   settings_win:
     pool:
