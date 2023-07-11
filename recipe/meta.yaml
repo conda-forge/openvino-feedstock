@@ -37,6 +37,7 @@ requirements:
     - git
     - ninja
     - ccache
+    - python >=3.7 # for GPU OpenCL files conversion
     - pkg-config # to generate openvino.pc on macOS
     - cmake >=3.15 # to have new cmake cmd interface (-S, --install and other options)
     - sysroot_linux-64 =2.17  # [linux64]
@@ -166,19 +167,17 @@ outputs:
         - cross-python_{{ target_platform }}  # [build_platform != target_platform]
         - cython >=0.29
         - cmake >=3.15 # to have new cmake cmd interface (-S, --install and other options)
-        - pip
+        - pybind11 # >=2.10.1  # this versions works well for cross-compilation
       host:
         - {{ pin_subpackage('libopenvino', exact=True) }}
-        - tbb-devel =2021.5  # for developer package
-        - pugixml >=1.12.1  # for developer package
-        - pybind11 # >=2.10.1  # this versions works well for cross-compilation
+        - tbb-devel =2021.5  # for developer package only
+        - pugixml >=1.12.1  # for developer package only
         - python
         - pip
       run:
         - {{ pin_subpackage('libopenvino', exact=True) }}
-        - singledispatchmethod  # [py<=37]
-        - numpy >=1.16.6
         - python
+        - numpy >=1.16.6
     test:
       imports:
         - ngraph
