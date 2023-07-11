@@ -10,6 +10,7 @@ source:
     sha256: dd76f5a153b0262692db62141f4fa8e8a5b8bc24d20714faa1d1b5c8f11c64cd
     patches:
     - patches/001-win64-find-ocl.patch  # [win64]
+    - patches/002-protobuf.patch
     - patches/003-lin-arm64-compute-lib.patch  # [aarch64]
     - patches/004-mha-build-fix.patch  # [arm64]
   - url: https://github.com/ARM-software/ComputeLibrary/archive/refs/tags/v23.02.1.tar.gz  # [aarch64 or arm64]
