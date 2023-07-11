@@ -1,7 +1,7 @@
 channel_priority: strict
 provider:
-  win_64: travis
-travis:
+  win_64: circle
+circle:
   store_build_artifacts: True
   settings_win:
     pool:
