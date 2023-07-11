@@ -1,7 +1,7 @@
 channel_priority: strict
 provider:
-  win_64: appveyor
-appveyor:
+  win_64: travis
+travis:
   store_build_artifacts: True
   settings_win:
     pool:
