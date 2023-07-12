@@ -24,7 +24,7 @@ build:
   number: 0
   run_exports:
     - {{ pin_subpackage('libopenvino', max_pin='x.x.x') }}
-    - {{ pin_subpackage('libopenvino-python', max_pin='x.x.x') }}
+    # - {{ pin_subpackage('libopenvino-python', max_pin='x.x.x') }}
   ignore_run_exports_from:
     - {{ compiler('c') }}
     - {{ compiler('cxx') }}
@@ -37,6 +37,7 @@ requirements:
     - git
     - ninja
     - ccache
+    - python >=3.7
     - pkg-config # to generate openvino.pc on macOS
     - cmake >=3.15 # to have new cmake cmd interface (-S, --install and other options)
     - sysroot_linux-64 =2.17  # [linux64]
@@ -46,7 +47,7 @@ requirements:
     - xbyak >=6.69.1  # [x86_64]
   run:
     - {{ pin_subpackage('libopenvino', max_pin='x.x.x') }}
-    - {{ pin_subpackage('libopenvino-python', max_pin='x.x.x') }}
+    # - {{ pin_subpackage('libopenvino-python', max_pin='x.x.x') }}
 
 test:
   requires:
