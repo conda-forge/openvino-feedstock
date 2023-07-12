@@ -41,6 +41,7 @@ requirements:
     - cmake >=3.15 # to have new cmake cmd interface (-S, --install and other options)
     - sysroot_linux-64 =2.17  # [linux64]
   host:
+    - python
     - tbb-devel =2021.5 # starting from this version TBB uses hwloc in conda
     - pugixml >=1.12.1 # starting from this version shared libraries are provided
     - xbyak >=6.69.1  # [x86_64]
