@@ -166,10 +166,12 @@ outputs:
         - python                              # [build_platform != target_platform]
         - cross-python_{{ target_platform }}  # [build_platform != target_platform]
         - cython >=0.29
-        - cmake >=3.15 # to have new cmake cmd interface (-S, --install and other options)
-        - pybind11 # >=2.10.1  # this versions works well for cross-compilation
+        - cmake >=3.15  # to have new cmake cmd interface (-S, --install and other options)
+        - pybind11 >=2.10.1  # this versions works well for cross-compilation
       host:
         - {{ pin_subpackage('libopenvino', exact=True) }}
+        - setuptools >=65.6.1
+        - cython >=0.29
         - tbb-devel =2021.5  # for developer package only
         - pugixml >=1.12.1  # for developer package only
         - python
