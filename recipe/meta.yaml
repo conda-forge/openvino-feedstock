@@ -399,8 +399,8 @@ outputs:
         - {{ pin_subpackage('libopenvino', exact=True) }}
     test:
       commands:
-        - test -f $PREFIX/lib/openvino-{{ version }}/libopenvino_intel_cpu_plugin.so  # [unix]
-        - if not exist %LIBRARY_BIN%\\openvino-{{ version }}\\openvino_intel_cpu_plugin%SHLIB_EXT% exit 1  # [win]
+        - test -f $PREFIX/lib/openvino-{{ version_postfix }}/libopenvino_intel_cpu_plugin.so  # [unix]
+        - if not exist %LIBRARY_BIN%\\openvino-{{ version_postfix }}\\openvino_intel_cpu_plugin%SHLIB_EXT% exit 1  # [win]
 
   - name: libopenvino-arm-cpu-plugin
     version: {{ version }}
@@ -430,7 +430,7 @@ outputs:
         - {{ pin_subpackage('libopenvino', exact=True) }}
     test:
       commands:
-        - test -f $PREFIX/lib/openvino-{{ version }}/libopenvino_arm_cpu_plugin.so
+        - test -f $PREFIX/lib/openvino-{{ version_postfix }}/libopenvino_arm_cpu_plugin.so
 
   - name: libopenvino-intel-gpu-plugin
     version: {{ version }}
@@ -464,8 +464,8 @@ outputs:
         - ocl-icd-system  # [linux64]
     test:
       commands:
-        - test -f $PREFIX/lib/openvino-{{ version }}/libopenvino_intel_gpu_plugin.so  # [unix]
-        - if not exist %LIBRARY_BIN%\\openvino-{{ version }}\\openvino_intel_gpu_plugin%SHLIB_EXT% exit 1  # [win]
+        - test -f $PREFIX/lib/openvino-{{ version_postfix }}/libopenvino_intel_gpu_plugin.so  # [unix]
+        - if not exist %LIBRARY_BIN%\\openvino-{{ version_postfix }}\\openvino_intel_gpu_plugin%SHLIB_EXT% exit 1  # [win]
 
   - name: libopenvino-auto-plugin
     version: {{ version }}
@@ -493,8 +493,8 @@ outputs:
         - {{ pin_subpackage('libopenvino', exact=True) }}
     test:
       commands:
-        - test -f $PREFIX/lib/openvino-{{ version }}/libopenvino_auto_plugin.so  # [unix]
-        - if not exist %LIBRARY_BIN%\\openvino-{{ version }}\\openvino_auto_plugin%SHLIB_EXT% exit 1  # [win]
+        - test -f $PREFIX/lib/openvino-{{ version_postfix }}/libopenvino_auto_plugin.so  # [unix]
+        - if not exist %LIBRARY_BIN%\\openvino-{{ version_postfix }}\\openvino_auto_plugin%SHLIB_EXT% exit 1  # [win]
 
   - name: libopenvino-auto-batch-plugin
     version: {{ version }}
@@ -521,8 +521,8 @@ outputs:
         - {{ pin_subpackage('libopenvino', exact=True) }}
     test:
       commands:
-        - test -f $PREFIX/lib/openvino-{{ version }}/libopenvino_auto_batch_plugin.so  # [unix]
-        - if not exist %LIBRARY_BIN%\\openvino-{{ version }}\\openvino_auto_batch_plugin%SHLIB_EXT% exit 1  # [win]
+        - test -f $PREFIX/lib/openvino-{{ version_postfix }}/libopenvino_auto_batch_plugin.so  # [unix]
+        - if not exist %LIBRARY_BIN%\\openvino-{{ version_postfix }}\\openvino_auto_batch_plugin%SHLIB_EXT% exit 1  # [win]
 
   - name: libopenvino-hetero-plugin
     version: {{ version }}
@@ -550,8 +550,8 @@ outputs:
         - {{ pin_subpackage('libopenvino', exact=True) }}
     test:
       commands:
-        - test -f $PREFIX/lib/openvino-{{ version }}/libopenvino_hetero_plugin.so  # [unix]
-        - if not exist %LIBRARY_BIN%\\openvino-{{ version }}\\openvino_hetero_plugin%SHLIB_EXT% exit 1  # [win]
+        - test -f $PREFIX/lib/openvino-{{ version_postfix }}/libopenvino_hetero_plugin.so  # [unix]
+        - if not exist %LIBRARY_BIN%\\openvino-{{ version_postfix }}\\openvino_hetero_plugin%SHLIB_EXT% exit 1  # [win]
 
   - name: openvino
     script: install/install_dev.sh
