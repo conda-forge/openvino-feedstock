@@ -1,15 +1,17 @@
 {% set name = "openvino" %}
-{% set version = "2023.0.1" %}
+{% set version_postfix = "2023.1.0" %}
+{% set version = "2023.1.0.dev20230623" %}
 
 package:
   name: {{ name|lower }}
   version: {{ version }}
 
 source:
-  - url: https://github.com/openvinotoolkit/openvino/archive/refs/tags/2023.0.1.tar.gz
-    sha256: c14cb22f5191a75ea15659c62baceb71333dc9ecf62139ce513f3e81e4544651
+  - url: https://github.com/openvinotoolkit/openvino/archive/refs/tags/2023.1.0.dev20230623.tar.gz
+    sha256: dd76f5a153b0262692db62141f4fa8e8a5b8bc24d20714faa1d1b5c8f11c64cd
     patches:
     - patches/001-win64-find-ocl.patch  # [win64]
+    - patches/002-protobuf.patch
     - patches/003-lin-arm64-compute-lib.patch  # [aarch64]
     - patches/004-mha-build-fix.patch  # [arm64]
   - url: https://github.com/ARM-software/ComputeLibrary/archive/refs/tags/v23.02.1.tar.gz  # [aarch64 or arm64]
@@ -18,8 +20,8 @@ source:
   - url: https://github.com/herumi/xbyak/archive/refs/tags/v6.69.tar.gz
     sha256: 7eb64e2c18527824402b16f26c6118ba82f40f57fe6e3ab05c6e2883246a04f1
     folder: thirdparty/xbyak
-  - url: https://github.com/openvinotoolkit/oneDNN/archive/1c7bfabf1b26e6fb95fea1613e1d3d2bef1f6b54.tar.gz
-    sha256: 52921b3efab33d1710971c67318e8c00ee102b6369e4e9cea8fdf91a1d68e38e
+  - url: https://github.com/openvinotoolkit/oneDNN/archive/ebb8bfc9491b792af1ec3a72f244550041e42cce.tar.gz
+    sha256: 4fe086384229fec00fc79a7b8986a22d8a213669e3e55b4e0e5703d82d30a725
     folder: src/plugins/intel_cpu/thirdparty/onednn
   - url: https://github.com/oneapi-src/oneDNN/archive/f27dedbfc093f51032a4580198bb80579440dc15.tar.gz  # [win64 or linux64]
     sha256: da57c2298a8e001718902f0b65b6d92c4a7897b35467e23bc24996dde43ec47b  # [win64 or linux64]
@@ -32,7 +34,7 @@ source:
     folder: thirdparty/onnx/onnx
 
 build:
-  number: 1
+  number: 0
   run_exports:
     - {{ pin_subpackage('libopenvino', max_pin='x.x.x') }}
     - {{ pin_subpackage('libopenvino-intel-cpu-plugin', max_pin='x.x.x') }}  # [x86_64]
@@ -188,8 +190,8 @@ outputs:
         {{ openvino_libs.append("") or "" }}
         {{ openvino_libs.append("_c") or "" }}
         {% for openvino_lib in openvino_libs %}
-        - test -f $PREFIX/lib/libopenvino{{ openvino_lib }}${SHLIB_EXT}.{{ version }}  # [linux]
-        - test -f $PREFIX/lib/libopenvino{{ openvino_lib }}.{{ version }}${SHLIB_EXT}  # [osx]
+        - test -f $PREFIX/lib/libopenvino{{ openvino_lib }}${SHLIB_EXT}.{{ version_postfix }}  # [linux]
+        - test -f $PREFIX/lib/libopenvino{{ openvino_lib }}.{{ version_postfix }}${SHLIB_EXT}  # [osx]
         - if not exist %LIBRARY_BIN%\\openvino{{ openvino_lib }}%SHLIB_EXT% exit 1  # [win]
         {% endfor %}
 
@@ -219,8 +221,8 @@ outputs:
         - {{ pin_subpackage('libopenvino', exact=True) }}
     test:
       commands:
-        - test -f $PREFIX/lib/libopenvino_ir_frontend${SHLIB_EXT}.{{ version }}  # [linux]
-        - test -f $PREFIX/lib/libopenvino_ir_frontend.{{ version }}${SHLIB_EXT}  # [osx]
+        - test -f $PREFIX/lib/libopenvino_ir_frontend${SHLIB_EXT}.{{ version_postfix }}  # [linux]
+        - test -f $PREFIX/lib/libopenvino_ir_frontend.{{ version_postfix }}${SHLIB_EXT}  # [osx]
         - if not exist %LIBRARY_BIN%\\openvino_ir_frontend%SHLIB_EXT% exit 1  # [win]
 
   - name: libopenvino-onnx-frontend
@@ -248,8 +250,8 @@ outputs:
         - {{ pin_subpackage('libopenvino', exact=True) }}
     test:
       commands:
-        - test -f $PREFIX/lib/libopenvino_onnx_frontend${SHLIB_EXT}.{{ version }}  # [linux]
-        - test -f $PREFIX/lib/libopenvino_onnx_frontend.{{ version }}${SHLIB_EXT}  # [osx]
+        - test -f $PREFIX/lib/libopenvino_onnx_frontend${SHLIB_EXT}.{{ version_postfix }}  # [linux]
+        - test -f $PREFIX/lib/libopenvino_onnx_frontend.{{ version_postfix }}${SHLIB_EXT}  # [osx]
         - if not exist %LIBRARY_BIN%\\openvino_onnx_frontend%SHLIB_EXT% exit 1  # [win]
 
   - name: libopenvino-paddle-frontend
@@ -277,8 +279,8 @@ outputs:
         - {{ pin_subpackage('libopenvino', exact=True) }}
     test:
       commands:
-        - test -f $PREFIX/lib/libopenvino_paddle_frontend${SHLIB_EXT}.{{ version }}  # [linux]
-        - test -f $PREFIX/lib/libopenvino_paddle_frontend.{{ version }}${SHLIB_EXT}  # [osx]
+        - test -f $PREFIX/lib/libopenvino_paddle_frontend${SHLIB_EXT}.{{ version_postfix }}  # [linux]
+        - test -f $PREFIX/lib/libopenvino_paddle_frontend.{{ version_postfix }}${SHLIB_EXT}  # [osx]
         - if not exist %LIBRARY_BIN%\\openvino_paddle_frontend%SHLIB_EXT% exit 1  # [win]
 
   - name: libopenvino-pytorch-frontend
@@ -306,8 +308,8 @@ outputs:
         - {{ pin_subpackage('libopenvino', exact=True) }}
     test:
       commands:
-        - test -f $PREFIX/lib/libopenvino_pytorch_frontend${SHLIB_EXT}.{{ version }}  # [linux]
-        - test -f $PREFIX/lib/libopenvino_pytorch_frontend.{{ version }}${SHLIB_EXT}  # [osx]
+        - test -f $PREFIX/lib/libopenvino_pytorch_frontend${SHLIB_EXT}.{{ version_postfix }}  # [linux]
+        - test -f $PREFIX/lib/libopenvino_pytorch_frontend.{{ version_postfix }}${SHLIB_EXT}  # [osx]
         - if not exist %LIBRARY_BIN%\\openvino_pytorch_frontend%SHLIB_EXT% exit 1  # [win]
 
   - name: libopenvino-tensorflow-frontend
@@ -336,8 +338,8 @@ outputs:
         - {{ pin_subpackage('libopenvino', exact=True) }}
     test:
       commands:
-        - test -f $PREFIX/lib/libopenvino_tensorflow_frontend${SHLIB_EXT}.{{ version }}  # [linux]
-        - test -f $PREFIX/lib/libopenvino_tensorflow_frontend.{{ version }}${SHLIB_EXT}  # [osx]
+        - test -f $PREFIX/lib/libopenvino_tensorflow_frontend${SHLIB_EXT}.{{ version_postfix }}  # [linux]
+        - test -f $PREFIX/lib/libopenvino_tensorflow_frontend.{{ version_postfix }}${SHLIB_EXT}  # [osx]
         - if not exist %LIBRARY_BIN%\\openvino_tensorflow_frontend%SHLIB_EXT% exit 1  # [win]
 
   - name: libopenvino-tensorflow-lite-frontend
@@ -365,8 +367,8 @@ outputs:
         - {{ pin_subpackage('libopenvino', exact=True) }}
     test:
       commands:
-        - test -f $PREFIX/lib/libopenvino_tensorflow_lite_frontend${SHLIB_EXT}.{{ version }}  # [linux]
-        - test -f $PREFIX/lib/libopenvino_tensorflow_lite_frontend.{{ version }}${SHLIB_EXT}  # [osx]
+        - test -f $PREFIX/lib/libopenvino_tensorflow_lite_frontend${SHLIB_EXT}.{{ version_postfix }}  # [linux]
+        - test -f $PREFIX/lib/libopenvino_tensorflow_lite_frontend.{{ version_postfix }}${SHLIB_EXT}  # [osx]
         - if not exist %LIBRARY_BIN%\\openvino_tensorflow_lite_frontend%SHLIB_EXT% exit 1  # [win]
 
   - name: libopenvino-intel-cpu-plugin
@@ -397,8 +399,8 @@ outputs:
         - {{ pin_subpackage('libopenvino', exact=True) }}
     test:
       commands:
-        - test -f $PREFIX/lib/openvino-{{ version }}/libopenvino_intel_cpu_plugin.so  # [unix]
-        - if not exist %LIBRARY_BIN%\\openvino-{{ version }}\\openvino_intel_cpu_plugin%SHLIB_EXT% exit 1  # [win]
+        - test -f $PREFIX/lib/openvino-{{ version_postfix }}/libopenvino_intel_cpu_plugin.so  # [unix]
+        - if not exist %LIBRARY_BIN%\\openvino-{{ version_postfix }}\\openvino_intel_cpu_plugin%SHLIB_EXT% exit 1  # [win]
 
   - name: libopenvino-arm-cpu-plugin
     version: {{ version }}
@@ -428,7 +430,7 @@ outputs:
         - {{ pin_subpackage('libopenvino', exact=True) }}
     test:
       commands:
-        - test -f $PREFIX/lib/openvino-{{ version }}/libopenvino_arm_cpu_plugin.so
+        - test -f $PREFIX/lib/openvino-{{ version_postfix }}/libopenvino_arm_cpu_plugin.so
 
   - name: libopenvino-intel-gpu-plugin
     version: {{ version }}
@@ -462,8 +464,8 @@ outputs:
         - ocl-icd-system  # [linux64]
     test:
       commands:
-        - test -f $PREFIX/lib/openvino-{{ version }}/libopenvino_intel_gpu_plugin.so  # [unix]
-        - if not exist %LIBRARY_BIN%\\openvino-{{ version }}\\openvino_intel_gpu_plugin%SHLIB_EXT% exit 1  # [win]
+        - test -f $PREFIX/lib/openvino-{{ version_postfix }}/libopenvino_intel_gpu_plugin.so  # [unix]
+        - if not exist %LIBRARY_BIN%\\openvino-{{ version_postfix }}\\openvino_intel_gpu_plugin%SHLIB_EXT% exit 1  # [win]
 
   - name: libopenvino-auto-plugin
     version: {{ version }}
@@ -491,8 +493,8 @@ outputs:
         - {{ pin_subpackage('libopenvino', exact=True) }}
     test:
       commands:
-        - test -f $PREFIX/lib/openvino-{{ version }}/libopenvino_auto_plugin.so  # [unix]
-        - if not exist %LIBRARY_BIN%\\openvino-{{ version }}\\openvino_auto_plugin%SHLIB_EXT% exit 1  # [win]
+        - test -f $PREFIX/lib/openvino-{{ version_postfix }}/libopenvino_auto_plugin.so  # [unix]
+        - if not exist %LIBRARY_BIN%\\openvino-{{ version_postfix }}\\openvino_auto_plugin%SHLIB_EXT% exit 1  # [win]
 
   - name: libopenvino-auto-batch-plugin
     version: {{ version }}
@@ -519,8 +521,8 @@ outputs:
         - {{ pin_subpackage('libopenvino', exact=True) }}
     test:
       commands:
-        - test -f $PREFIX/lib/openvino-{{ version }}/libopenvino_auto_batch_plugin.so  # [unix]
-        - if not exist %LIBRARY_BIN%\\openvino-{{ version }}\\openvino_auto_batch_plugin%SHLIB_EXT% exit 1  # [win]
+        - test -f $PREFIX/lib/openvino-{{ version_postfix }}/libopenvino_auto_batch_plugin.so  # [unix]
+        - if not exist %LIBRARY_BIN%\\openvino-{{ version_postfix }}\\openvino_auto_batch_plugin%SHLIB_EXT% exit 1  # [win]
 
   - name: libopenvino-hetero-plugin
     version: {{ version }}
@@ -548,8 +550,8 @@ outputs:
         - {{ pin_subpackage('libopenvino', exact=True) }}
     test:
       commands:
-        - test -f $PREFIX/lib/openvino-{{ version }}/libopenvino_hetero_plugin.so  # [unix]
-        - if not exist %LIBRARY_BIN%\\openvino-{{ version }}\\openvino_hetero_plugin%SHLIB_EXT% exit 1  # [win]
+        - test -f $PREFIX/lib/openvino-{{ version_postfix }}/libopenvino_hetero_plugin.so  # [unix]
+        - if not exist %LIBRARY_BIN%\\openvino-{{ version_postfix }}\\openvino_hetero_plugin%SHLIB_EXT% exit 1  # [win]
 
   - name: openvino
     script: install/install_dev.sh
