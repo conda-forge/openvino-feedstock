@@ -11,11 +11,10 @@ mkdir -p build
 cmake ${CMAKE_ARGS}                                                          \
     -DCMAKE_BUILD_TYPE=Release                                               \
     -DENABLE_INTEL_GNA=OFF                                                   \
-    -DENABLE_INTEL_GPU=OFF                                                   \
     -DENABLE_INTEL_CPU=OFF                                                   \
+    -DENABLE_INTEL_GPU=OFF                                                   \
     -DENABLE_GAPI_PREPROCESSING=OFF                                          \
     -DENABLE_OV_ONNX_FRONTEND=OFF                                            \
-    -DENABLE_OV_IR_FRONTEND=OFF                                              \
     -DENABLE_OV_PADDLE_FRONTEND=OFF                                          \
     -DENABLE_OV_TF_FRONTEND=OFF                                              \
     -DENABLE_OV_TF_LITE_FRONTEND=OFF                                         \
@@ -33,8 +32,6 @@ cmake ${CMAKE_ARGS}                                                          \
     -DENABLE_SAMPLES=OFF                                                     \
     -DENABLE_DATA=OFF                                                        \
     -DCPACK_GENERATOR=CONDA-FORGE                                            \
-    -DCMAKE_CXX_COMPILER_LAUNCHER=ccache                                     \
-    -DCMAKE_C_COMPILER_LAUNCHER=ccache                                       \
     -G Ninja                                                                 \
     -S "$SRC_DIR"                                                            \
     -B "$SRC_DIR/build"

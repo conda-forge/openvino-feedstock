@@ -9,23 +9,25 @@ source:
   - url: https://github.com/openvinotoolkit/{{ name }}/archive/e5abe855b7567b08cadc916b58ad01024484f97f.tar.gz
     sha256: 16269611ddd420b451f2ef949e676e3eb2f73d1a0d7977fa1d5e8b3a720c33c5
     patches:
-    # - patches/001-win64-find-ocl.patch  # [win64]
-    # - patches/003-lin-arm64-compute-lib.patch  # [aarch64]
-    # - patches/004-mha-build-fix.patch  # [arm64]
     - patches/005-setup-py.patch
   - url: https://github.com/opencv/ade/archive/58b2595a1a95cc807be8bf6222f266a9a1f393a9.tar.gz
     sha256: db7759cc32107e713b9e503ddf71a54ba2c80de07daefcb1aa315507e706ce07
     folder: thirdparty/ade
 
 build:
-  number: 0
+  number: 1
   run_exports:
     - {{ pin_subpackage('libopenvino', max_pin='x.x.x') }}
     - {{ pin_subpackage('libopenvino-python', max_pin='x.x.x') }}
+    - {{ pin_subpackage('libopenvino-auto-plugin', max_pin='x.x.x') }}
+    - {{ pin_subpackage('libopenvino-hetero-plugin', max_pin='x.x.x') }}
+    - {{ pin_subpackage('libopenvino-auto-batch-plugin', max_pin='x.x.x') }}
+    - {{ pin_subpackage('libopenvino-ir-frontend', max_pin='x.x.x') }}
   ignore_run_exports_from:
     - {{ compiler('c') }}
     - {{ compiler('cxx') }}
     - tbb-devel # libopenvino and libopenvino-*-plugin already depend on tbb
+    - pugixml # libopenvino already depends on pugixml
 
 requirements:
   build:
@@ -33,10 +35,11 @@ requirements:
     - {{ compiler('cxx') }}
     - git
     - ninja
-    - ccache
-    - python >=3.7 # for GPU OpenCL files conversion
     - pkg-config # to generate openvino.pc on macOS
+    - scons  # [aarch64 or arm64]
     - cmake >=3.15 # to have new cmake cmd interface (-S, --install and other options)
+    - python >=3.7
+    - flatbuffers =23.3.3
     - sysroot_linux-64 =2.17  # [linux64]
   host:
     - tbb-devel =2021.5 # starting from this version TBB uses hwloc in conda
@@ -45,6 +48,10 @@ requirements:
   run:
     - {{ pin_subpackage('libopenvino', max_pin='x.x.x') }}
     - {{ pin_subpackage('libopenvino-python', max_pin='x.x.x') }}
+    - {{ pin_subpackage('libopenvino-auto-plugin', max_pin='x.x.x') }}
+    - {{ pin_subpackage('libopenvino-hetero-plugin', max_pin='x.x.x') }}
+    - {{ pin_subpackage('libopenvino-auto-batch-plugin', max_pin='x.x.x') }}
+    - {{ pin_subpackage('libopenvino-ir-frontend', max_pin='x.x.x') }}
 
 test:
   requires:
@@ -72,6 +79,11 @@ test:
     {% set openvino_libs = [] %}
     {{ openvino_libs.append("") or "" }}
     {{ openvino_libs.append("_c") or "" }}
+    {{ openvino_libs.append("_paddle_frontend") or "" }}
+    {{ openvino_libs.append("_pytorch_frontend") or "" }}
+    {{ openvino_libs.append("_onnx_frontend") or "" }}
+    {{ openvino_libs.append("_tensorflow_frontend") or "" }}
+    {{ openvino_libs.append("_tensorflow_lite_frontend") or "" }}
     {% for openvino_lib in openvino_libs %}
     - test -f $PREFIX/lib/libopenvino{{ openvino_lib }}${SHLIB_EXT}  # [unix]
     - if not exist %LIBRARY_BIN%\\openvino{{ openvino_lib }}%SHLIB_EXT% exit 1  # [win]
@@ -100,6 +112,7 @@ test:
     - cp samples\\cpp\\CMakeLists.txt samples\\c\\CMakeLists.txt  # [win]
     - cmake -S samples\\c -B samples_c_build -DBIN_FOLDER=bin  # [win]
     - cmake --build samples_c_build --config Release --verbose  # [win]
+
 
 outputs:
   - name: libopenvino
@@ -134,6 +147,7 @@ outputs:
         - if not exist %LIBRARY_BIN%\\openvino{{ openvino_lib }}%SHLIB_EXT% exit 1  # [win]
         {% endfor %}
 
+
   - name: libopenvino-python
     version: {{ version }}
     script: install/install_python.sh
@@ -152,14 +166,13 @@ outputs:
       run_exports:
         - {{ pin_subpackage('libopenvino', max_pin='x.x.x') }}
       ignore_run_exports_from:
-        - tbb-devel  # because required just for developer package
-        - pugixml  # because required just for developer package
+        - tbb-devel  # because required just for OpenVINODeveloperPackage
+        - pugixml  # because required just for OpenVINODeveloperPackage
     requirements:
       build:
         - {{ compiler('cxx') }}
         - {{ compiler('c') }}
         - make  # [unix]
-        - ccache  # TODO: remove
         - python                              # [build_platform != target_platform]
         - cross-python_{{ target_platform }}  # [build_platform != target_platform]
         - cython >=0.29
@@ -169,8 +182,8 @@ outputs:
         - {{ pin_subpackage('libopenvino', exact=True) }}
         - setuptools >=65.6.1
         - cython >=0.29
-        - tbb-devel =2021.5  # for developer package only
-        - pugixml >=1.12.1  # for developer package only
+        - tbb-devel =2021.5  # for OpenVINODeveloperPackage only
+        - pugixml >=1.12.1  # for OpenVINODeveloperPackage only
         - python
         - pip
       run:
@@ -223,12 +236,120 @@ outputs:
       requires:
         - pip
 
-  - name: {{ name }}
-    script: install/install_dev.sh
+  - name: libopenvino-ir-frontend
+    version: {{ version }}
+    script: install/install_ir.sh
+    about:
+      summary: OpenVINO IR Frontend
+      license_file:
+        - LICENSE
+        - third-party-programs.txt
+        - onednn_third-party-programs.txt
+        - runtime-third-party-programs.txt
+    build:
+      run_exports:
+        - {{ pin_subpackage('libopenvino', max_pin='x.x.x') }}
     requirements:
       build:
-        - python                              # [build_platform != target_platform]
-        - cross-python_{{ target_platform }}  # [build_platform != target_platform]
+        - {{ compiler('cxx') }}
+        - {{ compiler('c') }}
+        - cmake >=3.15 # to have new cmake cmd interface (-S, --install and other options)
+      host:
+        - pugixml >=1.12.1 # starting from this version shared libraries are provided
+        - {{ pin_subpackage('libopenvino', exact=True) }}
+      run:
+        - {{ pin_subpackage('libopenvino', exact=True) }}
+    test:
+      commands:
+        - test -f $PREFIX/lib/libopenvino_ir_frontend${SHLIB_EXT}.{{ version }}  # [linux]
+        - test -f $PREFIX/lib/libopenvino_ir_frontend.{{ version }}${SHLIB_EXT}  # [osx]
+        - if not exist %LIBRARY_BIN%\\openvino_ir_frontend%SHLIB_EXT% exit 1  # [win]
+
+  - name: libopenvino-auto-plugin
+    version: {{ version }}
+    script: install/install_auto.sh
+    about:
+      summary: OpenVINO Auto plugin
+      license_file:
+        - LICENSE
+        - third-party-programs.txt
+        - onednn_third-party-programs.txt
+        - runtime-third-party-programs.txt
+    build:
+      run_exports:
+        - {{ pin_subpackage('libopenvino-auto-plugin', max_pin='x.x.x') }}
+    requirements:
+      build:
+        - {{ compiler('cxx') }}
+        - {{ compiler('c') }}
+        - cmake >=3.15 # to have new cmake cmd interface (-S, --install and other options)
+      host:
+        - tbb-devel =2021.5 # starting from this version TBB uses hwloc in conda
+        - {{ pin_subpackage('libopenvino', exact=True) }}
+      run:
+        - {{ pin_subpackage('libopenvino', exact=True) }}
+    test:
+      commands:
+        - test -f $PREFIX/lib/openvino-{{ version }}/libopenvino_auto_plugin.so  # [unix]
+        - if not exist %LIBRARY_BIN%\\openvino-{{ version }}\\openvino_auto_plugin%SHLIB_EXT% exit 1  # [win]
+
+  - name: libopenvino-auto-batch-plugin
+    version: {{ version }}
+    script: install/install_batch.sh
+    about:
+      summary: OpenVINO Auto Batch plugin
+      license_file:
+        - LICENSE
+        - third-party-programs.txt
+        - onednn_third-party-programs.txt
+        - runtime-third-party-programs.txt
+    build:
+      run_exports:
+        - {{ pin_subpackage('libopenvino-auto-batch-plugin', max_pin='x.x.x') }}
+    requirements:
+      build:
+        - {{ compiler('cxx') }}
+        - {{ compiler('c') }}
+        - cmake >=3.15 # to have new cmake cmd interface (-S, --install and other options)
+      host:
+        - {{ pin_subpackage('libopenvino', exact=True) }}
+      run:
+        - {{ pin_subpackage('libopenvino', exact=True) }}
+    test:
+      commands:
+        - test -f $PREFIX/lib/openvino-{{ version }}/libopenvino_auto_batch_plugin.so  # [unix]
+        - if not exist %LIBRARY_BIN%\\openvino-{{ version }}\\openvino_auto_batch_plugin%SHLIB_EXT% exit 1  # [win]
+
+  - name: libopenvino-hetero-plugin
+    version: {{ version }}
+    script: install/install_hetero.sh
+    about:
+      summary: OpenVINO Hetero plugin
+      license_file:
+        - LICENSE
+        - third-party-programs.txt
+        - onednn_third-party-programs.txt
+        - runtime-third-party-programs.txt
+    build:
+      run_exports:
+        - {{ pin_subpackage('libopenvino-hetero-plugin', max_pin='x.x.x') }}
+    requirements:
+      build:
+        - {{ compiler('cxx') }}
+        - {{ compiler('c') }}
+        - cmake >=3.15 # to have new cmake cmd interface (-S, --install and other options)
+      host:
+        - pugixml >=1.12.1 # starting from this version shared libraries are provided
+        - {{ pin_subpackage('libopenvino', exact=True) }}
+      run:
+        - {{ pin_subpackage('libopenvino', exact=True) }}
+    test:
+      commands:
+        - test -f $PREFIX/lib/openvino-{{ version }}/libopenvino_hetero_plugin.so  # [unix]
+        - if not exist %LIBRARY_BIN%\\openvino-{{ version }}\\openvino_hetero_plugin%SHLIB_EXT% exit 1  # [win]
+
+  - name: openvino
+    script: install/install_dev.sh
 
 about:
   home: https://github.com/openvinotoolkit/openvino
