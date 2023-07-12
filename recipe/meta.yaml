@@ -34,10 +34,11 @@ requirements:
   build:
     - {{ compiler('c') }}
     - {{ compiler('cxx') }}
+    - python                              # [build_platform != target_platform]
+    - cross-python_{{ target_platform }}  # [build_platform != target_platform]
     - git
     - ninja
     - ccache
-    - python >=3.7 # for GPU OpenCL files conversion
     - pkg-config # to generate openvino.pc on macOS
     - cmake >=3.15 # to have new cmake cmd interface (-S, --install and other options)
     - sysroot_linux-64 =2.17  # [linux64]
@@ -226,7 +227,7 @@ outputs:
       requires:
         - pip
 
-  - name: {{ name }}
+  - name: openvino
     script: install/install_dev.sh
 
 about:
