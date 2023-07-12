@@ -24,6 +24,7 @@ build:
   number: 0
   run_exports:
     - {{ pin_subpackage('libopenvino', max_pin='x.x.x') }}
+    - {{ pin_subpackage('libopenvino-dev', max_pin='x.x.x') }}
     - {{ pin_subpackage('libopenvino-python', max_pin='x.x.x') }}
   ignore_run_exports_from:
     - {{ compiler('c') }}
@@ -41,12 +42,12 @@ requirements:
     - cmake >=3.15 # to have new cmake cmd interface (-S, --install and other options)
     - sysroot_linux-64 =2.17  # [linux64]
   host:
-    - python
     - tbb-devel =2021.5 # starting from this version TBB uses hwloc in conda
     - pugixml >=1.12.1 # starting from this version shared libraries are provided
     - xbyak >=6.69.1  # [x86_64]
   run:
     - {{ pin_subpackage('libopenvino', max_pin='x.x.x') }}
+    - {{ pin_subpackage('libopenvino-dev', max_pin='x.x.x') }}
     - {{ pin_subpackage('libopenvino-python', max_pin='x.x.x') }}
 
 test:
@@ -153,7 +154,7 @@ outputs:
         - ovc = openvino.tools.ovc.main:main # do we need it? looks like setup.py does it
         # - benchmark_app = openvino.tools.benchmark.main:main
       run_exports:
-        - {{ pin_subpackage('libopenvino', max_pin='x.x.x') }}
+        - {{ pin_subpackage('libopenvino-python', max_pin='x.x.x') }}
       ignore_run_exports_from:
         - tbb-devel  # because required just for developer package
         - pugixml  # because required just for developer package
@@ -224,8 +225,43 @@ outputs:
       requires:
         - pip
 
-  - name: openvino
+  - name: libopenvino-dev
+    version: {{ version }}
     script: install/install_dev.sh
+    about:
+      summary: OpenVINO Development files
+      license_file:
+        - LICENSE
+        - third-party-programs.txt
+        - onednn_third-party-programs.txt
+        - runtime-third-party-programs.txt
+    build:
+      run_exports:
+        - {{ pin_subpackage('libopenvino', max_pin='x.x.x') }}
+    requirements:
+      build:
+        - cmake >=3.15  # to have new cmake cmd interface (-S, --install and other options)
+      run:
+        - {{ pin_subpackage('libopenvino', exact=True) }}
+
+  - name: openvino
+    build:
+      string: py{{ PY_VER_MAJOR }}{{ PY_VER_MINOR }}h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}
+    requirements:
+      build:
+        - {{ compiler('c') }}
+        - {{ compiler('cxx') }}
+        - git
+        - ninja
+        - ccache
+        - pkg-config # to generate openvino.pc on macOS
+        - cmake >=3.15 # to have new cmake cmd interface (-S, --install and other options)
+        - sysroot_linux-64 =2.17  # [linux64]
+      host:
+        - python
+        - tbb-devel =2021.5 # starting from this version TBB uses hwloc in conda
+        - pugixml >=1.12.1 # starting from this version shared libraries are provided
+        - xbyak >=6.69.1  # [x86_64]
 
 about:
   home: https://github.com/openvinotoolkit/openvino
