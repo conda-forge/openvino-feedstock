@@ -1,0 +1,24 @@
+diff --git a/thirdparty/dependencies.cmake b/thirdparty/dependencies.cmake
+index e815baa80c..3dd05849d4 100644
+--- a/thirdparty/dependencies.cmake
++++ b/thirdparty/dependencies.cmake
+@@ -446,9 +446,17 @@ if(ENABLE_OV_PADDLE_FRONTEND OR ENABLE_OV_ONNX_FRONTEND OR ENABLE_OV_TF_FRONTEND
+         if(CMAKE_VERBOSE_MAKEFILE)
+             set(Protobuf_DEBUG ON)
+         endif()
+-        # Note: we also specify 'protobuf' in NAMES because vcpkg
+-        find_package(Protobuf 3.20.3 REQUIRED NAMES Protobuf protobuf)
++        find_package(Protobuf 3.20.3 REQUIRED)
+         set(PROTOC_EXECUTABLE protobuf::protoc)
++
++        # in case of system protobuf, we have to add version to OpenVINOConfig.cmake for static build
++        # to ensure no mismatch between versions of protoc and libprotobuf, we need to use exactly
++        # the same versions
++        set(Protobuf_VERSION ${Protobuf_VERSION} PARENT_SCOPE)
++
++        foreach(target ${PROTOC_EXECUTABLE} protobuf::libprotobuf protobuf::libprotobuf-lite)
++            set_target_properties(${target} PROPERTIES IMPORTED_GLOBAL ON)
++        endforeach()
+     else()
+         add_subdirectory(thirdparty/protobuf EXCLUDE_FROM_ALL)
+     endif()
