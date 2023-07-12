@@ -1,9 +1,6 @@
 {% set name = "openvino" %}
 {% set version = "2023.1.0" %}
 
-{% set PY_VER_MAJOR = PY_VER.split('.')[0] %}
-{% set PY_VER_MINOR = PY_VER.split('.')[1] %}
-
 package:
   name: {{ name|lower }}
   version: {{ version }}
@@ -148,7 +145,7 @@ outputs:
         - onednn_third-party-programs.txt
         - runtime-third-party-programs.txt
     build:
-      string: py{{ PY_VER_MAJOR }}{{ PY_VER_MINOR }}h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}
+      string: py{{ CONDA_PY }}h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}
       entry_points:
         - ovc = openvino.tools.ovc.main:main # do we need it? looks like setup.py does it
         # - benchmark_app = openvino.tools.benchmark.main:main
@@ -228,6 +225,10 @@ outputs:
 
   - name: {{ name }}
     script: install/install_dev.sh
+    requirements:
+      build:
+        - python                              # [build_platform != target_platform]
+        - cross-python_{{ target_platform }}  # [build_platform != target_platform]
 
 about:
   home: https://github.com/openvinotoolkit/openvino
