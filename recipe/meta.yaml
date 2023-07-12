@@ -1,9 +1,10 @@
 {% set name = "openvino" %}
-{% set version = "2023.1.0.dev20230623" %}
+{% set version = "2023.1.0" %}
+{% set dev_version = "2023.1.0.dev20230623" %}
 
 package:
   name: {{ name|lower }}
-  version: {{ version }}
+  version: {{ dev_version }}
 
 source:
   - url: https://github.com/openvinotoolkit/openvino/archive/refs/tags/2023.1.0.dev20230623.tar.gz
