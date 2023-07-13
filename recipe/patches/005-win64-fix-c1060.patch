@@ -1,0 +1,14 @@
+diff --git a/cmake/developer_package/compile_flags/os_flags.cmake b/cmake/developer_package/compile_flags/os_flags.cmake
+index f7641a7b96..0519714728 100644
+--- a/cmake/developer_package/compile_flags/os_flags.cmake
++++ b/cmake/developer_package/compile_flags/os_flags.cmake
+@@ -365,6 +365,9 @@ if(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+     ie_add_compiler_flags(/wd4251)
+     # C4275 non dll-interface class used as base for dll-interface class
+     ie_add_compiler_flags(/wd4275)
++    
++    # [Win64] try to avoid C1060 error on conda-compilation
++    ie_add_compiler_flags(/zm2000)
+ 
+     #
+     # Debug information flags, by default CMake adds /Zi option
