@@ -2,9 +2,6 @@
 {% set version_postfix = "2023.1.0" %}
 {% set version = "2023.1.0.dev20230623" %}
 
-{% set PY_VER_MAJOR = PY_VER.split('.')[0] %}
-{% set PY_VER_MINOR = PY_VER.split('.')[1] %}
-
 package:
   name: {{ name|lower }}-split
   version: {{ version }}
@@ -110,7 +107,7 @@ outputs:
         - runtime-third-party-programs.txt
     build:
       run_exports:
-        - {{ pin_subpackage('libopenvino', max_pin='x.x.x') }}
+        - {{ pin_subpackage('libopenvino-ir-frontend', max_pin='x.x.x') }}
     requirements:
       build:
         - {{ compiler('cxx') }}
@@ -139,7 +136,7 @@ outputs:
         - runtime-third-party-programs.txt
     build:
       run_exports:
-        - {{ pin_subpackage('libopenvino', max_pin='x.x.x') }}
+        - {{ pin_subpackage('libopenvino-onnx-frontend', max_pin='x.x.x') }}
     requirements:
       build:
         - {{ compiler('cxx') }}
@@ -167,7 +164,7 @@ outputs:
         - runtime-third-party-programs.txt
     build:
       run_exports:
-        - {{ pin_subpackage('libopenvino', max_pin='x.x.x') }}
+        - {{ pin_subpackage('libopenvino-paddle-frontend', max_pin='x.x.x') }}
     requirements:
       build:
         - {{ compiler('cxx') }}
@@ -195,7 +192,7 @@ outputs:
         - runtime-third-party-programs.txt
     build:
       run_exports:
-        - {{ pin_subpackage('libopenvino', max_pin='x.x.x') }}
+        - {{ pin_subpackage('libopenvino-pytorch-frontend', max_pin='x.x.x') }}
     requirements:
       build:
         - {{ compiler('cxx') }}
@@ -223,7 +220,7 @@ outputs:
         - runtime-third-party-programs.txt
     build:
       run_exports:
-        - {{ pin_subpackage('libopenvino', max_pin='x.x.x') }}
+        - {{ pin_subpackage('libopenvino-tensorflow-frontend', max_pin='x.x.x') }}
     requirements:
       build:
         - {{ compiler('cxx') }}
@@ -252,7 +249,7 @@ outputs:
         - runtime-third-party-programs.txt
     build:
       run_exports:
-        - {{ pin_subpackage('libopenvino', max_pin='x.x.x') }}
+        - {{ pin_subpackage('libopenvino-tensorflow-lite-frontend', max_pin='x.x.x') }}
     requirements:
       build:
         - {{ compiler('cxx') }}
@@ -280,8 +277,6 @@ outputs:
         - runtime-third-party-programs.txt
     build:
       skip: True  # [not x86_64]
-      run_exports:
-        - {{ pin_subpackage('libopenvino-intel-cpu-plugin', max_pin='x.x.x') }}
     requirements:
       build:
         - {{ compiler('cxx') }}
@@ -310,8 +305,6 @@ outputs:
         - runtime-third-party-programs.txt
     build:
       skip: True  # [not aarch64 and not arm64]
-      run_exports:
-        - {{ pin_subpackage('libopenvino-arm-cpu-plugin', max_pin='x.x.x') }}
     requirements:
       build:
         - {{ compiler('cxx') }}
@@ -339,8 +332,6 @@ outputs:
         - runtime-third-party-programs.txt
     build:
       skip: True  # [not linux64 and not win64]
-      run_exports:
-        - {{ pin_subpackage('libopenvino-intel-gpu-plugin', max_pin='x.x.x') }}
     requirements:
       build:
         - {{ compiler('cxx') }}
@@ -371,9 +362,6 @@ outputs:
         - third-party-programs.txt
         - onednn_third-party-programs.txt
         - runtime-third-party-programs.txt
-    build:
-      run_exports:
-        - {{ pin_subpackage('libopenvino-auto-plugin', max_pin='x.x.x') }}
     requirements:
       build:
         - {{ compiler('cxx') }}
@@ -399,9 +387,6 @@ outputs:
         - third-party-programs.txt
         - onednn_third-party-programs.txt
         - runtime-third-party-programs.txt
-    build:
-      run_exports:
-        - {{ pin_subpackage('libopenvino-auto-batch-plugin', max_pin='x.x.x') }}
     requirements:
       build:
         - {{ compiler('cxx') }}
@@ -426,9 +411,6 @@ outputs:
         - third-party-programs.txt
         - onednn_third-party-programs.txt
         - runtime-third-party-programs.txt
-    build:
-      run_exports:
-        - {{ pin_subpackage('libopenvino-hetero-plugin', max_pin='x.x.x') }}
     requirements:
       build:
         - {{ compiler('cxx') }}
@@ -454,12 +436,10 @@ outputs:
         - onednn_third-party-programs.txt
         - runtime-third-party-programs.txt
     build:
-      string: py{{ PY_VER_MAJOR }}{{ PY_VER_MINOR }}h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}
+      string: py{{ CONDA_PY }}h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}
       entry_points:
-        - ovc = openvino.tools.ovc.main:main # do we need it? looks like setup.py does it
+        # - ovc = openvino.tools.ovc.main:main # do we need it? looks like setup.py does it
         # - benchmark_app = openvino.tools.benchmark.main:main
-      run_exports:
-        - {{ pin_subpackage('libopenvino-python', max_pin='x.x.x') }}
       ignore_run_exports_from:
         - tbb-devel  # because required just for developer package
         - pugixml  # because required just for developer package
@@ -476,13 +456,22 @@ outputs:
         - pybind11 >=2.10.1  # this versions works well for cross-compilation
       host:
         - {{ pin_subpackage('libopenvino', exact=True) }}
+        - {{ pin_subpackage('libopenvino-onnx-frontend', exact=True) }}
+        - {{ pin_subpackage('libopenvino-paddle-frontend', exact=True) }}
+        - {{ pin_subpackage('libopenvino-pytorch-frontend', exact=True) }}
+        - {{ pin_subpackage('libopenvino-tensorflow-frontend', exact=True) }}
         - tbb-devel =2021.5  # for developer package only
         - pugixml >=1.12.1  # for developer package only
         - python
         - pip
       run:
         - {{ pin_subpackage('libopenvino', exact=True) }}
+        - {{ pin_subpackage('libopenvino-onnx-frontend', exact=True) }}
+        - {{ pin_subpackage('libopenvino-paddle-frontend', exact=True) }}
+        - {{ pin_subpackage('libopenvino-pytorch-frontend', exact=True) }}
+        - {{ pin_subpackage('libopenvino-tensorflow-frontend', exact=True) }}
         - numpy >=1.16.6
+        - singledispatchmethod  # [py <= 37]
         - python
     test:
       imports:
@@ -526,7 +515,7 @@ outputs:
         # - ovc --help # enabled in next pre-release
         # - benchmark_app --help
         - test $(pip list | grep openvino | wc -l) -eq 1  # [unix]
-        - if [[ $($PYTHON -c 'import openvino.runtime as ov; print(ov.__version__[0:8])') != $PKG_VERSION ]]; then exit 1; fi  # [unix]
+        - if [[ $($PYTHON -c 'import openvino.runtime as ov; print(ov.__version__[0:8])') != {{ version_postfix }} ]]; then exit 1; fi  # [unix]
       requires:
         - pip
 
@@ -541,7 +530,7 @@ outputs:
         - onednn_third-party-programs.txt
         - runtime-third-party-programs.txt
     build:
-      string: py{{ PY_VER_MAJOR }}{{ PY_VER_MINOR }}h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}
+      string: py{{ CONDA_PY }}h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}
       run_exports:
         - {{ pin_subpackage('libopenvino', max_pin='x.x.x') }}
         - {{ pin_subpackage('libopenvino-python', max_pin='x.x.x') }}
