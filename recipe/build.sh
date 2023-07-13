@@ -11,6 +11,15 @@ mkdir -p build
 cmake ${CMAKE_ARGS}                                                          \
     -DCMAKE_BUILD_TYPE=Release                                               \
     -DENABLE_INTEL_GNA=OFF                                                   \
+    -DENABLE_INTEL_GPU=OFF                                                   \
+    -DENABLE_INTEL_CPU=OFF                                                   \
+    -DENABLE_GAPI_PREPROCESSING=OFF                                          \
+    -DENABLE_OV_ONNX_FRONTEND=OFF                                            \
+    -DENABLE_OV_IR_FRONTEND=OFF                                              \
+    -DENABLE_OV_PADDLE_FRONTEND=OFF                                          \
+    -DENABLE_OV_TF_FRONTEND=OFF                                              \
+    -DENABLE_OV_TF_LITE_FRONTEND=OFF                                         \
+    -DENABLE_OV_PYTORCH_FRONTEND=OFF                                         \
     -DENABLE_SYSTEM_TBB=ON                                                   \
     -DENABLE_SYSTEM_PUGIXML=ON                                               \
     -DENABLE_SYSTEM_PROTOBUF=ON                                              \
@@ -24,14 +33,14 @@ cmake ${CMAKE_ARGS}                                                          \
     -DENABLE_SAMPLES=OFF                                                     \
     -DENABLE_DATA=OFF                                                        \
     -DCPACK_GENERATOR=CONDA-FORGE                                            \
+    -DCMAKE_CXX_COMPILER_LAUNCHER=ccache                                     \
+    -DCMAKE_C_COMPILER_LAUNCHER=ccache                                       \
     -G Ninja                                                                 \
     -S "$SRC_DIR"                                                            \
     -B "$SRC_DIR/build"
 
 cmake --build "$SRC_DIR/build" --config Release --parallel $CPU_COUNT --verbose
 
-cp "$SRC_DIR/LICENSE" LICENSE
 cp "$SRC_DIR/licensing/third-party-programs.txt" third-party-programs.txt
 cp "$SRC_DIR/licensing/onednn_third-party-programs.txt" onednn_third-party-programs.txt
 cp "$SRC_DIR/licensing/runtime-third-party-programs.txt" runtime-third-party-programs.txt
-cp "$SRC_DIR/licensing/tbb_third-party-programs.txt" tbb_third-party-programs.txt
