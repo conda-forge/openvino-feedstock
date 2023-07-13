@@ -8,7 +8,7 @@ index f7641a7b96..0519714728 100644
      ie_add_compiler_flags(/wd4275)
 +    
 +    # [Win64] try to avoid C1060 error on conda-compilation
-+    ie_add_compiler_flags(/zm2000)
++    ie_add_compiler_flags(/Zm2000)
  
      #
      # Debug information flags, by default CMake adds /Zi option
