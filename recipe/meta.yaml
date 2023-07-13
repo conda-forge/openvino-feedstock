@@ -33,6 +33,8 @@ source:
   - url: https://github.com/opencv/ade/archive/58b2595a1a95cc807be8bf6222f266a9a1f393a9.tar.gz
     sha256: db7759cc32107e713b9e503ddf71a54ba2c80de07daefcb1aa315507e706ce07
     folder: thirdparty/ade
+    patches:
+    - patches/006-ade.patch
   - url: https://github.com/onnx/onnx/archive/refs/tags/v1.13.1.tar.gz
     sha256: 090d3e10ec662a98a2a72f1bf053f793efc645824f0d4b779e0ce47468a0890e
     folder: thirdparty/onnx/onnx
