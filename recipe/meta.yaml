@@ -7,22 +7,16 @@ package:
   version: {{ version }}
 
 source:
-  - url: https://github.com/openvinotoolkit/openvino/archive/refs/tags/2023.1.0.dev20230623.tar.gz
-    sha256: dd76f5a153b0262692db62141f4fa8e8a5b8bc24d20714faa1d1b5c8f11c64cd
+  - url: https://github.com/ilya-lavrenov/openvino/archive/c23a95df67b476b5c29f8b1841fb13f8c394c7b9.tar.gz
+    sha256: 4537ec1abbbac2bf357e26f98387b6508952c32a2fc476156b9e70ad07b82804
     patches:
-    - patches/001-win64-find-ocl.patch  # [win64]
-    - patches/002-protobuf.patch
     - patches/003-lin-arm64-compute-lib.patch  # [aarch64]
-    - patches/004-mha-build-fix.patch  # [arm64]
     - patches/005-setup-py.patch
   - url: https://github.com/ARM-software/ComputeLibrary/archive/refs/tags/v23.02.1.tar.gz  # [aarch64 or arm64]
     sha256: c3a443e26539f866969242e690cf0651ef629149741ee18732f954c734da6763  # [aarch64 or arm64]
     folder: src/plugins/intel_cpu/thirdparty/ComputeLibrary  # [aarch64 or arm64]
-  - url: https://github.com/herumi/xbyak/archive/refs/tags/v6.69.tar.gz
-    sha256: 7eb64e2c18527824402b16f26c6118ba82f40f57fe6e3ab05c6e2883246a04f1
-    folder: thirdparty/xbyak
-  - url: https://github.com/openvinotoolkit/oneDNN/archive/ebb8bfc9491b792af1ec3a72f244550041e42cce.tar.gz
-    sha256: 4fe086384229fec00fc79a7b8986a22d8a213669e3e55b4e0e5703d82d30a725
+  - url: https://github.com/openvinotoolkit/oneDNN/archive/33bb2b261d3829162395aaa9bbe8c1c5b139e855.tar.gz
+    sha256: db35a92f036d4f493931cf19abb57b6ec1e3eeafd8deb09a3294c5da6a63a50c
     folder: src/plugins/intel_cpu/thirdparty/onednn
   - url: https://github.com/oneapi-src/oneDNN/archive/f27dedbfc093f51032a4580198bb80579440dc15.tar.gz  # [win64 or linux64]
     sha256: da57c2298a8e001718902f0b65b6d92c4a7897b35467e23bc24996dde43ec47b  # [win64 or linux64]
@@ -30,8 +24,6 @@ source:
   - url: https://github.com/opencv/ade/archive/58b2595a1a95cc807be8bf6222f266a9a1f393a9.tar.gz
     sha256: db7759cc32107e713b9e503ddf71a54ba2c80de07daefcb1aa315507e706ce07
     folder: thirdparty/ade
-    patches:
-    - patches/006-ade.patch
   - url: https://github.com/onnx/onnx/archive/refs/tags/v1.13.1.tar.gz
     sha256: 090d3e10ec662a98a2a72f1bf053f793efc645824f0d4b779e0ce47468a0890e
     folder: thirdparty/onnx/onnx
@@ -88,12 +80,13 @@ outputs:
         {% set openvino_libs = [] %}
         {{ openvino_libs.append("") or "" }}
         {{ openvino_libs.append("_c") or "" }}
-        {{ openvino_libs.append("_gapi_preproc") or "" }}
         {% for openvino_lib in openvino_libs %}
         - test -f $PREFIX/lib/libopenvino{{ openvino_lib }}${SHLIB_EXT}.{{ version_postfix }}  # [linux]
         - test -f $PREFIX/lib/libopenvino{{ openvino_lib }}.{{ version_postfix }}${SHLIB_EXT}  # [osx]
         - if not exist %LIBRARY_BIN%\\openvino{{ openvino_lib }}%SHLIB_EXT% exit 1  # [win]
         {% endfor %}
+        - test -f $PREFIX/lib/openvino-{{ version_postfix }}/libopenvino_gapi_preproc.so  # [unix]
+        - if not exist %LIBRARY_BIN%\\openvino-{{ version_postfix }}\\openvino_gapi_preproc%SHLIB_EXT% exit 1  # [win]
 
   - name: libopenvino-ir-frontend
     version: {{ version }}
