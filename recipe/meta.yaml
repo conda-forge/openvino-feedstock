@@ -5,7 +5,7 @@
 {% set PY_VER_MINOR = PY_VER.split('.')[1] %}
 
 package:
-  name: {{ name|lower }}
+  name: {{ name|lower }}-split
   version: {{ version }}
 
 source:
@@ -22,13 +22,13 @@ source:
 
 build:
   number: 0
-  run_exports:
-    - {{ pin_subpackage('libopenvino', max_pin='x.x.x') }}
+  # run_exports:
+    # - {{ pin_subpackage('libopenvino', max_pin='x.x.x') }}
     # - {{ pin_subpackage('libopenvino-python', max_pin='x.x.x') }}
-  ignore_run_exports_from:
-    - {{ compiler('c') }}
-    - {{ compiler('cxx') }}
-    - tbb-devel # libopenvino and libopenvino-*-plugin already depend on tbb
+  # ignore_run_exports_from:
+  #   - {{ compiler('c') }}
+  #   - {{ compiler('cxx') }}
+  #   - tbb-devel # libopenvino and libopenvino-*-plugin already depend on tbb
 
 requirements:
   build:
@@ -45,68 +45,13 @@ requirements:
     - tbb-devel =2021.5 # starting from this version TBB uses hwloc in conda
     - pugixml >=1.12.1 # starting from this version shared libraries are provided
     - xbyak >=6.69.1  # [x86_64]
-  run:
-    - {{ pin_subpackage('libopenvino', max_pin='x.x.x') }}
+  # run:
+    # - {{ pin_subpackage('libopenvino', max_pin='x.x.x') }}
     # - {{ pin_subpackage('libopenvino-python', max_pin='x.x.x') }}
 
-test:
-  requires:
-    - {{ compiler('cxx') }}
-    - {{ compiler('c') }}
-    - ninja
-    - cmake >=3.15 # to have new cmake cmd interface (-S, --install and other options)
-    - pkg-config # to find zlib
-    - zlib
-    - nlohmann_json
-    - sysroot_linux-64 =2.17  # [linux64]
-    - tbb-devel =2021.5 # starting from this version TBB uses hwloc in conda
-    - opencv
-    - gflags
-  source_files:
-    - samples
-    - thirdparty/cnpy
-  files:
-    - snippets/
-  commands:
-    - export MACOSX_DEPLOYMENT_TARGET={{ MACOSX_DEPLOYMENT_TARGET }}  # [osx]
-    - export CMAKE_GENERATOR=Ninja  # [unix]
-
-    # check libraries (symlinks)
-    {% set openvino_libs = [] %}
-    {{ openvino_libs.append("") or "" }}
-    {{ openvino_libs.append("_c") or "" }}
-    {% for openvino_lib in openvino_libs %}
-    - test -f $PREFIX/lib/libopenvino{{ openvino_lib }}${SHLIB_EXT}  # [unix]
-    - if not exist %LIBRARY_BIN%\\openvino{{ openvino_lib }}%SHLIB_EXT% exit 1  # [win]
-    {% endfor %}
-
-    # C++ samples on Unix
-    - mkdir -p samples/cpp/thirdparty  # [unix]
-    - cp -R thirdparty/cnpy samples/cpp/thirdparty/cnpy  # [unix]
-    - cmake -S samples/cpp -B samples_cpp_build -DBIN_FOLDER=bin  # [unix]
-    - cmake --build samples_cpp_build --config Release --verbose  # [unix]
-    - ./samples_cpp_build/bin/hello_query_device  # [unix]
-
-    # C samples on Unix
-    - cp samples/cpp/CMakeLists.txt samples/c/CMakeLists.txt  # [unix]
-    - cmake -S samples/c -B samples_c_build -DBIN_FOLDER=bin  # [unix]
-    - cmake --build samples_c_build --config Release --verbose  # [unix]
-
-    # C++ samples on Windows
-    - mkdir -p samples\\cpp\\thirdparty  # [win]
-    - cp -R thirdparty\\cnpy samples\\cpp\\thirdparty\\cnpy  # [win]
-    - cmake -S samples\\cpp -B samples_cpp_build -DBIN_FOLDER=bin  # [win]
-    - cmake --build samples_cpp_build --config Release --verbose  # [win]
-    - .\\samples_cpp_build\\bin\\Release\\hello_query_device.exe  # [win]
-
-    # C samples on Windows
-    - cp samples\\cpp\\CMakeLists.txt samples\\c\\CMakeLists.txt  # [win]
-    - cmake -S samples\\c -B samples_c_build -DBIN_FOLDER=bin  # [win]
-    - cmake --build samples_c_build --config Release --verbose  # [win]
 
 outputs:
   - name: libopenvino
-    version: {{ version }}
     script: install/install.sh
     about:
       summary: OpenVINO Core Runtime library
@@ -138,7 +83,6 @@ outputs:
         {% endfor %}
 
   - name: libopenvino-python
-    version: {{ version }}
     script: install/install_python.sh
     about:
       summary: OpenVINO Python API
@@ -226,6 +170,75 @@ outputs:
 
   - name: openvino
     script: install/install_dev.sh
+    build:
+      string: py{{ PY_VER_MAJOR }}{{ PY_VER_MINOR }}h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}
+      run_exports:
+        - {{ pin_subpackage('libopenvino', max_pin='x.x.x') }}
+        - {{ pin_subpackage('libopenvino-python', max_pin='x.x.x') }}
+    requirements:
+      build:
+        - cmake >=3.15  # to have new cmake cmd interface (-S, --install and other options)
+      host:
+        - python
+      run:
+        - {{ pin_subpackage('libopenvino', exact=True) }}
+        - {{ pin_subpackage('libopenvino-python', max_pin='x.x.x') }}
+        - python
+    test:
+      requires:
+        - {{ compiler('cxx') }}
+        - {{ compiler('c') }}
+        - ninja
+        - cmake >=3.15 # to have new cmake cmd interface (-S, --install and other options)
+        - pkg-config # to find zlib
+        - zlib
+        - nlohmann_json
+        - sysroot_linux-64 =2.17  # [linux64]
+        - tbb-devel =2021.5 # starting from this version TBB uses hwloc in conda
+        - opencv
+        - gflags
+      source_files:
+        - samples
+        - thirdparty/cnpy
+      files:
+        - snippets/
+      commands:
+        - export MACOSX_DEPLOYMENT_TARGET={{ MACOSX_DEPLOYMENT_TARGET }}  # [osx]
+        - export CMAKE_GENERATOR=Ninja  # [unix]
+
+        # check libraries (symlinks)
+        {% set openvino_libs = [] %}
+        {{ openvino_libs.append("") or "" }}
+        {{ openvino_libs.append("_c") or "" }}
+        {% for openvino_lib in openvino_libs %}
+        - test -f $PREFIX/lib/libopenvino{{ openvino_lib }}${SHLIB_EXT}  # [unix]
+        - if not exist %LIBRARY_BIN%\\openvino{{ openvino_lib }}%SHLIB_EXT% exit 1  # [win]
+        {% endfor %}
+
+        # C++ samples on Unix
+        - mkdir -p samples/cpp/thirdparty  # [unix]
+        - cp -R thirdparty/cnpy samples/cpp/thirdparty/cnpy  # [unix]
+        - cmake -S samples/cpp -B samples_cpp_build -DBIN_FOLDER=bin  # [unix]
+        - cmake --build samples_cpp_build --config Release --verbose  # [unix]
+        - ./samples_cpp_build/bin/hello_query_device  # [unix]
+
+        # C samples on Unix
+        - cp samples/cpp/CMakeLists.txt samples/c/CMakeLists.txt  # [unix]
+        - cmake -S samples/c -B samples_c_build -DBIN_FOLDER=bin  # [unix]
+        - cmake --build samples_c_build --config Release --verbose  # [unix]
+
+        # C++ samples on Windows
+        - mkdir -p samples\\cpp\\thirdparty  # [win]
+        - cp -R thirdparty\\cnpy samples\\cpp\\thirdparty\\cnpy  # [win]
+        - cmake -S samples\\cpp -B samples_cpp_build -DBIN_FOLDER=bin  # [win]
+        - cmake --build samples_cpp_build --config Release --verbose  # [win]
+        - .\\samples_cpp_build\\bin\\Release\\hello_query_device.exe  # [win]
+
+        # C samples on Windows
+        - cp samples\\cpp\\CMakeLists.txt samples\\c\\CMakeLists.txt  # [win]
+        - cmake -S samples\\c -B samples_c_build -DBIN_FOLDER=bin  # [win]
+        - cmake --build samples_c_build --config Release --verbose  # [win]
+
 
 about:
   home: https://github.com/openvinotoolkit/openvino
@@ -248,6 +261,7 @@ about:
   dev_url: https://github.com/openvinotoolkit/openvino
 
 extra:
+  feedstock-name: openvino
   recipe-maintainers:
     - ilya-lavrenov
     - artanokhov
