@@ -1,5 +1,5 @@
 diff --git a/cmake/developer_package/packaging/common-libraries.cmake b/cmake/developer_package/packaging/common-libraries.cmake
-index c8cde9746e..90b02b1d5e 100644
+index 159dce21bb..1efab8576c 100644
 --- a/cmake/developer_package/packaging/common-libraries.cmake
 +++ b/cmake/developer_package/packaging/common-libraries.cmake
 @@ -37,7 +37,7 @@ macro(ov_common_libraries_cpack_set_dirs)
@@ -11,26 +11,41 @@ index c8cde9746e..90b02b1d5e 100644
      endif()
  
      # non-native stuff
-diff --git a/samples/cpp/CMakeLists.txt b/samples/cpp/CMakeLists.txt
-index 8849aaf47d..68b80b2336 100644
---- a/samples/cpp/CMakeLists.txt
-+++ b/samples/cpp/CMakeLists.txt
-@@ -100,12 +100,7 @@ endif()
- if(TARGET gflags)
-     set(GFLAGS_TARGET gflags)
- elseif(gflags_required)
--    if(EXISTS /etc/debian_version)
--        set(gflags_component nothreads_static)
--    else()
--        set(gflags_component shared)
--    endif()
--    find_package(gflags QUIET OPTIONAL_COMPONENTS ${gflags_component})
-+    find_package(gflags QUIET)
-     if(gflags_FOUND)
-         if(TARGET ${GFLAGS_TARGET})
-             # nothing
+diff --git a/src/bindings/python/CMakeLists.txt b/src/bindings/python/CMakeLists.txt
+index 93fd65992e..3bf06a5a76 100644
+--- a/src/bindings/python/CMakeLists.txt
++++ b/src/bindings/python/CMakeLists.txt
+@@ -242,6 +242,8 @@ macro(ov_define_setup_py_packaging_vars)
+         # build locations
+         OPENVINO_BINARY_DIR=${OpenVINO_BINARY_DIR}
+         OPENVINO_PYTHON_BINARY_DIR=${OpenVINOPython_BINARY_DIR}
++        # to create proper directories for BA, OVC tools
++        CPACK_GENERATOR=${CPACK_GENERATOR}
+         # variables to reflect cpack locations
+         OV_RUNTIME_LIBS_DIR=${OV_WHEEL_RUNTIMEDIR}
+         TBB_LIBS_DIR=${TBB_LIBS_DIR}
+@@ -316,14 +318,17 @@ if(ENABLE_PYTHON_PACKAGING)
+         COMMAND ${CMAKE_COMMAND} -E remove_directory
+             "${python_package_prefix}"
+         COMMAND ${setup_py_env}
++                # variables to reflect options (extensions only or full wheel package)
++                PYTHON_EXTENSIONS_ONLY=ON
++                SKIP_RPATH=ON
+             "${PYTHON_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/wheel/setup.py"
+                 --no-user-cfg
+                 --quiet
+                 build
+-                    --python-extensions-only
++                    # --python-extensions-only
+                     --executable "/usr/bin/python3"
+                 build_ext
+-                    --skip-rpath
++                    # --skip-rpath
+                 install
+                     --no-compile
+                     --prefix "${python_package_prefix}"
 diff --git a/src/bindings/python/wheel/setup.py b/src/bindings/python/wheel/setup.py
-index e8427dea31..b5b296d87e 100644
+index 6feaa81519..1440bad222 100644
 --- a/src/bindings/python/wheel/setup.py
 +++ b/src/bindings/python/wheel/setup.py
 @@ -52,6 +52,9 @@ TBB_LIBS_DIR = os.getenv("TBB_LIBS_DIR", f"runtime/3rdparty/tbb/{LIBS_DIR}")
@@ -43,38 +58,7 @@ index e8427dea31..b5b296d87e 100644
  
  LIB_INSTALL_CFG = {
      "ie_libs": {
-@@ -175,30 +178,6 @@ PY_INSTALL_CFG = {
-         "install_dir": PY_PACKAGES_DIR,
-         "binary_dir": OPENVINO_PYTHON_BINARY_DIR,
-     },
--    "benchmark_app": {
--        "entry_point": {
--            "console_scripts": [
--                "benchmark_app = openvino.tools.benchmark.main:main",
--            ],
--        },
--        "name": f"pyopenvino_{PYTHON_VERSION}",
--        "prefix": f"{BUILD_BASE}/site-packages",
--        "source_dir": f"{OPENVINO_SOURCE_DIR}/tools/benchmark_tool",
--        "install_dir": PY_PACKAGES_DIR,
--        "binary_dir": "benchmark_app",
--    },
--    # "model_optimizer": {                                  # noqa: E731
--    #     "entry_point": {                                  # noqa: E731
--    #         "console_scripts": [                          # noqa: E731
--    #             "mo = openvino.tools.mo.main:main",       # noqa: E731
--    #         ],                                            # noqa: E731
--    #     },                                                # noqa: E731
--    #     "name": f"pyopenvino_{PYTHON_VERSION}",           # noqa: E731
--    #     "prefix": f"{BUILD_BASE}/site-packages",          # noqa: E731
--    #     "source_dir": f"{OPENVINO_SOURCE_DIR}/tools/mo",  # noqa: E731
--    #     "install_dir": PY_PACKAGES_DIR,                   # noqa: E731
--    #     "binary_dir": "model_optimizer",                  # noqa: E731
--    # },                                                    # noqa: E731
- }
- 
- 
-@@ -238,6 +217,9 @@ class CustomBuild(build):
+@@ -238,6 +241,9 @@ class CustomBuild(build):
              self.jobs = os.getenv("MAX_JOBS")
          self.jobs = multiprocessing.cpu_count() if self.jobs is None else int(self.jobs)
  
@@ -84,16 +68,15 @@ index e8427dea31..b5b296d87e 100644
          if self.cmake_args is None:
              self.cmake_args = ""
  
-@@ -266,6 +248,8 @@ class CustomBuild(build):
-                     binary_dir = os.path.join(self.build_temp, binary_dir)
+@@ -267,6 +273,7 @@ class CustomBuild(build):
                      self.announce(f"Configuring {comp} cmake project", level=3)
                      self.spawn(["cmake", f"-DOpenVINODeveloperPackage_DIR={OPENVINO_BINARY_DIR}",
-+                                         f"-DPYTHON_EXECUTABLE={sys.executable}",
+                                          f"-DPYTHON_EXECUTABLE={sys.executable}",
 +                                         f"-DCPACK_GENERATOR={CPACK_GENERATOR}",
                                           "-DCMAKE_BUILD_TYPE=Release",
                                           "-DENABLE_WHEEL=OFF",
                                           self.cmake_args,
-@@ -443,6 +427,13 @@ class CopyExt(build_ext):
+@@ -444,6 +451,13 @@ class CopyExt(build_ext):
          super().initialize_options()
          self.skip_rpath = False
  
@@ -107,62 +90,3 @@ index e8427dea31..b5b296d87e 100644
      def run(self):
          if len(self.extensions) == 1:
              self.extensions = find_prebuilt_extensions(get_install_dirs_list(PY_INSTALL_CFG))
-diff --git a/thirdparty/dependencies.cmake b/thirdparty/dependencies.cmake
-index e815baa80c..55630df950 100644
---- a/thirdparty/dependencies.cmake
-+++ b/thirdparty/dependencies.cmake
-@@ -363,52 +363,8 @@ endif()
- #
- 
- if(ENABLE_SAMPLES OR ENABLE_COMPILE_TOOL OR ENABLE_TESTS)
--    if(CMAKE_TOOLCHAIN_FILE MATCHES "vcpkg          " OR DEFINED VCPKG_VERBOSE OR
--       CMAKE_TOOLCHAIN_FILE MATCHES "conan_toolchain" OR DEFINED CONAN_EXPORTED)
--        # vcpkg contains only libs compiled with threads
--        # conan case
--        find_package(gflags QUIET)
--    elseif(APPLE OR WIN32)
--        # on Windows and macOS we don't use gflags, because will be dynamically linked
--    elseif(CMAKE_HOST_LINUX AND LINUX)
--        if(OV_OS_RHEL)
--            set(gflag_component nothreads_shared)
--        elseif(OV_OS_DEBIAN)
--            set(gflag_component nothreads_static)
--        endif()
--        find_package(gflags QUIET OPTIONAL_COMPONENTS ${gflag_component})
--    endif()
--
--    if(gflags_FOUND)
--        if(TARGET gflags)
--            # no extra steps
--        elseif(TARGET gflags_nothreads-static)
--            # Debian 9: gflag_component is ignored
--            set(gflags_target gflags_nothreads-static)
--        elseif(TARGET gflags_nothreads-shared)
--            # CentOS / RHEL / Fedora case
--            set(gflags_target gflags_nothreads-shared)
--        elseif(TARGET ${GFLAGS_TARGET})
--            set(gflags_target ${GFLAGS_TARGET})
--        else()
--            message(FATAL_ERROR "Internal error: failed to find imported target 'gflags' using '${gflag_component}' component")
--        endif()
--
--        if(gflags_target)
--            if(OV_PkgConfig_VISILITY)
--                # need to set GLOBAL visibility in order to create ALIAS for this target
--                set_target_properties(${gflags_target} PROPERTIES IMPORTED_GLOBAL ON)
--            endif()
--            add_library(gflags ALIAS ${gflags_target})
--        endif()
--
--        message(STATUS "gflags (${gflags_VERSION}) is found at ${gflags_DIR} using '${gflag_component}' component")
--    endif()
--
--    if(NOT TARGET gflags)
--        add_subdirectory(thirdparty/gflags EXCLUDE_FROM_ALL)
--        openvino_developer_export_targets(COMPONENT openvino_common TARGETS gflags)
--    endif()
-+    add_subdirectory(thirdparty/gflags EXCLUDE_FROM_ALL)
-+    openvino_developer_export_targets(COMPONENT openvino_common TARGETS gflags)
- endif()
- 
- #
