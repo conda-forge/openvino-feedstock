@@ -26,7 +26,7 @@ cmake                                                                        ^
     -B "%SRC_DIR%/build"
 if errorlevel 1 exit 1
 
-cmake --build "%SRC_DIR%/build" --config Release --parallel %CPU_COUNT% --verbose
+cmake --build "%SRC_DIR%/build" --config Release --verbose
 if errorlevel 1 exit 1
 
 cp "%SRC_DIR%/LICENSE" LICENSE
