@@ -504,7 +504,7 @@ outputs:
         - openvino.preprocess
       commands:
         # - pip check # fails before of openvino-telemetry
-        # - ovc --help # enabled in next pre-release
+        - ovc --help
         # - benchmark_app --help
         - test $(pip list | grep openvino | wc -l) -eq 1  # [unix]
         - if [[ $($PYTHON -c 'import openvino.runtime as ov; print(ov.__version__[0:8])') != {{ version_postfix }} ]]; then exit 1; fi  # [unix]
@@ -545,7 +545,6 @@ outputs:
         - python
       run:
         - python
-        - singledispatchmethod  # [py <= 37]
         - {{ pin_subpackage('libopenvino', max_pin='x.x.x') }}
         - {{ pin_subpackage('libopenvino-python', max_pin='x.x.x') }}
         - {{ pin_subpackage('libopenvino-intel-cpu-plugin', max_pin='x.x.x') }}  # [x86_64]
