@@ -21,7 +21,7 @@ cmake                                                                        ^
     -DENABLE_SAMPLES=OFF                                                     ^
     -DENABLE_DATA=OFF                                                        ^
     -DCPACK_GENERATOR=CONDA-FORGE                                            ^
-    -G Ninja                                                                 ^
+    -G "Visual Studio 16 2019"                                               ^
     -S "%SRC_DIR%"                                                           ^
     -B "%SRC_DIR%/build"
 if errorlevel 1 exit 1
