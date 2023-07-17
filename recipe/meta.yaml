@@ -6,23 +6,26 @@ package:
   version: {{ version }}
 
 source:
-  - url: https://github.com/openvinotoolkit/openvino/archive/refs/tags/2023.0.1.tar.gz
-    sha256: c14cb22f5191a75ea15659c62baceb71333dc9ecf62139ce513f3e81e4544651
+  - url: https://github.com/openvinotoolkit/openvino/archive/aeff5056f56aab643252ace33ae9d3416edd4ef8.tar.gz
+    sha256: 62562e1b10d8aae304dd85c2c216fbc3b376369d17023eaeba7af7bb4e7ee865
     patches:
     - patches/001-win64-find-ocl.patch  # [win64]
     - patches/003-lin-arm64-compute-lib.patch  # [aarch64]
     - patches/004-mha-build-fix.patch  # [arm64]
+  - url: https://github.com/openvinotoolkit/openvino_contrib/archive/7a4782d8cb8b238f2c88eb2ea502ef3ca5079c6f.tar.gz  # [win64 or linux64]
+    sha256: f3edf883ebcfdd59622aefbb7819f7ba1cfafcee0fde43ddb021775098e25843  # [win64 or linux64]
+    folder: openvino_contrib  # [win64 or linux64]  
   - url: https://github.com/ARM-software/ComputeLibrary/archive/refs/tags/v23.02.1.tar.gz  # [aarch64 or arm64]
     sha256: c3a443e26539f866969242e690cf0651ef629149741ee18732f954c734da6763  # [aarch64 or arm64]
     folder: src/plugins/intel_cpu/thirdparty/ComputeLibrary  # [aarch64 or arm64]
   - url: https://github.com/herumi/xbyak/archive/refs/tags/v6.69.tar.gz
     sha256: 7eb64e2c18527824402b16f26c6118ba82f40f57fe6e3ab05c6e2883246a04f1
     folder: thirdparty/xbyak
-  - url: https://github.com/openvinotoolkit/oneDNN/archive/1c7bfabf1b26e6fb95fea1613e1d3d2bef1f6b54.tar.gz
-    sha256: 52921b3efab33d1710971c67318e8c00ee102b6369e4e9cea8fdf91a1d68e38e
+  - url: https://github.com/openvinotoolkit/oneDNN/archive/33bb2b261d3829162395aaa9bbe8c1c5b139e855.tar.gz
+    sha256: db35a92f036d4f493931cf19abb57b6ec1e3eeafd8deb09a3294c5da6a63a50c
     folder: src/plugins/intel_cpu/thirdparty/onednn
-  - url: https://github.com/oneapi-src/oneDNN/archive/f27dedbfc093f51032a4580198bb80579440dc15.tar.gz  # [win64 or linux64]
-    sha256: da57c2298a8e001718902f0b65b6d92c4a7897b35467e23bc24996dde43ec47b  # [win64 or linux64]
+  - url: https://github.com/oneapi-src/oneDNN/archive/ec0b2ee85fc2a2dbdeec10035c5ef5813d8fb5ea.tar.gz  # [win64 or linux64]
+    sha256: 8d84c7567803bf30e3a8fec9bf14e33b2003f73545160ddd1cf0406c4c7fb3d5  # [win64 or linux64]
     folder: src/plugins/intel_gpu/thirdparty/onednn_gpu  # [win64 or linux64]
   - url: https://github.com/opencv/ade/archive/58b2595a1a95cc807be8bf6222f266a9a1f393a9.tar.gz
     sha256: db7759cc32107e713b9e503ddf71a54ba2c80de07daefcb1aa315507e706ce07
@@ -38,6 +41,7 @@ build:
     - {{ pin_subpackage('libopenvino-intel-cpu-plugin', max_pin='x.x.x') }}  # [x86_64]
     - {{ pin_subpackage('libopenvino-arm-cpu-plugin', max_pin='x.x.x') }}  # [aarch64 or arm64]
     - {{ pin_subpackage('libopenvino-intel-gpu-plugin', max_pin='x.x.x') }}  # [win64 or linux64]
+    - {{ pin_subpackage('libopenvino-intel-nvidia-plugin', max_pin='x.x.x') }}  # [win64 or linux64]
     - {{ pin_subpackage('libopenvino-auto-plugin', max_pin='x.x.x') }}
     - {{ pin_subpackage('libopenvino-hetero-plugin', max_pin='x.x.x') }}
     - {{ pin_subpackage('libopenvino-auto-batch-plugin', max_pin='x.x.x') }}
@@ -74,11 +78,15 @@ requirements:
     - pugixml >=1.12.1 # starting from this version shared libraries are provided
     - xbyak >=6.69.1  # [x86_64]
     - libprotobuf-static =3.20.3
+    - cudatoolkit =11.8.0  # [linux64 or win64]
+    - cutensor =1.6.1.5  # [linux64 or win64]
+    - cudnn =8.8.0  # [linux64 or win64]
   run:
     - {{ pin_subpackage('libopenvino', max_pin='x.x.x') }}
     - {{ pin_subpackage('libopenvino-intel-cpu-plugin', max_pin='x.x.x') }}  # [x86_64]
     - {{ pin_subpackage('libopenvino-arm-cpu-plugin', max_pin='x.x.x') }}  # [aarch64 or arm64]
     - {{ pin_subpackage('libopenvino-intel-gpu-plugin', max_pin='x.x.x') }}  # [win64 or linux64]
+    - {{ pin_subpackage('libopenvino-intel-nvidia-plugin', max_pin='x.x.x') }}  # [win64 or linux64]
     - {{ pin_subpackage('libopenvino-auto-plugin', max_pin='x.x.x') }}
     - {{ pin_subpackage('libopenvino-hetero-plugin', max_pin='x.x.x') }}
     - {{ pin_subpackage('libopenvino-auto-batch-plugin', max_pin='x.x.x') }}
@@ -464,6 +472,43 @@ outputs:
       commands:
         - test -f $PREFIX/lib/openvino-{{ version }}/libopenvino_intel_gpu_plugin.so  # [unix]
         - if not exist %LIBRARY_BIN%\\openvino-{{ version }}\\openvino_intel_gpu_plugin%SHLIB_EXT% exit 1  # [win]
+
+  - name: libopenvino-intel-nvidia-plugin
+    version: {{ version }}
+    script: install/install_nvidia_gpu.sh
+    about:
+      summary: OpenVINO™ NVIDIA GPU plugin is developed in order to enable deep neural networks inference on NVIDIA GPUs, using OpenVINO™ API
+      license_file:
+        - LICENSE
+        - third-party-programs.txt
+        - onednn_third-party-programs.txt
+        - runtime-third-party-programs.txt
+        - tbb_third-party-programs.txt
+    build:
+      skip: True  # [not linux64 and not win64]
+      run_exports:
+        - {{ pin_subpackage('libopenvino-intel-nvidia-plugin', max_pin='x.x.x') }}
+    requirements:
+      build:
+        - {{ compiler('cxx') }}
+        - {{ compiler('c') }}
+        - cmake >=3.15 # to have new cmake cmd interface (-S, --install and other options)
+        - cudatoolkit =11.8.0
+        - cutensor =1.6.1.5
+        - cudnn =8.8.0
+      host:
+        - tbb-devel =2021.5 # starting from this version TBB uses hwloc in conda
+        - pugixml >=1.12.1 # starting from this version shared libraries are provided
+        - {{ pin_subpackage('libopenvino', exact=True) }}
+      run:
+        - {{ pin_subpackage('libopenvino', exact=True) }}
+        - cutensor =1.6.1.5
+        - cudnn =8.8.0
+    test:
+      commands:
+        - test -f $PREFIX/lib/openvino-{{ version }}/libopenvino_nvidia_gpu_plugin.so  # [unix]
+        - if not exist %LIBRARY_BIN%\\openvino-{{ version }}\\openvino_intel_nvidia_gpu_plugin%SHLIB_EXT% exit 1  # [win]
+
 
   - name: libopenvino-auto-plugin
     version: {{ version }}
