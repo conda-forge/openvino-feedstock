@@ -17,6 +17,7 @@ cmake ${CMAKE_ARGS}                                                          \
     -DENABLE_SYSTEM_SNAPPY=ON                                                \
     -DOPENVINO_EXTRA_MODULES="$SRC_DIR/openvino_contrib/modules"             \
     -DBUILD_nvidia_plugin=ON                                                 \
+    -DBUILD_java_api=OFF                                                     \
     -DENABLE_COMPILE_TOOL=OFF                                                \
     -DENABLE_PYTHON=OFF                                                      \
     -DENABLE_CPPLINT=OFF                                                     \
