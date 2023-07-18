@@ -12,6 +12,7 @@ cmake                                                                        ^
     -DENABLE_SYSTEM_OPENCL=ON                                                ^
     -DENABLE_SYSTEM_PROTOBUF=ON                                              ^
     -DENABLE_SYSTEM_SNAPPY=ON                                                ^
+    -DOPENVINO_EXTRA_MODULES="%SRC_DIR%/openvino_contrib/modules"            ^
     -DBUILD_nvidia_plugin=ON                                                 ^
     -DENABLE_COMPILE_TOOL=OFF                                                ^
     -DENABLE_PYTHON=OFF                                                      ^
