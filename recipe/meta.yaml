@@ -61,6 +61,7 @@ requirements:
     - {{ compiler('c') }}
     - {{ compiler('cxx') }}
     - git
+    - wget
     - ninja
     - pkg-config # to generate openvino.pc on macOS
     - scons  # [aarch64 or arm64]
