@@ -70,7 +70,6 @@ requirements:
     - libprotobuf =3.20.3 # for protoc compiler, libraries are used from libprotobuf-static
     - flatbuffers =23.3.3
     - sysroot_linux-64 =2.17  # [linux64]
-    - cudatoolkit =11.8.0  # [linux64 or win64]
     - cudatoolkit-dev  # [linux64 or win64]
   host:
     - tbb-devel =2021.5 # starting from this version TBB uses hwloc in conda
@@ -495,7 +494,6 @@ outputs:
         - {{ compiler('cxx') }}
         - {{ compiler('c') }}
         - cmake >=3.15 # to have new cmake cmd interface (-S, --install and other options)
-        - cudatoolkit =11.8.0
         - cudatoolkit-dev
         - cutensor =1.6.1.5
         - cudnn =8.8.0
