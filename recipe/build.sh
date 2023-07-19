@@ -15,7 +15,6 @@ cmake ${CMAKE_ARGS}                                                          \
     -DENABLE_SYSTEM_PUGIXML=ON                                               \
     -DENABLE_SYSTEM_PROTOBUF=ON                                              \
     -DENABLE_SYSTEM_SNAPPY=ON                                                \
-    -DENABLE_COMPILE_TOOL=OFF                                                \
     -DENABLE_PYTHON=OFF                                                      \
     -DENABLE_CPPLINT=OFF                                                     \
     -DENABLE_CLANG_FORMAT=OFF                                                \

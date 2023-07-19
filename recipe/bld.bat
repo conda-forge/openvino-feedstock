@@ -12,7 +12,6 @@ cmake                                                                        ^
     -DENABLE_SYSTEM_OPENCL=ON                                                ^
     -DENABLE_SYSTEM_PROTOBUF=ON                                              ^
     -DENABLE_SYSTEM_SNAPPY=ON                                                ^
-    -DENABLE_COMPILE_TOOL=OFF                                                ^
     -DENABLE_PYTHON=OFF                                                      ^
     -DENABLE_CPPLINT=OFF                                                     ^
     -DENABLE_CLANG_FORMAT=OFF                                                ^
@@ -21,16 +20,16 @@ cmake                                                                        ^
     -DENABLE_SAMPLES=OFF                                                     ^
     -DENABLE_DATA=OFF                                                        ^
     -DCPACK_GENERATOR=CONDA-FORGE                                            ^
-    -G Ninja                                                                 ^
+    -G "Visual Studio 16 2019"                                               ^
     -S "%SRC_DIR%"                                                           ^
-    -B "%SRC_DIR%/build"
+    -B "%SRC_DIR%\build"
 if errorlevel 1 exit 1
 
-cmake --build "%SRC_DIR%/build" --config Release --parallel %CPU_COUNT% --verbose
+cmake --build "%SRC_DIR%\build" --config Release --parallel %CPU_COUNT% --verbose
 if errorlevel 1 exit 1
 
-cp "%SRC_DIR%/licensing/third-party-programs.txt" third-party-programs.txt
-cp "%SRC_DIR%/licensing/onednn_third-party-programs.txt" onednn_third-party-programs.txt
-cp "%SRC_DIR%/licensing/runtime-third-party-programs.txt" runtime-third-party-programs.txt
+COPY "%SRC_DIR%\licensing\third-party-programs.txt" third-party-programs.txt
+COPY "%SRC_DIR%\licensing\onednn_third-party-programs.txt" onednn_third-party-programs.txt
+COPY "%SRC_DIR%\licensing\runtime-third-party-programs.txt" runtime-third-party-programs.txt
 
 exit 0

@@ -4,6 +4,7 @@ azure:
   settings_win:
     pool:
       vmImage: windows-2019
+  timeout_minutes: 600
 build_platform:
   osx_arm64: osx_64
   linux_aarch64: linux_64

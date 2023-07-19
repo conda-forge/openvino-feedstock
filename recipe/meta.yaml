@@ -7,9 +7,10 @@ package:
   version: {{ version }}
 
 source:
-  - url: https://github.com/openvinotoolkit/openvino/archive/181238bcfb70fd7edb96ae55f5742243a9e26d4c.tar.gz
-    sha256: cbc2beea200ee6b195b6c177c08f4fe501600358a5de3a7c6f645de5e9152402
+  - url: https://github.com/openvinotoolkit/openvino/archive/04cb55c37dbb673bd940afd176f5dcb541fe3779.tar.gz
+    sha256: 09d7258aa9f0f842c18207c3350fce0aad5e1cb4b0b68be005578f7ce5f591f4
     patches:
+    - patches/001-onnx-frontend-build.patch
     - patches/003-lin-arm64-compute-lib.patch  # [aarch64]
   - url: https://github.com/ARM-software/ComputeLibrary/archive/refs/tags/v23.02.1.tar.gz  # [aarch64 or arm64]
     sha256: c3a443e26539f866969242e690cf0651ef629149741ee18732f954c734da6763  # [aarch64 or arm64]
@@ -17,8 +18,8 @@ source:
   - url: https://github.com/openvinotoolkit/oneDNN/archive/33bb2b261d3829162395aaa9bbe8c1c5b139e855.tar.gz
     sha256: db35a92f036d4f493931cf19abb57b6ec1e3eeafd8deb09a3294c5da6a63a50c
     folder: src/plugins/intel_cpu/thirdparty/onednn
-  - url: https://github.com/oneapi-src/oneDNN/archive/f27dedbfc093f51032a4580198bb80579440dc15.tar.gz  # [win64 or linux64]
-    sha256: da57c2298a8e001718902f0b65b6d92c4a7897b35467e23bc24996dde43ec47b  # [win64 or linux64]
+  - url: https://github.com/oneapi-src/oneDNN/archive/ec0b2ee85fc2a2dbdeec10035c5ef5813d8fb5ea.tar.gz  # [win64 or linux64]
+    sha256: 8d84c7567803bf30e3a8fec9bf14e33b2003f73545160ddd1cf0406c4c7fb3d5  # [win64 or linux64]
     folder: src/plugins/intel_gpu/thirdparty/onednn_gpu  # [win64 or linux64]
   - url: https://github.com/opencv/ade/archive/58b2595a1a95cc807be8bf6222f266a9a1f393a9.tar.gz
     sha256: db7759cc32107e713b9e503ddf71a54ba2c80de07daefcb1aa315507e706ce07
@@ -50,7 +51,8 @@ requirements:
     - khronos-opencl-icd-loader  # [win64]
     - pugixml >=1.12.1 # starting from this version shared libraries are provided
     - xbyak >=6.69.1  # [x86_64]
-    - libprotobuf-static =3.20.3
+    - libprotobuf-static =3.20.3  # [not win64]
+    - libprotobuf-static  # [win64]
 
 outputs:
   - name: libopenvino
@@ -430,8 +432,8 @@ outputs:
     build:
       string: py{{ CONDA_PY }}h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}
       entry_points:
-        # - ovc = openvino.tools.ovc.main:main # do we need it? looks like setup.py does it
-        # - benchmark_app = openvino.tools.benchmark.main:main
+        - ovc = openvino.tools.ovc.main:main
+        - benchmark_app = openvino.tools.benchmark.main:main
       ignore_run_exports_from:
         - tbb-devel  # because required just for developer package
         - pugixml  # because required just for developer package
@@ -505,7 +507,7 @@ outputs:
       commands:
         # - pip check # fails before of openvino-telemetry
         - ovc --help
-        # - benchmark_app --help
+        - benchmark_app --help
         - test $(pip list | grep openvino | wc -l) -eq 1  # [unix]
         - if [[ $($PYTHON -c 'import openvino.runtime as ov; print(ov.__version__[0:8])') != {{ version_postfix }} ]]; then exit 1; fi  # [unix]
       requires:
