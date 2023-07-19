@@ -57,7 +57,8 @@ requirements:
     - khronos-opencl-icd-loader  # [win64]
     - pugixml >=1.12.1 # starting from this version shared libraries are provided
     - xbyak >=6.69.1  # [x86_64]
-    - libprotobuf-static =3.20.3
+    - libprotobuf-static =3.20.3  # [not win64]
+    - libprotobuf-static  # [win64]
 
 outputs:
   - name: libopenvino
