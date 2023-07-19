@@ -10,6 +10,7 @@ source:
     sha256: 62562e1b10d8aae304dd85c2c216fbc3b376369d17023eaeba7af7bb4e7ee865
     patches:
     - patches/001-win64-find-ocl.patch  # [win64]
+    - patches/002-cuda-opencl.patch
     - patches/003-lin-arm64-compute-lib.patch  # [aarch64]
     - patches/004-mha-build-fix.patch  # [arm64]
   - url: https://github.com/openvinotoolkit/openvino_contrib/archive/7a4782d8cb8b238f2c88eb2ea502ef3ca5079c6f.tar.gz  # [win64 or linux64]
