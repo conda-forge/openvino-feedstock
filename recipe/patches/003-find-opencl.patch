@@ -1,0 +1,49 @@
+diff --git a/thirdparty/CMakeLists.txt b/thirdparty/CMakeLists.txt
+index 24a1099752..46baa89dad 100644
+--- a/thirdparty/CMakeLists.txt
++++ b/thirdparty/CMakeLists.txt
+@@ -36,24 +36,7 @@ ov_install_static_lib(xbyak ${OV_CPACK_COMP_CORE})
+ 
+ if(ENABLE_INTEL_GPU)
+     if(ENABLE_SYSTEM_OPENCL)
+-        # try to find system OpenCL (installed via 'brew install opencl-icd-loader')
+-        find_package(OpenCLICDLoader QUIET)
+-
+-        if(OpenCLICDLoader_FOUND)
+-            # 'brew install opencl-headers'
+-            find_package(OpenCLHeaders QUIET)
+-            if(NOT OpenCLHeaders_FOUND)
+-                message(FATAL_ERROR "OpenCLHeaders not found, but OpenCLICDLoader is installed. Please, install OpenCL headers")
+-            else()
+-                set_target_properties(OpenCL::Headers PROPERTIES IMPORTED_GLOBAL ON)
+-            endif()
+-        else()
+-            # try to find system OpenCL:
+-            # - 'sudo -E apt-get install opencl-headers ocl-icd-opencl-dev'
+-            # - 'sudo -E yum install ocl-icd-devel opencl-headers'
+-            # - 'conda install khronos-opencl-icd-loader -c conda-forge'
+-            find_package(OpenCL QUIET)
+-        endif()
++        find_package(OpenCL QUIET)
+     endif()
+ 
+     if(TARGET OpenCL::OpenCL)
+@@ -77,18 +60,6 @@ if(ENABLE_INTEL_GPU)
+                     INTERFACE_COMPILE_DEFINITIONS OV_GPU_OPENCL_HPP_HAS_UUID)
+             endif()
+         endif()
+-
+-        # set variables for onednn_gpu
+-        if(OpenCLHeaders_FOUND)
+-            set(OpenCL_INCLUDE_DIR "$<TARGET_PROPERTY:OpenCL::Headers,INTERFACE_INCLUDE_DIRECTORIES>" PARENT_SCOPE)
+-            set(OpenCL_LIBRARY "$<TARGET_PROPERTY:OpenCL::OpenCL,IMPORTED_LOCATION_RELEASE>" PARENT_SCOPE)
+-        elseif(OpenCL_FOUND)
+-            # find_package(OpenCL) already defines OpenCL_INCLUDE_DIR and OpenCL_LIBRARY
+-            # see https://cmake.org/cmake/help/latest/module/FindOpenCL.html
+-            message(STATUS "Found OpenCL (ver. ${OpenCL_VERSION_STRING}, include dirs ${OpenCL_INCLUDE_DIRS})")
+-        else()
+-            message(FATAL_ERROR "Internal error: cannot find OpenCL headers")
+-        endif()
+     else()
+         add_subdirectory(ocl)
+ 

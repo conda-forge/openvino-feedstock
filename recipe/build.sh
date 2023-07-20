@@ -6,9 +6,6 @@ if [[ "$CONDA_BUILD_CROSS_COMPILATION" == 1 ]]; then
     CMAKE_ARGS="${CMAKE_ARGS} -DProtobuf_PROTOC_EXECUTABLE=$BUILD_PREFIX/bin/protoc"
 fi
 
-export PKG_CONFIG_LIBDIR=$PREFIX/lib:$BUILD_PREFIX/lib
-export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:$PREFIX/lib/pkgconfig:$BUILD_PREFIX/lib/pkgconfig
-
 mkdir -p openvino-build
 
 cmake ${CMAKE_ARGS}                                                          \
@@ -38,6 +35,7 @@ cmake ${CMAKE_ARGS}                                                          \
 
 cmake --build "$SRC_DIR/openvino-build" --config Release --parallel $CPU_COUNT --verbose
 
+cp "$SRC_DIR/openvino_sources/LICENSE" LICENSE
 cp "$SRC_DIR/openvino_sources/licensing/third-party-programs.txt" third-party-programs.txt
 cp "$SRC_DIR/openvino_sources/licensing/onednn_third-party-programs.txt" onednn_third-party-programs.txt
 cp "$SRC_DIR/openvino_sources/licensing/runtime-third-party-programs.txt" runtime-third-party-programs.txt
