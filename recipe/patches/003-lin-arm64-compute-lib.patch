@@ -1,3 +1,16 @@
+diff --git a/cmake/templates/OpenVINOConfig.cmake.in b/cmake/templates/OpenVINOConfig.cmake.in
+index 29af7dd50e..9a9048d88a 100644
+--- a/cmake/templates/OpenVINOConfig.cmake.in
++++ b/cmake/templates/OpenVINOConfig.cmake.in
+@@ -422,7 +422,7 @@ function(_ov_target_no_deprecation_error)
+         else()
+             set(flags "-Wno-error=deprecated-declarations")
+         endif()
+-        if(CMAKE_CROSSCOMPILING)
++        if(CMAKE_CROSSCOMPILING AND NOT APPLE)
+             set_target_properties(${ARGV} PROPERTIES
+                                   INTERFACE_LINK_OPTIONS "-Wl,--allow-shlib-undefined")
+         endif()
 diff --git a/src/plugins/intel_cpu/thirdparty/ACLConfig.cmake b/src/plugins/intel_cpu/thirdparty/ACLConfig.cmake
 index 2c0b7d12ee..c306ee339d 100644
 --- a/src/plugins/intel_cpu/thirdparty/ACLConfig.cmake
