@@ -1,12 +1,8 @@
-diff --git a/thirdparty/CMakeLists.txt b/thirdparty/CMakeLists.txt
-index 95d80a6fbd..f3e79d36cf 100644
---- a/thirdparty/CMakeLists.txt
-+++ b/thirdparty/CMakeLists.txt
-@@ -56,51 +56,20 @@ endif()
- # OpenCL
- #
- 
-+
+diff --git a/thirdparty/dependencies.cmake b/thirdparty/dependencies.cmake
+index e815baa80c..a90ad3f389 100644
+--- a/thirdparty/dependencies.cmake
++++ b/thirdparty/dependencies.cmake
+@@ -63,39 +63,13 @@ endif()
  if(ENABLE_INTEL_GPU)
      if(ENABLE_SYSTEM_OPENCL)
          # try to find system OpenCL:
@@ -22,7 +18,6 @@ index 95d80a6fbd..f3e79d36cf 100644
 -            if(NOT OpenCLHeaders_FOUND)
 -                message(WARNING "OpenCLHeaders not found, but OpenCLICDLoader is installed. Please, install OpenCL headers")
 -            else()
--                set_target_properties(OpenCL::Headers PROPERTIES IMPORTED_GLOBAL ON)
 -                set_property(TARGET OpenCL::OpenCL APPEND PROPERTY INTERFACE_LINK_LIBRARIES OpenCL::Headers)
 -            endif()
 -
@@ -33,18 +28,15 @@ index 95d80a6fbd..f3e79d36cf 100644
 -            if(NOT OpenCLHeadersCpp_FOUND)
 -                message(WARNING "OpenCLHeadersCpp not found, but OpenCLICDLoader is installed. Please, install OpenCL C++ headers")
 -            else()
--                set_target_properties(OpenCL::HeadersCpp PROPERTIES IMPORTED_GLOBAL ON)
 -                get_target_property(opencl_cpp_include_dirs OpenCL::HeadersCpp INTERFACE_INCLUDE_DIRECTORIES)
 -                set_property(TARGET OpenCL::OpenCL APPEND PROPERTY INTERFACE_LINK_LIBRARIES OpenCL::HeadersCpp)
 -            endif()
--
--            # set OpenCLICDLoader_FOUND to parent scope to generate proper OpenVINOConfig.cmake for static libraries case
--            set(OpenCLICDLoader_FOUND ON PARENT_SCOPE)
 -        else()
 -            # try to find system OpenCL:
 -            # - 'apt-get install opencl-headers ocl-icd-opencl-dev'
 -            # - 'yum install ocl-icd-devel opencl-headers'
 -            # - 'conda install khronos-opencl-icd-loader -c conda-forge'
+-            # - 'vcpkg install opencl:<triplet>'
 -            find_package(OpenCL QUIET)
 -        endif()
 +        # - 'apt-get install opencl-headers ocl-icd-opencl-dev'
@@ -57,20 +49,15 @@ index 95d80a6fbd..f3e79d36cf 100644
      endif()
  
      if(TARGET OpenCL::OpenCL)
--        set_target_properties(OpenCL::OpenCL PROPERTIES IMPORTED_GLOBAL ON)
--
-         # try to find CL/opencl.hpp
-         find_file(OpenCL_HPP
-                   NAMES CL/opencl.hpp OpenCL/opencl.hpp
-@@ -120,27 +89,8 @@ if(ENABLE_INTEL_GPU)
+@@ -118,18 +92,6 @@ if(ENABLE_INTEL_GPU)
              set_target_properties(OpenCL::OpenCL PROPERTIES
                  INTERFACE_COMPILE_DEFINITIONS "${opencl_interface_definitions}")
          endif()
 -
 -        # set variables for onednn_gpu
 -        if(OpenCLHeaders_FOUND)
--            set(OpenCL_INCLUDE_DIR "$<TARGET_PROPERTY:OpenCL::Headers,INTERFACE_INCLUDE_DIRECTORIES>" PARENT_SCOPE)
--            set(OpenCL_LIBRARY "$<TARGET_PROPERTY:OpenCL::OpenCL,IMPORTED_LOCATION_RELEASE>" PARENT_SCOPE)
+-            set(OpenCL_INCLUDE_DIR "$<TARGET_PROPERTY:OpenCL::Headers,INTERFACE_INCLUDE_DIRECTORIES>")
+-            set(OpenCL_LIBRARY "$<TARGET_PROPERTY:OpenCL::OpenCL,IMPORTED_LOCATION_RELEASE>")
 -        elseif(OpenCL_FOUND)
 -            # find_package(OpenCL) already defines OpenCL_INCLUDE_DIR and OpenCL_LIBRARY
 -            # see https://cmake.org/cmake/help/latest/module/FindOpenCL.html
@@ -79,25 +66,5 @@ index 95d80a6fbd..f3e79d36cf 100644
 -            message(FATAL_ERROR "Internal error: cannot find OpenCL headers")
 -        endif()
      else()
--        add_subdirectory(ocl)
--
--        set(OpenCL_INCLUDE_DIR "${OpenCL_INCLUDE_DIR}" PARENT_SCOPE)
--        set(OpenCL_LIBRARY "${OpenCL_LIBRARY}" PARENT_SCOPE)
--        set(opencl_root_hints "${opencl_root_hints}" PARENT_SCOPE)
--
--        # system OpenCL is not found: set it explictly for consistent OpenVINOConfig.cmake generation
--        set(ENABLE_SYSTEM_OPENCL OFF PARENT_SCOPE)
-+        add_subdirectory(thirdparty/ocl)
+         add_subdirectory(thirdparty/ocl)
      endif()
- 
-     # cmake cannot set properties for imported targets
-@@ -157,7 +107,8 @@ if(ENABLE_INTEL_GPU)
-     # used in tests
-     add_library(opencl_new_headers INTERFACE)
-     add_library(OpenCL::NewHeaders ALIAS opencl_new_headers)
--    foreach(opencl_dir "${CMAKE_CURRENT_SOURCE_DIR}/ocl/clhpp_headers/include" "${CMAKE_CURRENT_SOURCE_DIR}/ocl/cl_headers")
-+    foreach(opencl_dir "${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/ocl/clhpp_headers/include"
-+                       "${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/ocl/cl_headers")
-         if(EXISTS "${opencl_dir}")
-             set_property(TARGET opencl_new_headers APPEND PROPERTY INTERFACE_INCLUDE_DIRECTORIES
-                 $<BUILD_INTERFACE:${opencl_dir}>)
