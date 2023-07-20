@@ -12,6 +12,8 @@ source:
     - patches/001-win64-find-ocl.patch  # [win64]
     - patches/003-lin-arm64-compute-lib.patch  # [aarch64]
     - patches/004-mha-build-fix.patch  # [arm64]
+    - patches/005-cross-compilation-macos.patch
+    - patches/006-remove-mp.patch  # [win64]
   - url: https://github.com/ARM-software/ComputeLibrary/archive/refs/tags/v23.02.1.tar.gz  # [aarch64 or arm64]
     sha256: c3a443e26539f866969242e690cf0651ef629149741ee18732f954c734da6763  # [aarch64 or arm64]
     folder: src/plugins/intel_cpu/thirdparty/ComputeLibrary  # [aarch64 or arm64]
@@ -32,7 +34,7 @@ source:
     folder: thirdparty/onnx/onnx
 
 build:
-  number: 1
+  number: 2
   run_exports:
     - {{ pin_subpackage('libopenvino', max_pin='x.x.x') }}
     - {{ pin_subpackage('libopenvino-intel-cpu-plugin', max_pin='x.x.x') }}  # [x86_64]
@@ -73,7 +75,8 @@ requirements:
     - khronos-opencl-icd-loader  # [win64]
     - pugixml >=1.12.1 # starting from this version shared libraries are provided
     - xbyak >=6.69.1  # [x86_64]
-    - libprotobuf-static =3.20.3
+    - libprotobuf-static =3.20.3  # [not win64]
+    - libprotobuf-static  # [win64]
   run:
     - {{ pin_subpackage('libopenvino', max_pin='x.x.x') }}
     - {{ pin_subpackage('libopenvino-intel-cpu-plugin', max_pin='x.x.x') }}  # [x86_64]
@@ -170,7 +173,6 @@ outputs:
         - third-party-programs.txt
         - onednn_third-party-programs.txt
         - runtime-third-party-programs.txt
-        - tbb_third-party-programs.txt
     build:
       run_exports:
         - {{ pin_subpackage('libopenvino', max_pin='x.x.x') }}
@@ -203,7 +205,6 @@ outputs:
         - third-party-programs.txt
         - onednn_third-party-programs.txt
         - runtime-third-party-programs.txt
-        - tbb_third-party-programs.txt
     build:
       run_exports:
         - {{ pin_subpackage('libopenvino', max_pin='x.x.x') }}
@@ -233,7 +234,6 @@ outputs:
         - third-party-programs.txt
         - onednn_third-party-programs.txt
         - runtime-third-party-programs.txt
-        - tbb_third-party-programs.txt
     build:
       run_exports:
         - {{ pin_subpackage('libopenvino', max_pin='x.x.x') }}
@@ -262,7 +262,6 @@ outputs:
         - third-party-programs.txt
         - onednn_third-party-programs.txt
         - runtime-third-party-programs.txt
-        - tbb_third-party-programs.txt
     build:
       run_exports:
         - {{ pin_subpackage('libopenvino', max_pin='x.x.x') }}
@@ -291,7 +290,6 @@ outputs:
         - third-party-programs.txt
         - onednn_third-party-programs.txt
         - runtime-third-party-programs.txt
-        - tbb_third-party-programs.txt
     build:
       run_exports:
         - {{ pin_subpackage('libopenvino', max_pin='x.x.x') }}
@@ -320,7 +318,6 @@ outputs:
         - third-party-programs.txt
         - onednn_third-party-programs.txt
         - runtime-third-party-programs.txt
-        - tbb_third-party-programs.txt
     build:
       run_exports:
         - {{ pin_subpackage('libopenvino', max_pin='x.x.x') }}
@@ -350,7 +347,6 @@ outputs:
         - third-party-programs.txt
         - onednn_third-party-programs.txt
         - runtime-third-party-programs.txt
-        - tbb_third-party-programs.txt
     build:
       run_exports:
         - {{ pin_subpackage('libopenvino', max_pin='x.x.x') }}
@@ -379,7 +375,6 @@ outputs:
         - third-party-programs.txt
         - onednn_third-party-programs.txt
         - runtime-third-party-programs.txt
-        - tbb_third-party-programs.txt
     build:
       skip: True  # [not x86_64]
       run_exports:
@@ -410,7 +405,6 @@ outputs:
         - third-party-programs.txt
         - onednn_third-party-programs.txt
         - runtime-third-party-programs.txt
-        - tbb_third-party-programs.txt
     build:
       skip: True  # [not aarch64 and not arm64]
       run_exports:
@@ -440,7 +434,6 @@ outputs:
         - third-party-programs.txt
         - onednn_third-party-programs.txt
         - runtime-third-party-programs.txt
-        - tbb_third-party-programs.txt
     build:
       skip: True  # [not linux64 and not win64]
       run_exports:
@@ -475,7 +468,6 @@ outputs:
         - third-party-programs.txt
         - onednn_third-party-programs.txt
         - runtime-third-party-programs.txt
-        - tbb_third-party-programs.txt
     build:
       run_exports:
         - {{ pin_subpackage('libopenvino-auto-plugin', max_pin='x.x.x') }}
@@ -504,7 +496,6 @@ outputs:
         - third-party-programs.txt
         - onednn_third-party-programs.txt
         - runtime-third-party-programs.txt
-        - tbb_third-party-programs.txt
     build:
       run_exports:
         - {{ pin_subpackage('libopenvino-auto-batch-plugin', max_pin='x.x.x') }}
@@ -532,7 +523,6 @@ outputs:
         - third-party-programs.txt
         - onednn_third-party-programs.txt
         - runtime-third-party-programs.txt
-        - tbb_third-party-programs.txt
     build:
       run_exports:
         - {{ pin_subpackage('libopenvino-hetero-plugin', max_pin='x.x.x') }}
@@ -576,7 +566,6 @@ about:
     - third-party-programs.txt
     - onednn_third-party-programs.txt
     - runtime-third-party-programs.txt
-    - tbb_third-party-programs.txt
   doc_url: https://docs.openvino.ai/latest/index.html
   dev_url: https://github.com/openvinotoolkit/openvino
 
