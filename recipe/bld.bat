@@ -29,8 +29,8 @@ if errorlevel 1 exit 1
 cmake --build "%SRC_DIR%/build" --config Release --verbose
 if errorlevel 1 exit 1
 
-COPY "%SRC_DIR%/licensing/third-party-programs.txt" third-party-programs.txt
-COPY "%SRC_DIR%/licensing/onednn_third-party-programs.txt" onednn_third-party-programs.txt
-COPY "%SRC_DIR%/licensing/runtime-third-party-programs.txt" runtime-third-party-programs.txt
+COPY "%SRC_DIR%\licensing\third-party-programs.txt" third-party-programs.txt
+COPY "%SRC_DIR%\licensing\onednn_third-party-programs.txt" onednn_third-party-programs.txt
+COPY "%SRC_DIR%\licensing\runtime-third-party-programs.txt" runtime-third-party-programs.txt
 
 exit 0
