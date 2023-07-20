@@ -74,8 +74,6 @@ requirements:
     - flatbuffers =23.3.3
     - sysroot_linux-64 =2.17  # [linux64]
     - cudatoolkit =11.8.0  # [linux64 or win64]
-    - cudnn =8.8.0  # [linux64 or win64]
-    - cutensor =1.6.1.5  # [linux64 or win64]
   host:
     - tbb-devel =2021.5 # starting from this version TBB uses hwloc in conda
     - snappy
@@ -85,6 +83,8 @@ requirements:
     - pugixml >=1.12.1 # starting from this version shared libraries are provided
     - xbyak >=6.69.1  # [x86_64]
     - libprotobuf-static =3.20.3
+    - cudnn =8.4  # [linux64 or win64]
+    - cutensor =1.6.1.5  # [linux64 or win64]
   run:
     - {{ pin_subpackage('libopenvino', max_pin='x.x.x') }}
     - {{ pin_subpackage('libopenvino-intel-cpu-plugin', max_pin='x.x.x') }}  # [x86_64]
