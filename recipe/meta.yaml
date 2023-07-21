@@ -10,6 +10,7 @@ source:
   - url: https://github.com/openvinotoolkit/openvino/archive/0974cb10bc5259b11c157b347327a0e0ccda291d.tar.gz
     sha256: db5ed60d128cad863d372220f52ebe1fea796fe28e9c9c48275574096782f545
     patches:
+    - patches/001-aarch64-linux.patch  # [aarch64]
     - patches/002-win32-python-search.patch
     - patches/003-lin-arm64-compute-lib.patch  # [aarch64]
   - url: https://github.com/ARM-software/ComputeLibrary/archive/refs/tags/v23.02.1.tar.gz  # [aarch64 or arm64]
