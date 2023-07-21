@@ -9,6 +9,11 @@ int main() {
     char* ret = NULL;
     OV_CALL(ov_core_create(&core));
     OV_CALL(ov_core_get_property(core, "CPU", "AVAILABLE_DEVICES", &ret));
+#ifndef __APPLE__
+    // in 2022.3.1 release Intel GPU plugin cannot return empty list of available devices
+    // in case of no GPU on the current system
+    // OV_CALL(ov_core_get_property(core, "GPU", "AVAILABLE_DEVICES", &ret));
+#endif
     OV_CALL(ov_core_get_property(core, "AUTO", "SUPPORTED_METRICS", &ret));
     OV_CALL(ov_core_get_property(core, "MULTI", "SUPPORTED_METRICS", &ret));
     OV_CALL(ov_core_get_property(core, "HETERO", "SUPPORTED_METRICS", &ret));
