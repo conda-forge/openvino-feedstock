@@ -3,6 +3,7 @@ About openvino-feedstock
 
 Feedstock license: [BSD-3-Clause](https://github.com/conda-forge/openvino-feedstock/blob/main/LICENSE.txt)
 
+
 About openvino
 --------------
 
@@ -24,9 +25,10 @@ language processing, recommendation systems, etc. It provides
 high-performance and rich deployment options, from edge to cloud
 
 Installing OpenVINO Runtime from Conda Forge is recommended for C++ developers,
-as it provides only the C++ Runtime API. 
+as it provides only the C++ / C Runtime API.
 If you work with Python, consider other OpenVINO distribution channels:
 https://www.intel.com/content/www/us/en/developer/tools/openvino-toolkit/download.html
+
 
 About libopenvino
 -----------------
@@ -36,6 +38,7 @@ About libopenvino
 Package license: 
 
 Summary: OpenVINO Core Runtime library
+
 About libopenvino-auto-batch-plugin
 -----------------------------------
 
@@ -44,6 +47,7 @@ About libopenvino-auto-batch-plugin
 Package license: 
 
 Summary: OpenVINO Auto Batch plugin
+
 About libopenvino-auto-plugin
 -----------------------------
 
@@ -52,6 +56,7 @@ About libopenvino-auto-plugin
 Package license: 
 
 Summary: OpenVINO Auto plugin
+
 About libopenvino-hetero-plugin
 -------------------------------
 
@@ -60,6 +65,7 @@ About libopenvino-hetero-plugin
 Package license: 
 
 Summary: OpenVINO Hetero plugin
+
 About libopenvino-intel-cpu-plugin
 ----------------------------------
 
@@ -68,6 +74,7 @@ About libopenvino-intel-cpu-plugin
 Package license: 
 
 Summary: OpenVINO Intel® CPU plugin
+
 About libopenvino-intel-gpu-plugin
 ----------------------------------
 
@@ -76,6 +83,7 @@ About libopenvino-intel-gpu-plugin
 Package license: 
 
 Summary: OpenVINO Intel® GPU plugin
+
 About libopenvino-ir-frontend
 -----------------------------
 
@@ -84,6 +92,7 @@ About libopenvino-ir-frontend
 Package license: 
 
 Summary: OpenVINO IR Frontend
+
 About libopenvino-onnx-frontend
 -------------------------------
 
@@ -92,6 +101,7 @@ About libopenvino-onnx-frontend
 Package license: 
 
 Summary: OpenVINO ONNX Frontend
+
 About libopenvino-paddle-frontend
 ---------------------------------
 
@@ -100,6 +110,7 @@ About libopenvino-paddle-frontend
 Package license: 
 
 Summary: OpenVINO Paddle Frontend
+
 About libopenvino-pytorch-frontend
 ----------------------------------
 
@@ -108,6 +119,7 @@ About libopenvino-pytorch-frontend
 Package license: 
 
 Summary: OpenVINO Pytorch Frontend
+
 About libopenvino-tensorflow-frontend
 -------------------------------------
 
@@ -116,6 +128,7 @@ About libopenvino-tensorflow-frontend
 Package license: 
 
 Summary: OpenVINO TensorFlow Frontend
+
 About libopenvino-tensorflow-lite-frontend
 ------------------------------------------
 
@@ -124,30 +137,6 @@ About libopenvino-tensorflow-lite-frontend
 Package license: 
 
 Summary: OpenVINO TensorFlow Lite Frontend
-About openvino
---------------
-
-Home: https://github.com/openvinotoolkit/openvino
-
-Package license: Apache-2.0
-
-Summary: Intel® Distribution of OpenVINO™ Toolkit
-
-Development: https://github.com/openvinotoolkit/openvino
-
-Documentation: https://docs.openvino.ai/latest/index.html
-
-Intel® Distribution of OpenVINO™ toolkit is an open-source toolkit for
-optimizing and deploying AI inference. It can be used to develop
-applications and solutions based on deep learning tasks, such as:
-emulation of human vision, automatic speech recognition, natural
-language processing, recommendation systems, etc. It provides
-high-performance and rich deployment options, from edge to cloud
-
-Installing OpenVINO Runtime from Conda Forge is recommended for C++ developers,
-as it provides only the C++ Runtime API.
-If you work with Python, consider other OpenVINO distribution channels:
-https://www.intel.com/content/www/us/en/developer/tools/openvino-toolkit/download.html
 
 About libopenvino-arm-cpu-plugin
 --------------------------------
