@@ -7,8 +7,8 @@ package:
   version: {{ version }}
 
 source:
-  - url: https://github.com/openvinotoolkit/openvino/archive/0974cb10bc5259b11c157b347327a0e0ccda291d.tar.gz
-    sha256: db5ed60d128cad863d372220f52ebe1fea796fe28e9c9c48275574096782f545
+  - url: https://github.com/openvinotoolkit/openvino/archive/f96f021920f91a536831118a64b216887e109c0f.tar.gz
+    sha256: 13150550456a39c1ae26109578a2721b429d57668ed988d5c14717323a2c9220
     patches:
     - patches/001-aarch64-linux.patch  # [aarch64]
     - patches/002-win32-python-search.patch
@@ -446,7 +446,7 @@ outputs:
         - cross-python_{{ target_platform }}  # [build_platform != target_platform]
         - sysroot_linux-64 =2.17  # [linux64]
         - make  # [unix]
-        - cython >=0.29
+        - cython =0.29.36
         - cmake >=3.15  # to have new cmake cmd interface (-S, --install and other options)
         - pybind11 >=2.10.1  # this versions works well for cross-compilation
       host:
