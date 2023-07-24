@@ -106,15 +106,6 @@ Package license:
 
 Summary: OpenVINO Paddle Frontend
 
-About libopenvino-python
-------------------------
-
-
-
-Package license: 
-
-Summary: OpenVINO Python API
-
 About libopenvino-pytorch-frontend
 ----------------------------------
 
@@ -141,6 +132,15 @@ About libopenvino-tensorflow-lite-frontend
 Package license: 
 
 Summary: OpenVINO TensorFlow Lite Frontend
+
+About libopenvino-python
+------------------------
+
+
+
+Package license: 
+
+Summary: OpenVINO Python API
 
 About openvino
 --------------
