@@ -111,7 +111,6 @@ outputs:
         - cmake >=3.15 # to have new cmake cmd interface (-S, --install and other options)
       host:
         - pugixml >=1.12.1 # starting from this version shared libraries are provided
-        - {{ pin_subpackage('libopenvino', exact=True) }}
       run:
         - {{ pin_subpackage('libopenvino', exact=True) }}
     test:
@@ -138,8 +137,6 @@ outputs:
         - {{ compiler('cxx') }}
         - {{ compiler('c') }}
         - cmake >=3.15 # to have new cmake cmd interface (-S, --install and other options)
-      host:
-        - {{ pin_subpackage('libopenvino', exact=True) }}
       run:
         - {{ pin_subpackage('libopenvino', exact=True) }}
     test:
@@ -166,8 +163,6 @@ outputs:
         - {{ compiler('cxx') }}
         - {{ compiler('c') }}
         - cmake >=3.15 # to have new cmake cmd interface (-S, --install and other options)
-      host:
-        - {{ pin_subpackage('libopenvino', exact=True) }}
       run:
         - {{ pin_subpackage('libopenvino', exact=True) }}
     test:
@@ -194,8 +189,6 @@ outputs:
         - {{ compiler('cxx') }}
         - {{ compiler('c') }}
         - cmake >=3.15 # to have new cmake cmd interface (-S, --install and other options)
-      host:
-        - {{ pin_subpackage('libopenvino', exact=True) }}
       run:
         - {{ pin_subpackage('libopenvino', exact=True) }}
     test:
@@ -223,7 +216,6 @@ outputs:
         - {{ compiler('c') }}
         - cmake >=3.15 # to have new cmake cmd interface (-S, --install and other options)
       host:
-        - {{ pin_subpackage('libopenvino', exact=True) }}
         - snappy =1.1.10
       run:
         - {{ pin_subpackage('libopenvino', exact=True) }}
@@ -251,8 +243,6 @@ outputs:
         - {{ compiler('cxx') }}
         - {{ compiler('c') }}
         - cmake >=3.15 # to have new cmake cmd interface (-S, --install and other options)
-      host:
-        - {{ pin_subpackage('libopenvino', exact=True) }}
       run:
         - {{ pin_subpackage('libopenvino', exact=True) }}
     test:
@@ -281,7 +271,6 @@ outputs:
       host:
         - pugixml >=1.12.1 # starting from this version shared libraries are provided
         - tbb-devel =2021.5 # starting from this version TBB uses hwloc in conda
-        - {{ pin_subpackage('libopenvino', exact=True) }}
       run:
         - {{ pin_subpackage('libopenvino', exact=True) }}
     test:
@@ -309,7 +298,6 @@ outputs:
       host:
         - pugixml >=1.12.1 # starting from this version shared libraries are provided
         - tbb-devel =2021.5 # starting from this version TBB uses hwloc in conda
-        - {{ pin_subpackage('libopenvino', exact=True) }}
       run:
         - {{ pin_subpackage('libopenvino', exact=True) }}
     test:
@@ -339,7 +327,6 @@ outputs:
         - clhpp
         - khronos-opencl-icd-loader  # [win64]
         - pugixml >=1.12.1 # starting from this version shared libraries are provided
-        - {{ pin_subpackage('libopenvino', exact=True) }}
       run:
         - {{ pin_subpackage('libopenvino', exact=True) }}
         - ocl-icd-system  # [linux64]
@@ -365,7 +352,6 @@ outputs:
         - cmake >=3.15 # to have new cmake cmd interface (-S, --install and other options)
       host:
         - tbb-devel =2021.5 # starting from this version TBB uses hwloc in conda
-        - {{ pin_subpackage('libopenvino', exact=True) }}
       run:
         - {{ pin_subpackage('libopenvino', exact=True) }}
     test:
@@ -388,8 +374,6 @@ outputs:
         - {{ compiler('cxx') }}
         - {{ compiler('c') }}
         - cmake >=3.15 # to have new cmake cmd interface (-S, --install and other options)
-      host:
-        - {{ pin_subpackage('libopenvino', exact=True) }}
       run:
         - {{ pin_subpackage('libopenvino', exact=True) }}
     test:
@@ -414,7 +398,6 @@ outputs:
         - cmake >=3.15 # to have new cmake cmd interface (-S, --install and other options)
       host:
         - pugixml >=1.12.1 # starting from this version shared libraries are provided
-        - {{ pin_subpackage('libopenvino', exact=True) }}
       run:
         - {{ pin_subpackage('libopenvino', exact=True) }}
     test:
@@ -457,6 +440,7 @@ outputs:
         - python
         - pip
       run:
+        - {{ pin_subpackage('libopenvino', exact=True) }}
         # subpackages below have explicit python bindings
         - {{ pin_subpackage('libopenvino-onnx-frontend', exact=True) }}
         - {{ pin_subpackage('libopenvino-paddle-frontend', exact=True) }}
@@ -649,7 +633,6 @@ outputs:
         - {{ pin_subpackage('libopenvino-tensorflow-lite-frontend', max_pin='x.x.x') }}
     requirements:
       run:
-        - python
         - {{ pin_subpackage('libopenvino-dev', exact=True) }}
         - {{ pin_subpackage('libopenvino-python', exact=True) }}
     test:
