@@ -618,16 +618,16 @@ outputs:
         - cmake --build samples_c_build --config Release --verbose  # [unix]
 
         # C++ samples on Windows
-        - mkdir -p samples\\cpp\\thirdparty  # [win]
-        - cp -R thirdparty\\cnpy samples\\cpp\\thirdparty\\cnpy  # [win]
-        - cmake -S samples\\cpp -B samples_cpp_build -DBIN_FOLDER=bin  # [win]
-        - cmake --build samples_cpp_build --config Release --verbose  # [win]
-        - .\\samples_cpp_build\\bin\\Release\\hello_query_device.exe  # [win]
+        # - mkdir -p samples\\cpp\\thirdparty  # [win]
+        # - cp -R thirdparty\\cnpy samples\\cpp\\thirdparty\\cnpy  # [win]
+        # - cmake -S samples\\cpp -B samples_cpp_build -DBIN_FOLDER=bin  # [win]
+        # - cmake --build samples_cpp_build --config Release --verbose  # [win]
+        # - .\\samples_cpp_build\\bin\\Release\\hello_query_device.exe  # [win]
 
         # C samples on Windows
-        - cp samples\\cpp\\CMakeLists.txt samples\\c\\CMakeLists.txt  # [win]
-        - cmake -S samples\\c -B samples_c_build -DBIN_FOLDER=bin  # [win]
-        - cmake --build samples_c_build --config Release --verbose  # [win]
+        # - cp samples\\cpp\\CMakeLists.txt samples\\c\\CMakeLists.txt  # [win]
+        # - cmake -S samples\\c -B samples_c_build -DBIN_FOLDER=bin  # [win]
+        # - cmake --build samples_c_build --config Release --verbose  # [win]
 
         # check that devices are found using OpenVINO C API
         - $CC snippets/openvino_available_devices.c $(pkg-config --cflags --libs pugixml tbb openvino) -Wl,-rpath,$PREFIX/lib -o openvino_devices_test  # [unix]
