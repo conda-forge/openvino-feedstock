@@ -11,8 +11,6 @@ mkdir -p build
 cmake ${CMAKE_ARGS}                                                          \
     -DCMAKE_BUILD_TYPE=Release                                               \
     -DENABLE_INTEL_GNA=OFF                                                   \
-    -DENABLE_INTEL_CPU=OFF                                                   \
-    -DENABLE_GAPI_PREPROCESSING=OFF                                          \
     -DENABLE_SYSTEM_TBB=ON                                                   \
     -DENABLE_SYSTEM_PUGIXML=ON                                               \
     -DENABLE_SYSTEM_PROTOBUF=ON                                              \
@@ -25,8 +23,6 @@ cmake ${CMAKE_ARGS}                                                          \
     -DENABLE_SAMPLES=OFF                                                     \
     -DENABLE_DATA=OFF                                                        \
     -DCPACK_GENERATOR=CONDA-FORGE                                            \
-    -DCMAKE_CXX_COMPILER_LAUNCHER=ccache                                     \
-    -DCMAKE_C_COMPILER_LAUNCHER=ccache                                       \
     -G Ninja                                                                 \
     -S "$SRC_DIR"                                                            \
     -B "$SRC_DIR/build"
