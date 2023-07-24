@@ -1,0 +1,14 @@
+diff --git a/src/bindings/python/src/openvino/utils.py b/src/bindings/python/src/openvino/utils.py
+index a1467b427b..ae4121e3a6 100644
+--- a/src/bindings/python/src/openvino/utils.py
++++ b/src/bindings/python/src/openvino/utils.py
+@@ -21,6 +21,9 @@ def _add_openvino_libs_to_search_path() -> None:
+         # looking for the libs in the pip installation path.
+         if os.path.isdir(os.path.join(os.path.dirname(__file__), "libs")):
+             openvino_libs.append(os.path.join(os.path.dirname(__file__), "libs"))
++        elif os.path.isdir(os.path.join(os.path.dirname(__file__), "..", "..", "..", "Library", "bin")):
++            # looking for the libs in the conda installation path
++            openvino_libs.append(os.path.join(os.path.dirname(__file__), "..", "..", "..", "Library", "bin"))
+         else:
+             # setupvars.bat script set all libs paths to OPENVINO_LIB_PATHS environment variable.
+             openvino_libs_installer = os.getenv("OPENVINO_LIB_PATHS")
