@@ -515,21 +515,19 @@ outputs:
       requires:
         - pip
 
-  - name: openvino
+  - name: libopenvino-dev
     version: {{ version }}
     script: install/install_dev.sh
     about:
-      summary: OpenVINO Runtime & Development files
+      summary: OpenVINO C++ / C Runtime & Development files
       license_file:
         - LICENSE
         - third-party-programs.txt
         - onednn_third-party-programs.txt
         - runtime-third-party-programs.txt
     build:
-      string: py{{ CONDA_PY }}h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}
       run_exports:
         - {{ pin_subpackage('libopenvino', max_pin='x.x.x') }}
-        - {{ pin_subpackage('libopenvino-python', max_pin='x.x.x') }}
         - {{ pin_subpackage('libopenvino-intel-cpu-plugin', max_pin='x.x.x') }}  # [x86_64]
         - {{ pin_subpackage('libopenvino-arm-cpu-plugin', max_pin='x.x.x') }}  # [aarch64 or arm64]
         - {{ pin_subpackage('libopenvino-intel-gpu-plugin', max_pin='x.x.x') }}  # [win64 or linux64]
@@ -545,12 +543,8 @@ outputs:
     requirements:
       build:
         - cmake >=3.15  # to have new cmake cmd interface (-S, --install and other options)
-      host:
-        - python
       run:
-        - python
         - {{ pin_subpackage('libopenvino', max_pin='x.x.x') }}
-        - {{ pin_subpackage('libopenvino-python', max_pin='x.x.x') }}
         - {{ pin_subpackage('libopenvino-intel-cpu-plugin', max_pin='x.x.x') }}  # [x86_64]
         - {{ pin_subpackage('libopenvino-arm-cpu-plugin', max_pin='x.x.x') }}  # [aarch64 or arm64]
         - {{ pin_subpackage('libopenvino-intel-gpu-plugin', max_pin='x.x.x') }}  # [win64 or linux64]
@@ -611,16 +605,16 @@ outputs:
         - cmake --build samples_c_build --config Release --verbose  # [unix]
 
         # C++ samples on Windows
-        # - mkdir -p samples\\cpp\\thirdparty  # [win]
-        # - cp -R thirdparty\\cnpy samples\\cpp\\thirdparty\\cnpy  # [win]
-        # - cmake -S samples\\cpp -B samples_cpp_build -DBIN_FOLDER=bin  # [win]
-        # - cmake --build samples_cpp_build --config Release --verbose  # [win]
-        # - .\\samples_cpp_build\\bin\\Release\\hello_query_device.exe  # [win]
+        - mkdir -p samples\\cpp\\thirdparty  # [win]
+        - cp -R thirdparty\\cnpy samples\\cpp\\thirdparty\\cnpy  # [win]
+        - cmake -S samples\\cpp -B samples_cpp_build -DBIN_FOLDER=bin  # [win]
+        - cmake --build samples_cpp_build --config Release --verbose  # [win]
+        - .\\samples_cpp_build\\bin\\Release\\hello_query_device.exe  # [win]
 
         # C samples on Windows
-        # - cp samples\\cpp\\CMakeLists.txt samples\\c\\CMakeLists.txt  # [win]
-        # - cmake -S samples\\c -B samples_c_build -DBIN_FOLDER=bin  # [win]
-        # - cmake --build samples_c_build --config Release --verbose  # [win]
+        - cp samples\\cpp\\CMakeLists.txt samples\\c\\CMakeLists.txt  # [win]
+        - cmake -S samples\\c -B samples_c_build -DBIN_FOLDER=bin  # [win]
+        - cmake --build samples_c_build --config Release --verbose  # [win]
 
         # check that devices are found using OpenVINO C API
         - $CC snippets/openvino_available_devices.c $(pkg-config --cflags --libs pugixml tbb openvino) -Wl,-rpath,$PREFIX/lib -o openvino_devices_test  # [unix]
@@ -631,6 +625,55 @@ outputs:
         - cmake --build snippets_build --config Release --verbose
         - if [[ $(./snippets_build/openvino_frontends_test) != 6 ]]; then exit 1 ; fi  # [unix]
 
+  - name: openvino
+    version: {{ version }}
+    about:
+      summary: OpenVINO C++ / C / Python Runtimes & Development files
+      license_file:
+        - LICENSE
+        - third-party-programs.txt
+        - onednn_third-party-programs.txt
+        - runtime-third-party-programs.txt
+    build:
+      string: py{{ CONDA_PY }}h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}
+      run_exports:
+        - {{ pin_subpackage('libopenvino', max_pin='x.x.x') }}
+        - {{ pin_subpackage('libopenvino-python', max_pin='x.x.x') }}
+        - {{ pin_subpackage('libopenvino-intel-cpu-plugin', max_pin='x.x.x') }}  # [x86_64]
+        - {{ pin_subpackage('libopenvino-arm-cpu-plugin', max_pin='x.x.x') }}  # [aarch64 or arm64]
+        - {{ pin_subpackage('libopenvino-intel-gpu-plugin', max_pin='x.x.x') }}  # [win64 or linux64]
+        - {{ pin_subpackage('libopenvino-auto-plugin', max_pin='x.x.x') }}
+        - {{ pin_subpackage('libopenvino-hetero-plugin', max_pin='x.x.x') }}
+        - {{ pin_subpackage('libopenvino-auto-batch-plugin', max_pin='x.x.x') }}
+        - {{ pin_subpackage('libopenvino-ir-frontend', max_pin='x.x.x') }}
+        - {{ pin_subpackage('libopenvino-onnx-frontend', max_pin='x.x.x') }}
+        - {{ pin_subpackage('libopenvino-paddle-frontend', max_pin='x.x.x') }}
+        - {{ pin_subpackage('libopenvino-pytorch-frontend', max_pin='x.x.x') }}
+        - {{ pin_subpackage('libopenvino-tensorflow-frontend', max_pin='x.x.x') }}
+        - {{ pin_subpackage('libopenvino-tensorflow-lite-frontend', max_pin='x.x.x') }}
+    requirements:
+      host:
+        - python
+      run:
+        - python
+        - {{ pin_subpackage('libopenvino', max_pin='x.x.x') }}
+        - {{ pin_subpackage('libopenvino-dev', max_pin='x.x.x') }}
+        - {{ pin_subpackage('libopenvino-python', max_pin='x.x.x') }}
+        - {{ pin_subpackage('libopenvino-intel-cpu-plugin', max_pin='x.x.x') }}  # [x86_64]
+        - {{ pin_subpackage('libopenvino-arm-cpu-plugin', max_pin='x.x.x') }}  # [aarch64 or arm64]
+        - {{ pin_subpackage('libopenvino-intel-gpu-plugin', max_pin='x.x.x') }}  # [win64 or linux64]
+        - {{ pin_subpackage('libopenvino-auto-plugin', max_pin='x.x.x') }}
+        - {{ pin_subpackage('libopenvino-hetero-plugin', max_pin='x.x.x') }}
+        - {{ pin_subpackage('libopenvino-auto-batch-plugin', max_pin='x.x.x') }}
+        - {{ pin_subpackage('libopenvino-ir-frontend', max_pin='x.x.x') }}
+        - {{ pin_subpackage('libopenvino-onnx-frontend', max_pin='x.x.x') }}
+        - {{ pin_subpackage('libopenvino-paddle-frontend', max_pin='x.x.x') }}
+        - {{ pin_subpackage('libopenvino-pytorch-frontend', max_pin='x.x.x') }}
+        - {{ pin_subpackage('libopenvino-tensorflow-frontend', max_pin='x.x.x') }}
+        - {{ pin_subpackage('libopenvino-tensorflow-lite-frontend', max_pin='x.x.x') }}
+    test:
+      commands:
+        - echo "tested in other outputs"
 
 about:
   home: https://github.com/openvinotoolkit/openvino
