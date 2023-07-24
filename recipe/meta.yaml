@@ -449,6 +449,7 @@ outputs:
         - cython =0.29.36
         - cmake >=3.15  # to have new cmake cmd interface (-S, --install and other options)
         - pybind11 >=2.10.1  # this versions works well for cross-compilation
+        - wheel
       host:
         - {{ pin_subpackage('libopenvino', exact=True) }}
         - {{ pin_subpackage('libopenvino-onnx-frontend', exact=True) }}
