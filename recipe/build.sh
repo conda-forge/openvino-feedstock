@@ -24,6 +24,8 @@ cmake ${CMAKE_ARGS}                                                          \
     -DENABLE_TEMPLATE=OFF                                                    \
     -DENABLE_SAMPLES=OFF                                                     \
     -DENABLE_DATA=OFF                                                        \
+    -DCMAKE_CXX_FLAGS="-Wno-deprecated-declarations"                         \
+    -DCMAKE_C_FLAGS="-Wno-deprecated-declarations"                           \
     -DCPACK_GENERATOR=CONDA-FORGE                                            \
     -DCMAKE_CXX_COMPILER_LAUNCHER=ccache                                     \
     -DCMAKE_C_COMPILER_LAUNCHER=ccache                                       \

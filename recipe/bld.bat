@@ -19,6 +19,8 @@ cmake                                                                        ^
     -DENABLE_TEMPLATE=OFF                                                    ^
     -DENABLE_SAMPLES=OFF                                                     ^
     -DENABLE_DATA=OFF                                                        ^
+    -DCMAKE_CXX_FLAGS="/wd4996"                                              ^
+    -DCMAKE_C_FLAGS="/wd4996"                                                ^
     -DCPACK_GENERATOR=CONDA-FORGE                                            ^
     -G "Visual Studio 16 2019"                                               ^
     -S "%SRC_DIR%"                                                           ^
