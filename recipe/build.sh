@@ -22,6 +22,8 @@ cmake ${CMAKE_ARGS}                                                          \
     -DENABLE_TEMPLATE=OFF                                                    \
     -DENABLE_SAMPLES=OFF                                                     \
     -DENABLE_DATA=OFF                                                        \
+    -DCMAKE_CXX_FLAGS="-Wno-deprecated-declarations"                         \
+    -DCMAKE_C_FLAGS="-Wno-deprecated-declarations"                           \
     -DCPACK_GENERATOR=CONDA-FORGE                                            \
     -G Ninja                                                                 \
     -S "$SRC_DIR"                                                            \
