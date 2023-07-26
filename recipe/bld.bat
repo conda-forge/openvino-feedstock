@@ -12,7 +12,6 @@ cmake                                                                        ^
     -DENABLE_SYSTEM_OPENCL=ON                                                ^
     -DENABLE_SYSTEM_PROTOBUF=ON                                              ^
     -DENABLE_SYSTEM_SNAPPY=ON                                                ^
-    -DENABLE_COMPILE_TOOL=OFF                                                ^
     -DENABLE_PYTHON=OFF                                                      ^
     -DENABLE_CPPLINT=OFF                                                     ^
     -DENABLE_CLANG_FORMAT=OFF                                                ^
@@ -20,13 +19,15 @@ cmake                                                                        ^
     -DENABLE_TEMPLATE=OFF                                                    ^
     -DENABLE_SAMPLES=OFF                                                     ^
     -DENABLE_DATA=OFF                                                        ^
+    -DCMAKE_CXX_FLAGS="/wd4996"                                              ^
+    -DCMAKE_C_FLAGS="/wd4996"                                                ^
     -DCPACK_GENERATOR=CONDA-FORGE                                            ^
     -G "Visual Studio 16 2019"                                               ^
     -S "%SRC_DIR%"                                                           ^
-    -B "%SRC_DIR%/build"
+    -B "%SRC_DIR%\build"
 if errorlevel 1 exit 1
 
-cmake --build "%SRC_DIR%/build" --config Release --verbose
+cmake --build "%SRC_DIR%\build" --config Release --parallel %CPU_COUNT% --verbose
 if errorlevel 1 exit 1
 
 COPY "%SRC_DIR%\licensing\third-party-programs.txt" third-party-programs.txt
