@@ -1,4 +1,7 @@
 cuda_compiler:
-- nvcc
+  - nvcc
 cuda_compiler_version:
-- '11.8'
+  - '11.8'
+zip_keys:
+  - cuda_compiler
+  - cuda_compiler_version
