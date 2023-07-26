@@ -1,2 +1,4 @@
+cuda:
+  - 11.8
 cuda_compiler_version:         
   - 11.8                         
