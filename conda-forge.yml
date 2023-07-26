@@ -16,4 +16,3 @@ github:
 os_version:
   linux_64: cos7
 test: native_and_emulated
-cuda_compiler_version: 11.8
