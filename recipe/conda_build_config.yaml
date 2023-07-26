@@ -1,7 +1,5 @@
 cuda_compiler:
-  - nvcc
+  - nvcc_linux-64   # [linux64]
+  - nvcc_win-64   # [win64]
 cuda_compiler_version:
   - '11.8'
-zip_keys:
-  - cuda_compiler
-  - cuda_compiler_version
