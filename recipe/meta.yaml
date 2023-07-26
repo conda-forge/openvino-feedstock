@@ -9,7 +9,6 @@ source:
   - url: https://github.com/openvinotoolkit/openvino/archive/3c1c3e67687b6cf7e3701b0a92fcdb57ca8d8d33.tar.gz
     sha256: f551772c60707b1671827b3f1802c9b78b4033d0a24ee7b0142f8f29057325e4
     patches:
-    - patches/001-win64-find-ocl.patch  # [win64]
     - patches/003-lin-arm64-compute-lib.patch  # [aarch64]
     - patches/004-mha-build-fix.patch  # [arm64]
   - url: https://github.com/openvinotoolkit/openvino_contrib/archive/8e60111f3f2658cb2921a09b52543b95818e7be3.tar.gz  # [cuda_compiler_version != "None"]
@@ -83,7 +82,7 @@ requirements:
     - pugixml >=1.12.1 # starting from this version shared libraries are provided
     - xbyak >=6.69.1  # [x86_64]
     - libprotobuf-static =3.20.3
-    - cudnn =8.4  # [cuda_compiler_version != "None"]
+    - cudnn =8.8.0  # [cuda_compiler_version != "None"]
     - cutensor =1.6.1.5  # [cuda_compiler_version != "None"]
   run:
     - {{ pin_subpackage('libopenvino', max_pin='x.x.x') }}
@@ -494,10 +493,10 @@ outputs:
         - {{ compiler('c') }}
         - {{ compiler('cuda') }}  # [cuda_compiler_version != "None"]
         - cmake >=3.15 # to have new cmake cmd interface (-S, --install and other options)
-        - cudatoolkit =11.8.0  # [linux64 or win64]
         - cutensor =1.6.1.5
         - cudnn =8.8.0
       host:
+        - cudatoolkit =11.8.0  # [linux64 or win64]
         - tbb-devel =2021.5 # starting from this version TBB uses hwloc in conda
         - pugixml >=1.12.1 # starting from this version shared libraries are provided
         - {{ pin_subpackage('libopenvino', exact=True) }}
