@@ -37,7 +37,7 @@ source:
     folder: thirdparty/xbyak
 
 build:
-  number: 1
+  number: 2
   run_exports:
     - {{ pin_subpackage('libopenvino', max_pin='x.x.x') }}
     - {{ pin_subpackage('libopenvino-intel-cpu-plugin', max_pin='x.x.x') }}             # [cuda_compiler_version == "None" and x86_64]
@@ -182,7 +182,6 @@ outputs:
         - third-party-programs.txt
         - onednn_third-party-programs.txt
         - runtime-third-party-programs.txt
-        - tbb_third-party-programs.txt
     build:
       run_exports:
         - {{ pin_subpackage('libopenvino', max_pin='x.x.x') }}
@@ -215,7 +214,6 @@ outputs:
         - third-party-programs.txt
         - onednn_third-party-programs.txt
         - runtime-third-party-programs.txt
-        - tbb_third-party-programs.txt
     build:
       run_exports:
         - {{ pin_subpackage('libopenvino', max_pin='x.x.x') }}
@@ -245,7 +243,6 @@ outputs:
         - third-party-programs.txt
         - onednn_third-party-programs.txt
         - runtime-third-party-programs.txt
-        - tbb_third-party-programs.txt
     build:
       skip: True  # [cuda_compiler_version != "None"]
       run_exports:
@@ -275,7 +272,6 @@ outputs:
         - third-party-programs.txt
         - onednn_third-party-programs.txt
         - runtime-third-party-programs.txt
-        - tbb_third-party-programs.txt
     build:
       skip: True  # [cuda_compiler_version != "None"]
       run_exports:
@@ -305,7 +301,6 @@ outputs:
         - third-party-programs.txt
         - onednn_third-party-programs.txt
         - runtime-third-party-programs.txt
-        - tbb_third-party-programs.txt
     build:
       skip: True  # [cuda_compiler_version != "None"]
       run_exports:
@@ -335,7 +330,6 @@ outputs:
         - third-party-programs.txt
         - onednn_third-party-programs.txt
         - runtime-third-party-programs.txt
-        - tbb_third-party-programs.txt
     build:
       skip: True  # [cuda_compiler_version != "None"]
       run_exports:
@@ -366,7 +360,6 @@ outputs:
         - third-party-programs.txt
         - onednn_third-party-programs.txt
         - runtime-third-party-programs.txt
-        - tbb_third-party-programs.txt
     build:
       skip: True  # [cuda_compiler_version != "None"]
       run_exports:
@@ -396,7 +389,6 @@ outputs:
         - third-party-programs.txt
         - onednn_third-party-programs.txt
         - runtime-third-party-programs.txt
-        - tbb_third-party-programs.txt
     build:
       skip: True  # [cuda_compiler_version != "None" or not x86_64]
       run_exports:
@@ -427,7 +419,6 @@ outputs:
         - third-party-programs.txt
         - onednn_third-party-programs.txt
         - runtime-third-party-programs.txt
-        - tbb_third-party-programs.txt
     build:
       skip: True  # [cuda_compiler_version != "None" or (not aarch64 and not arm64)]
       run_exports:
@@ -457,7 +448,6 @@ outputs:
         - third-party-programs.txt
         - onednn_third-party-programs.txt
         - runtime-third-party-programs.txt
-        - tbb_third-party-programs.txt
     build:
       skip: True  # [not linux64 and not win64]
       run_exports:
@@ -531,7 +521,6 @@ outputs:
         - third-party-programs.txt
         - onednn_third-party-programs.txt
         - runtime-third-party-programs.txt
-        - tbb_third-party-programs.txt
     build:
       skip: True  # [cuda_compiler_version != "None"]
       run_exports:
@@ -561,7 +550,6 @@ outputs:
         - third-party-programs.txt
         - onednn_third-party-programs.txt
         - runtime-third-party-programs.txt
-        - tbb_third-party-programs.txt
     build:
       skip: True  # [cuda_compiler_version != "None"]
       run_exports:
@@ -590,7 +578,6 @@ outputs:
         - third-party-programs.txt
         - onednn_third-party-programs.txt
         - runtime-third-party-programs.txt
-        - tbb_third-party-programs.txt
     build:
       skip: True  # [cuda_compiler_version != "None"]
       run_exports:
@@ -623,11 +610,6 @@ about:
     emulation of human vision, automatic speech recognition, natural
     language processing, recommendation systems, etc. It provides
     high-performance and rich deployment options, from edge to cloud
-
-    Installing OpenVINO Runtime from Conda Forge is recommended for C++ developers,
-    as it provides only the C++ / C Runtime API.
-    If you work with Python, consider other OpenVINO distribution channels:
-    https://www.intel.com/content/www/us/en/developer/tools/openvino-toolkit/download.html
   license: Apache-2.0
   license_family: Apache
   license_file:
@@ -635,7 +617,6 @@ about:
     - third-party-programs.txt
     - onednn_third-party-programs.txt
     - runtime-third-party-programs.txt
-    - tbb_third-party-programs.txt
   doc_url: https://docs.openvino.ai/latest/index.html
   dev_url: https://github.com/openvinotoolkit/openvino
 

@@ -3,7 +3,6 @@ setlocal enabledelayedexpansion
 
 mkdir -p build
 
-
 if %cuda_compiler_version% == "None" (
     cmake                                                                               ^
         -DCMAKE_INSTALL_PREFIX="%LIBRARY_PREFIX%"                                       ^
@@ -70,10 +69,8 @@ if errorlevel 1 exit 1
 cmake --build "%SRC_DIR%/build" --config Release --verbose
 if errorlevel 1 exit 1
 
-cp "%SRC_DIR%/LICENSE" LICENSE
-cp "%SRC_DIR%/licensing/third-party-programs.txt" third-party-programs.txt
-cp "%SRC_DIR%/licensing/onednn_third-party-programs.txt" onednn_third-party-programs.txt
-cp "%SRC_DIR%/licensing/runtime-third-party-programs.txt" runtime-third-party-programs.txt
-cp "%SRC_DIR%/licensing/tbb_third-party-programs.txt" tbb_third-party-programs.txt
+COPY "%SRC_DIR%\licensing\third-party-programs.txt" third-party-programs.txt
+COPY "%SRC_DIR%\licensing\onednn_third-party-programs.txt" onednn_third-party-programs.txt
+COPY "%SRC_DIR%\licensing\runtime-third-party-programs.txt" runtime-third-party-programs.txt
 
 exit 0
