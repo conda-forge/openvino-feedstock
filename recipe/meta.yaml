@@ -1,6 +1,6 @@
 {% set name = "openvino" %}
 {% set version_postfix = "2023.1.0" %}
-{% set version = "2023.1.0.dev20230623" %}
+{% set version = "2023.1.0.dev20230724" %}
 
 package:
   name: {{ name|lower }}-split
