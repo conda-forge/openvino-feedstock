@@ -493,17 +493,15 @@ outputs:
         - {{ compiler('c') }}
         - {{ compiler('cuda') }}  # [cuda_compiler_version != "None"]
         - cmake >=3.15 # to have new cmake cmd interface (-S, --install and other options)
+        - cudatoolkit =11.8.0  # [linux64 or win64]
+      host:
         - cutensor =1.6.1.5
         - cudnn =8.8.0
-      host:
-        - cudatoolkit =11.8.0  # [linux64 or win64]
         - tbb-devel =2021.5 # starting from this version TBB uses hwloc in conda
         - pugixml >=1.12.1 # starting from this version shared libraries are provided
         - {{ pin_subpackage('libopenvino', exact=True) }}
       run:
         - {{ pin_subpackage('libopenvino', exact=True) }}
-        - cutensor =1.6.1.5
-        - cudnn =8.8.0
     test:
       commands:
         - test -f $PREFIX/lib/openvino-{{ version }}/libopenvino_nvidia_gpu_plugin.so  # [unix]
