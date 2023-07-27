@@ -1,5 +1,6 @@
-docker_image:
-    - quay.io/condaforge/linux-anvil-cuda:11.8          # [linux64 and os.environ.get("BUILD_PLATFORM") == "linux-64"]
+docker_image:                                   # [os.environ.get("BUILD_PLATFORM", "").startswith("linux-")]
+  - quay.io/condaforge/linux-anvil-cos7-x86_64  # [os.environ.get("BUILD_PLATFORM") == "linux-64"]
+  - quay.io/condaforge/linux-anvil-cuda:11.8    # [linux64 and os.environ.get("BUILD_PLATFORM") == "linux-64" and os.environ.get("CF_CUDA_ENABLED", "False") == "True"]
 cuda_compiler:
   - None
   - nvcc                       # [(linux64 or win64) and os.environ.get("CF_CUDA_ENABLED", "False") == "True"]
@@ -7,5 +8,5 @@ cuda_compiler_version:
   - None
   - 11.8                       # [(linux64 or win64) and os.environ.get("CF_CUDA_ENABLED", "False") == "True"]
 cuda_compiler_version_min:
-  - None                       #
+  - None
   - 11.8                       # [(linux64 or win64) and os.environ.get("CF_CUDA_ENABLED", "False") == "True"]
