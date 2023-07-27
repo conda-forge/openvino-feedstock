@@ -9,8 +9,3 @@ cuda_compiler_version:
 cuda_compiler_version_min:
   - None                       #
   - 11.8                       # [(linux64 or win64) and os.environ.get("CF_CUDA_ENABLED", "False") == "True"]
-zip_keys:
-  -                             # [unix]
-    - cuda_compiler             # [linux and os.environ.get("CF_CUDA_ENABLED", "False") == "True"]
-    - cuda_compiler_version     # [linux and os.environ.get("CF_CUDA_ENABLED", "False") == "True"]
-    - docker_image              # [linux and os.environ.get("CF_CUDA_ENABLED", "False") == "True" and os.environ.get("BUILD_PLATFORM", "").startswith("linux-")]
