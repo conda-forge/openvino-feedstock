@@ -9,7 +9,6 @@ cuda_compiler_version:
 cuda_compiler_version_min:
   - None                       #
   - 11.8                       # [(linux64 or win64) and os.environ.get("CF_CUDA_ENABLED", "False") == "True"]
-  4"]
 zip_keys:
   -                             # [unix]
     - cuda_compiler             # [linux and os.environ.get("CF_CUDA_ENABLED", "False") == "True"]
