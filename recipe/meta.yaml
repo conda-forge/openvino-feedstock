@@ -20,9 +20,9 @@ source:
   - url: https://github.com/openvinotoolkit/oneDNN/archive/3efb012c7f96b2d5e47270632cdf4b9e4b79b1b8.tar.gz
     sha256: 19263ec2a25a86bf368cf48d3fad41679b02a037278c7f796547381f07dc6b3b
     folder: src/plugins/intel_cpu/thirdparty/onednn
-  - url: https://github.com/openvinotoolkit/mlas/archive/519abf79de5ee295cfe5bbed97037a2623616c80.tar.gz  # [not (aarch64 or arm64)]
-    sha256: ef681b16a0f8b325aa01ab94d252f4cbd2f4848d8a1f8a3f2bd12ee76b241238  # [not (aarch64 or arm64)]
-    folder: src/plugins/intel_cpu/thirdparty/mlas  # [not (aarch64 or arm64)]
+  - url: https://github.com/openvinotoolkit/mlas/archive/519abf79de5ee295cfe5bbed97037a2623616c80.tar.gz  # [not aarch64]
+    sha256: ef681b16a0f8b325aa01ab94d252f4cbd2f4848d8a1f8a3f2bd12ee76b241238  # [not aarch64]
+    folder: src/plugins/intel_cpu/thirdparty/mlas  # [not aarch64]
   - url: https://github.com/oneapi-src/oneDNN/archive/ec0b2ee85fc2a2dbdeec10035c5ef5813d8fb5ea.tar.gz  # [win64 or linux64]
     sha256: 8d84c7567803bf30e3a8fec9bf14e33b2003f73545160ddd1cf0406c4c7fb3d5  # [win64 or linux64]
     folder: src/plugins/intel_gpu/thirdparty/onednn_gpu  # [win64 or linux64]
