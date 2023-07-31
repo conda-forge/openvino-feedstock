@@ -1,14 +1,14 @@
 {% set name = "openvino" %}
 {% set version_postfix = "2023.1.0" %}
-{% set version = "2023.1.0.dev20230623" %}
+{% set version = "2023.1.0.dev20230728" %}
 
 package:
   name: {{ name|lower }}-split
   version: {{ version }}
 
 source:
-  - url: https://github.com/openvinotoolkit/openvino/archive/26d53eb1da3cadc3a43562ab8a655e00919e6689.tar.gz
-    sha256: 21130f197d25ad5f361e4cce705ae16eda2b48c8dc55417bb379fc63d9b6366b
+  - url: https://github.com/openvinotoolkit/openvino/archive/c7cde6a102a98f1e66d06f064915eaccd97b7c99.tar.gz
+    sha256: 78e9eb0661463c667d82da64a66b6823cf718b47f4778795159fa88cf7d87dce
     patches:
     - patches/002-win32-python-search.patch
     - patches/003-lin-arm64-compute-lib.patch  # [aarch64]
@@ -16,8 +16,8 @@ source:
   - url: https://github.com/ARM-software/ComputeLibrary/archive/refs/tags/v23.02.1.tar.gz  # [aarch64 or arm64]
     sha256: c3a443e26539f866969242e690cf0651ef629149741ee18732f954c734da6763  # [aarch64 or arm64]
     folder: src/plugins/intel_cpu/thirdparty/ComputeLibrary  # [aarch64 or arm64]
-  - url: https://github.com/openvinotoolkit/oneDNN/archive/f1080be59e8eaa053195cd06da833f6515e29a96.tar.gz
-    sha256: dfac2fc8a728ec8f5310e5144c3e4be547752bdcc45db1461249a73c5ff245a4
+  - url: https://github.com/openvinotoolkit/oneDNN/archive/5bf389f616d0b1551ce468f2712df492a7aab140.tar.gz
+    sha256: 31af79c5b25a01ae795ad03e0745d238f0459b6e79844c33f5cf8b549d005393
     folder: src/plugins/intel_cpu/thirdparty/onednn
   - url: https://github.com/oneapi-src/oneDNN/archive/ec0b2ee85fc2a2dbdeec10035c5ef5813d8fb5ea.tar.gz  # [win64 or linux64]
     sha256: 8d84c7567803bf30e3a8fec9bf14e33b2003f73545160ddd1cf0406c4c7fb3d5  # [win64 or linux64]
@@ -30,7 +30,7 @@ source:
     folder: thirdparty/onnx/onnx
 
 build:
-  number: 1
+  number: 0
 
 requirements:
   build:
