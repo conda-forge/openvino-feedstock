@@ -33,7 +33,7 @@ source:
     folder: thirdparty/onnx/onnx
 
 build:
-  number: 0
+  number: 1
 
 requirements:
   build:
@@ -659,7 +659,10 @@ outputs:
         - {{ pin_subpackage('libopenvino-tensorflow-frontend', max_pin='x.x.x') }}
         - {{ pin_subpackage('libopenvino-tensorflow-lite-frontend', max_pin='x.x.x') }}
     requirements:
+      host:
+        - python # dummy dependency to create python-version dependent package
       run:
+        - python # dummy dependency to create python-version dependent package
         - {{ pin_subpackage('libopenvino-dev', exact=True) }}
         - {{ pin_subpackage('libopenvino-python', exact=True) }}
     test:
@@ -675,7 +678,7 @@ outputs:
         - snippets/
       commands:
         # check that devices and frontends are found using Python API
-        # - $PYTHON snippets/openvino_available_components.py
+        - $PYTHON snippets/openvino_available_components.py
 
         # check that devices are found using OpenVINO C API
         - $CC snippets/openvino_available_devices.c $(pkg-config --cflags --libs pugixml tbb openvino) -Wl,-rpath,$PREFIX/lib -o openvino_devices_test  # [unix]
