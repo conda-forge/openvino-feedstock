@@ -678,7 +678,7 @@ outputs:
         - snippets/
       commands:
         # check that devices and frontends are found using Python API
-        - $PYTHON snippets/openvino_available_components.py
+        - $PYTHON snippets/openvino_available_components.py  # [unix]
 
         # check that devices are found using OpenVINO C API
         - $CC snippets/openvino_available_devices.c $(pkg-config --cflags --libs pugixml tbb openvino) -Wl,-rpath,$PREFIX/lib -o openvino_devices_test  # [unix]
