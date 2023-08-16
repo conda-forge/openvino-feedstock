@@ -1,5 +1,5 @@
 diff --git a/src/bindings/python/wheel/setup.py b/src/bindings/python/wheel/setup.py
-index ee0de58d68..429af8e908 100644
+index ee0de58d68..4dc269a586 100644
 --- a/src/bindings/python/wheel/setup.py
 +++ b/src/bindings/python/wheel/setup.py
 @@ -615,6 +615,8 @@ def concat_files(input_files, output_file):
