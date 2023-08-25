@@ -448,7 +448,6 @@ outputs:
       build:
         - {{ compiler('cxx') }}
         - {{ compiler('c') }}
-        - python                              # [build_platform != target_platform]
         - cross-python_{{ target_platform }}  # [build_platform != target_platform]
         - sysroot_linux-64 =2.17  # [linux64]
         - make  # [unix]
@@ -460,6 +459,7 @@ outputs:
       host:
         - tbb-devel =2021.5  # for developer package only
         - pugixml >=1.12.1  # for developer package only
+        - python
         - pip
         - {{ pin_subpackage('libopenvino', exact=True) }}
         # subpackages below have explicit python bindings
