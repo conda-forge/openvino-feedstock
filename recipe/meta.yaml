@@ -460,7 +460,6 @@ outputs:
       host:
         - tbb-devel =2021.5  # for developer package only
         - pugixml >=1.12.1  # for developer package only
-        - python
         - pip
         - {{ pin_subpackage('libopenvino', exact=True) }}
         # subpackages below have explicit python bindings
