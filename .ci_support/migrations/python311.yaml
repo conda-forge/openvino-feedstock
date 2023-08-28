@@ -8,7 +8,7 @@ __migrator:
             - 3.6.* *_cpython
             - 3.7.* *_cpython
             - 3.8.* *_cpython
-            - 3.9.* *_cpython
+            - 3.9.17 *_cpython
             - 3.10.* *_cpython
             - 3.11.* *_cpython  # new entry
             - 3.6.* *_73_pypy
