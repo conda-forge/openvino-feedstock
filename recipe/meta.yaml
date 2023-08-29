@@ -34,7 +34,7 @@ source:
     folder: thirdparty/onnx/onnx
 
 build:
-  number: 2
+  number: 3
   run_exports:
     - {{ pin_subpackage('libopenvino', max_pin='x.x.x') }}
     - {{ pin_subpackage('libopenvino-intel-cpu-plugin', max_pin='x.x.x') }}  # [x86_64]
