@@ -10,6 +10,7 @@ source:
     sha256: 03c9b0c384e7ade8f9423e67d96f71b4521160abf5e7637720a86a7df73c6be7
     patches:
     - patches/001-win64-find-ocl.patch  # [win64]
+    - patches/002-find-protobuf.patch
     - patches/003-lin-arm64-compute-lib.patch  # [aarch64]
     - patches/004-mha-build-fix.patch  # [arm64]
     - patches/005-cross-compilation-macos.patch
