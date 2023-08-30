@@ -1,13 +1,13 @@
 {% set name = "openvino" %}
-{% set version = "2023.0.1" %}
+{% set version = "2023.1.0" %}
 
 package:
   name: {{ name|lower }}
   version: {{ version }}
 
 source:
-  - url: https://github.com/openvinotoolkit/openvino/archive/refs/tags/2023.0.1.tar.gz
-    sha256: c14cb22f5191a75ea15659c62baceb71333dc9ecf62139ce513f3e81e4544651
+  - url: https://github.com/openvinotoolkit/openvino/archive/35a1840b4b5bc00fdf93fe0d26af320ac7c2f625.tar.gz
+    sha256: 1a14e9360f36955742ed20cb16c451e428d4f3ad5965f1a22aadc777a21d21ba
     patches:
     - patches/001-win64-find-ocl.patch  # [win64]
     - patches/003-lin-arm64-compute-lib.patch  # [aarch64]
@@ -20,11 +20,14 @@ source:
   - url: https://github.com/herumi/xbyak/archive/refs/tags/v6.69.tar.gz
     sha256: 7eb64e2c18527824402b16f26c6118ba82f40f57fe6e3ab05c6e2883246a04f1
     folder: thirdparty/xbyak
-  - url: https://github.com/openvinotoolkit/oneDNN/archive/1c7bfabf1b26e6fb95fea1613e1d3d2bef1f6b54.tar.gz
-    sha256: 52921b3efab33d1710971c67318e8c00ee102b6369e4e9cea8fdf91a1d68e38e
+  - url: https://github.com/openvinotoolkit/oneDNN/archive/ae825539bd850d1ad5c83d4bb0d56c65d46d5842.tar.gz
+    sha256: 1204df17785c8603f9dfa1f4f91e91e5ffd4391bf7680d2b256de2513490ebee
     folder: src/plugins/intel_cpu/thirdparty/onednn
-  - url: https://github.com/oneapi-src/oneDNN/archive/f27dedbfc093f51032a4580198bb80579440dc15.tar.gz  # [win64 or linux64]
-    sha256: da57c2298a8e001718902f0b65b6d92c4a7897b35467e23bc24996dde43ec47b  # [win64 or linux64]
+  - url: https://github.com/openvinotoolkit/mlas/archive/8ed1c80deb0607530b3bef23a797335c09cebe1b.tar.gz
+    sha256: 2e420a6cb26b09306ad5e133dd4c48998d888dc16080cbc480a5709017e7d4e9
+    folder: src/plugins/intel_cpu/thirdparty/mlas
+  - url: https://github.com/oneapi-src/oneDNN/archive/4b82a66ed38ecaa993352e5cc6ed7753656b8a26.tar.gz  # [win64 or linux64]
+    sha256: cb17c003fe51bc9b4e20189573956b4446468162adf0fc4cea2ee0820cff0cd0  # [win64 or linux64]
     folder: src/plugins/intel_gpu/thirdparty/onednn_gpu  # [win64 or linux64]
   - url: https://github.com/opencv/ade/archive/58b2595a1a95cc807be8bf6222f266a9a1f393a9.tar.gz
     sha256: db7759cc32107e713b9e503ddf71a54ba2c80de07daefcb1aa315507e706ce07
@@ -34,7 +37,7 @@ source:
     folder: thirdparty/onnx/onnx
 
 build:
-  number: 3
+  number: 0
   run_exports:
     - {{ pin_subpackage('libopenvino', max_pin='x.x.x') }}
     - {{ pin_subpackage('libopenvino-intel-cpu-plugin', max_pin='x.x.x') }}  # [x86_64]
