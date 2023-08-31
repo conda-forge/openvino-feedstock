@@ -33,27 +33,9 @@ source:
   - url: https://github.com/onnx/onnx/archive/refs/tags/v1.13.1.tar.gz
     sha256: 090d3e10ec662a98a2a72f1bf053f793efc645824f0d4b779e0ce47468a0890e
     folder: thirdparty/onnx/onnx
-
+    
 build:
   number: 0
-  run_exports:
-    - {{ pin_subpackage('libopenvino', max_pin='x.x.x') }}
-    - {{ pin_subpackage('libopenvino-intel-cpu-plugin', max_pin='x.x.x') }}  # [x86_64]
-    - {{ pin_subpackage('libopenvino-arm-cpu-plugin', max_pin='x.x.x') }}  # [aarch64 or arm64]
-    - {{ pin_subpackage('libopenvino-intel-gpu-plugin', max_pin='x.x.x') }}  # [win64 or linux64]
-    - {{ pin_subpackage('libopenvino-auto-plugin', max_pin='x.x.x') }}
-    - {{ pin_subpackage('libopenvino-hetero-plugin', max_pin='x.x.x') }}
-    - {{ pin_subpackage('libopenvino-auto-batch-plugin', max_pin='x.x.x') }}
-    - {{ pin_subpackage('libopenvino-ir-frontend', max_pin='x.x.x') }}
-    - {{ pin_subpackage('libopenvino-onnx-frontend', max_pin='x.x.x') }}
-    - {{ pin_subpackage('libopenvino-paddle-frontend', max_pin='x.x.x') }}
-    - {{ pin_subpackage('libopenvino-pytorch-frontend', max_pin='x.x.x') }}
-    - {{ pin_subpackage('libopenvino-tensorflow-frontend', max_pin='x.x.x') }}
-    - {{ pin_subpackage('libopenvino-tensorflow-lite-frontend', max_pin='x.x.x') }}
-  ignore_run_exports_from:
-    - {{ compiler('c') }}
-    - {{ compiler('cxx') }}
-    - tbb-devel # libopenvino and libopenvino-*-plugin already depend on tbb
 
 requirements:
   build:
