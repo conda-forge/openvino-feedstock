@@ -16,6 +16,17 @@ gflags:
 - '2.2'
 macos_machine:
 - arm64-apple-darwin20.0.0
+pin_run_as_build:
+  python:
+    min_pin: x.x
+    max_pin: x.x
+pugixml:
+- '1.13'
+python:
+- 3.10.* *_cpython
+- 3.11.* *_cpython
+- 3.8.* *_cpython
+- 3.9.* *_cpython
 snappy:
 - '1'
 target_platform:
