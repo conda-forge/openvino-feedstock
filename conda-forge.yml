@@ -1,18 +1,19 @@
+channel_priority: strict
 azure:
+  store_build_artifacts: True
   settings_win:
     pool:
       vmImage: windows-2019
-  store_build_artifacts: true
+  timeout_minutes: 600
 build_platform:
-  linux_aarch64: linux_64
   osx_arm64: osx_64
-channel_priority: strict
-conda_build:
-  error_overlinking: true
-conda_forge_output_validation: true
-github:
-  branch_name: main
-  tooling_branch_name: main
+  linux_aarch64: linux_64
 os_version:
   linux_64: cos7
 test: native_and_emulated
+github:
+  branch_name: main
+  tooling_branch_name: main
+conda_build:
+  error_overlinking: true
+conda_forge_output_validation: true
