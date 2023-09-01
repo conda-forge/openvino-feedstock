@@ -154,11 +154,23 @@ Summary: OpenVINO Python API
 About openvino
 --------------
 
+Home: https://github.com/openvinotoolkit/openvino
 
-
-Package license: 
+Package license: Apache-2.0
 
 Summary: OpenVINO C++ / C / Python Runtimes & Development files
+
+Development: https://github.com/openvinotoolkit/openvino
+
+Documentation: https://docs.openvino.ai/latest/index.html
+
+Intel® Distribution of OpenVINO™ toolkit is an open-source toolkit for
+optimizing and deploying AI inference. It can be used to develop
+applications and solutions based on deep learning tasks, such as:
+emulation of human vision, automatic speech recognition, natural
+language processing, recommendation systems, etc. It provides
+high-performance and rich deployment options, from edge to cloud
+
 
 About libopenvino-arm-cpu-plugin
 --------------------------------
