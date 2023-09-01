@@ -10,6 +10,7 @@ source:
   - url: https://github.com/openvinotoolkit/openvino/archive/refs/tags/2023.1.0.dev20230811.tar.gz
     sha256: 8bbe23019034e8f1a3751648ad5404142b3285c392031573cb9bdbd47d4716a3
     patches:
+    - patches/001-python-osx-arm64.patch  # [arm64]
     - patches/002-win32-python-search.patch
     - patches/003-lin-arm64-compute-lib.patch  # [aarch64]
     - patches/004-gflags-samples.patch
