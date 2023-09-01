@@ -1,0 +1,13 @@
+diff --git a/cmake/developer_package/compile_flags/os_flags.cmake b/cmake/developer_package/compile_flags/os_flags.cmake
+index 7d34c308f3..5119da0717 100644
+--- a/cmake/developer_package/compile_flags/os_flags.cmake
++++ b/cmake/developer_package/compile_flags/os_flags.cmake
+@@ -346,7 +346,7 @@ if(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+     # Increase Number of Sections in .Obj file
+     ie_add_compiler_flags(/bigobj)
+     # Build with multiple processes
+-    ie_add_compiler_flags(/MP)
++    # ie_add_compiler_flags(/MP)
+ 
+     if(AARCH64 AND NOT MSVC_VERSION LESS 1930)
+         # otherwise, _ARM64_EXTENDED_INTRINSICS is defined, which defines 'mvn' macro
