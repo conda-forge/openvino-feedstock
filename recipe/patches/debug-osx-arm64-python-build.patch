@@ -1,23 +1,13 @@
 diff --git a/src/bindings/python/CMakeLists.txt b/src/bindings/python/CMakeLists.txt
-index 2e41c7e780..ae44e6597a 100644
+index 2e41c7e780..5194bf3de5 100644
 --- a/src/bindings/python/CMakeLists.txt
 +++ b/src/bindings/python/CMakeLists.txt
-@@ -74,6 +74,18 @@ function(ov_check_python_build_conditions)
+@@ -72,7 +72,7 @@ function(ov_check_python_build_conditions)
+         if(PYTHONLIBSNEW_FOUND)
+             # clear Python_ADDITIONAL_VERSIONS to find only python library matching PYTHON_EXECUTABLE
              unset(Python_ADDITIONAL_VERSIONS CACHE)
-             find_host_package(PythonLibs ${PYTHON_VERSION_STRING} EXACT ${find_package_mode})
+-            find_host_package(PythonLibs ${PYTHON_VERSION_STRING} EXACT ${find_package_mode})
++            find_package(PythonLibs ${PYTHON_VERSION_STRING} EXACT ${find_package_mode})
          endif()
-+        
-+        get_cmake_property(_variableNames VARIABLES)
-+        list (SORT _variableNames)
-+        foreach (_variableName ${_variableNames})
-+            unset(MATCHED)
-+            string(REGEX MATCH "PYTHON*" MATCHED ${_variableName})
-+            if (NOT MATCHED)
-+                continue()
-+            endif()
-+            message(STATUS "${_variableName}=${${_variableName}}")
-+        endforeach()
-+        
          if(NOT PYTHONLIBS_FOUND)
              message(${message_mode} "Python development libraries are not found. OpenVINO Python API will be turned off (ENABLE_PYTHON is OFF)")
-         endif()
