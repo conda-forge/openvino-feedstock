@@ -6,8 +6,8 @@ package:
   version: {{ version }}
 
 source:
-  - url: https://github.com/openvinotoolkit/openvino/archive/e662b1a330126daed2d8de724b9e14690bec8bfd.tar.gz
-    sha256: 03c9b0c384e7ade8f9423e67d96f71b4521160abf5e7637720a86a7df73c6be7
+  - url: https://github.com/openvinotoolkit/openvino/archive/refs/tags/2023.0.2.tar.gz 
+    sha256: 7f09b795f9261e9dc4a49eeec572a07910f90702142ad4ae164ddf214edaa9d4
     patches:
     - patches/001-win64-find-ocl.patch  # [win64]
     - patches/002-find-protobuf.patch
