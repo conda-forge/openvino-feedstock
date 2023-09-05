@@ -1,15 +1,16 @@
 {% set name = "openvino" %}
-{% set version = "2023.0.1" %}
+{% set version = "2023.0.2" %}
 
 package:
   name: {{ name|lower }}
   version: {{ version }}
 
 source:
-  - url: https://github.com/openvinotoolkit/openvino/archive/refs/tags/2023.0.1.tar.gz
-    sha256: c14cb22f5191a75ea15659c62baceb71333dc9ecf62139ce513f3e81e4544651
+  - url: https://github.com/openvinotoolkit/openvino/archive/refs/tags/2023.0.2.tar.gz 
+    sha256: 7f09b795f9261e9dc4a49eeec572a07910f90702142ad4ae164ddf214edaa9d4
     patches:
     - patches/001-win64-find-ocl.patch  # [win64]
+    - patches/002-find-protobuf.patch
     - patches/003-lin-arm64-compute-lib.patch  # [aarch64]
     - patches/004-mha-build-fix.patch  # [arm64]
     - patches/005-cross-compilation-macos.patch
@@ -34,7 +35,7 @@ source:
     folder: thirdparty/onnx/onnx
 
 build:
-  number: 3
+  number: 0
   run_exports:
     - {{ pin_subpackage('libopenvino', max_pin='x.x.x') }}
     - {{ pin_subpackage('libopenvino-intel-cpu-plugin', max_pin='x.x.x') }}  # [x86_64]
