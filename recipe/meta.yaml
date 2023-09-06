@@ -56,31 +56,84 @@ build:
     - {{ compiler('cxx') }}
     - tbb-devel # libopenvino and libopenvino-*-plugin already depend on tbb
 
-requirements:
-  build:
-    - {{ compiler('c') }}
-    - {{ compiler('cxx') }}
-    - ninja
-    - pkg-config # to generate openvino.pc on macOS
-    - scons  # [aarch64 or arm64]
-    - cmake >=3.15 # to have new cmake cmd interface (-S, --install and other options)
-    - python >=3.7
-    - ccache
-    - libprotobuf =3.20.3 # for protoc compiler, libraries are used from libprotobuf-static
-    - flatbuffers =23.3.3
-    - sysroot_linux-64 =2.17  # [linux64]
-  host:
-    - tbb-devel =2021.5 # starting from this version TBB uses hwloc in conda
-    - snappy
-    - ocl-icd  # [linux64]
-    - clhpp  # [linux64 or win64]
-    - khronos-opencl-icd-loader  # [win64]
-    - pugixml >=1.12.1 # starting from this version shared libraries are provided
-    - xbyak >=6.69.1  # [x86_64]
-    - libprotobuf-static =3.20.3  # [not win64]
-    - libprotobuf-static  # [win64]  
-
 outputs:
+  - name: openvino
+    version: {{ version }}
+    about:
+      summary: OpenVINO C++ / C / Python Runtimes & Development files
+      license_file:
+        - LICENSE
+        - third-party-programs.txt
+        - onednn_third-party-programs.txt
+        - runtime-third-party-programs.txt
+    build:
+      string: py{{ CONDA_PY }}h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}
+      run_exports:
+        - {{ pin_subpackage('libopenvino-python', max_pin='x.x.x') }}
+        - {{ pin_subpackage('libopenvino-intel-cpu-plugin', max_pin='x.x.x') }}  # [x86_64]
+        - {{ pin_subpackage('libopenvino-arm-cpu-plugin', max_pin='x.x.x') }}  # [aarch64 or arm64]
+        - {{ pin_subpackage('libopenvino-intel-gpu-plugin', max_pin='x.x.x') }}  # [win64 or linux64]
+        - {{ pin_subpackage('libopenvino-auto-plugin', max_pin='x.x.x') }}
+        - {{ pin_subpackage('libopenvino-hetero-plugin', max_pin='x.x.x') }}
+        - {{ pin_subpackage('libopenvino-auto-batch-plugin', max_pin='x.x.x') }}
+        - {{ pin_subpackage('libopenvino-ir-frontend', max_pin='x.x.x') }}
+        - {{ pin_subpackage('libopenvino-onnx-frontend', max_pin='x.x.x') }}
+        - {{ pin_subpackage('libopenvino-paddle-frontend', max_pin='x.x.x') }}
+        - {{ pin_subpackage('libopenvino-pytorch-frontend', max_pin='x.x.x') }}
+        - {{ pin_subpackage('libopenvino-tensorflow-frontend', max_pin='x.x.x') }}
+        - {{ pin_subpackage('libopenvino-tensorflow-lite-frontend', max_pin='x.x.x') }}
+    requirements:
+      build:
+        - {{ compiler('c') }}
+        - {{ compiler('cxx') }}
+        - ninja
+        - pkg-config # to generate openvino.pc on macOS
+        - scons  # [aarch64 or arm64]
+        - cmake >=3.15 # to have new cmake cmd interface (-S, --install and other options)
+        - python >=3.7
+        - ccache
+        - libprotobuf =3.20.3 # for protoc compiler, libraries are used from libprotobuf-static
+        - flatbuffers =23.3.3
+        - sysroot_linux-64 =2.17  # [linux64]
+      host:
+        - python # dummy dependency to create python-version dependent package
+        - tbb-devel =2021.5 # starting from this version TBB uses hwloc in conda
+        - snappy
+        - ocl-icd  # [linux64]
+        - clhpp  # [linux64 or win64]
+        - khronos-opencl-icd-loader  # [win64]
+        - pugixml >=1.12.1 # starting from this version shared libraries are provided
+        - xbyak >=6.69.1  # [x86_64]
+        - libprotobuf-static =3.20.3  # [not win64]
+        - libprotobuf-static  # [win64]  
+      run:
+        - python # dummy dependency to create python-version dependent package
+        - {{ pin_subpackage('libopenvino-dev', exact=True) }}
+        - {{ pin_subpackage('libopenvino-python', exact=True) }}
+    test:
+      requires:
+        - {{ compiler('cxx') }}
+        - {{ compiler('c') }}
+        - ninja
+        - pkg-config
+        - cmake >=3.15 # to have new cmake cmd interface (-S, --install and other options)
+        - sysroot_linux-64 =2.17  # [linux64]
+        - tbb-devel =2021.5 # starting from this version TBB uses hwloc in conda
+      files:
+        - snippets/
+      commands:
+        # check that devices and frontends are found using Python API
+        - $PYTHON snippets/openvino_available_components.py  # [unix]
+
+        # check that devices are found using OpenVINO C API
+        - $CC snippets/openvino_available_devices.c $(pkg-config --cflags --libs pugixml tbb openvino) -Wl,-rpath,$PREFIX/lib -o openvino_devices_test  # [unix]
+        - if [[ $(./openvino_devices_test) != "passed" ]]; then exit 1 ; fi  # [unix]
+
+        # check that frontends are found using OpenVINO C++ API
+        - cmake -S snippets -B snippets_build -G Ninja
+        - cmake --build snippets_build --config Release --verbose
+        - if [[ $(./snippets_build/openvino_frontends_test) != 6 ]]; then exit 1 ; fi  # [unix]
+
   - name: libopenvino
     version: {{ version }}
     script: install/install.sh
@@ -652,62 +705,6 @@ outputs:
 
         # check that frontends are found using OpenVINO C++ API
         - cmake -S snippets -B snippets_build
-        - cmake --build snippets_build --config Release --verbose
-        - if [[ $(./snippets_build/openvino_frontends_test) != 6 ]]; then exit 1 ; fi  # [unix]
-
-  - name: openvino
-    version: {{ version }}
-    about:
-      summary: OpenVINO C++ / C / Python Runtimes & Development files
-      license_file:
-        - LICENSE
-        - third-party-programs.txt
-        - onednn_third-party-programs.txt
-        - runtime-third-party-programs.txt
-    build:
-      string: py{{ CONDA_PY }}h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}
-      run_exports:
-        - {{ pin_subpackage('libopenvino-python', max_pin='x.x.x') }}
-        - {{ pin_subpackage('libopenvino-intel-cpu-plugin', max_pin='x.x.x') }}  # [x86_64]
-        - {{ pin_subpackage('libopenvino-arm-cpu-plugin', max_pin='x.x.x') }}  # [aarch64 or arm64]
-        - {{ pin_subpackage('libopenvino-intel-gpu-plugin', max_pin='x.x.x') }}  # [win64 or linux64]
-        - {{ pin_subpackage('libopenvino-auto-plugin', max_pin='x.x.x') }}
-        - {{ pin_subpackage('libopenvino-hetero-plugin', max_pin='x.x.x') }}
-        - {{ pin_subpackage('libopenvino-auto-batch-plugin', max_pin='x.x.x') }}
-        - {{ pin_subpackage('libopenvino-ir-frontend', max_pin='x.x.x') }}
-        - {{ pin_subpackage('libopenvino-onnx-frontend', max_pin='x.x.x') }}
-        - {{ pin_subpackage('libopenvino-paddle-frontend', max_pin='x.x.x') }}
-        - {{ pin_subpackage('libopenvino-pytorch-frontend', max_pin='x.x.x') }}
-        - {{ pin_subpackage('libopenvino-tensorflow-frontend', max_pin='x.x.x') }}
-        - {{ pin_subpackage('libopenvino-tensorflow-lite-frontend', max_pin='x.x.x') }}
-    requirements:
-      host:
-        - python # dummy dependency to create python-version dependent package
-      run:
-        - python # dummy dependency to create python-version dependent package
-        - {{ pin_subpackage('libopenvino-dev', exact=True) }}
-        - {{ pin_subpackage('libopenvino-python', exact=True) }}
-    test:
-      requires:
-        - {{ compiler('cxx') }}
-        - {{ compiler('c') }}
-        - ninja
-        - pkg-config
-        - cmake >=3.15 # to have new cmake cmd interface (-S, --install and other options)
-        - sysroot_linux-64 =2.17  # [linux64]
-        - tbb-devel =2021.5 # starting from this version TBB uses hwloc in conda
-      files:
-        - snippets/
-      commands:
-        # check that devices and frontends are found using Python API
-        - $PYTHON snippets/openvino_available_components.py  # [unix]
-
-        # check that devices are found using OpenVINO C API
-        - $CC snippets/openvino_available_devices.c $(pkg-config --cflags --libs pugixml tbb openvino) -Wl,-rpath,$PREFIX/lib -o openvino_devices_test  # [unix]
-        - if [[ $(./openvino_devices_test) != "passed" ]]; then exit 1 ; fi  # [unix]
-
-        # check that frontends are found using OpenVINO C++ API
-        - cmake -S snippets -B snippets_build -G Ninja
         - cmake --build snippets_build --config Release --verbose
         - if [[ $(./snippets_build/openvino_frontends_test) != 6 ]]; then exit 1 ; fi  # [unix]
 
