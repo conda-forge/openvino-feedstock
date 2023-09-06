@@ -59,6 +59,7 @@ build:
 outputs:
   - name: openvino
     version: {{ version }}
+    script: install/install_dev.sh
     about:
       summary: OpenVINO C++ / C / Python Runtimes & Development files
       license_file:
