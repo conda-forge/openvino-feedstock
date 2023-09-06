@@ -6,8 +6,8 @@ package:
   version: {{ version }}
 
 source:
-  - url: https://github.com/openvinotoolkit/openvino/archive/35a1840b4b5bc00fdf93fe0d26af320ac7c2f625.tar.gz
-    sha256: 1a14e9360f36955742ed20cb16c451e428d4f3ad5965f1a22aadc777a21d21ba
+  - url: https://github.com/openvinotoolkit/openvino/archive/47b736f63edda256d66e2bbb572f42a9d6549f6e.tar.gz
+    sha256: 8a1dd5b35fe4b60440e97ee61e12e01aa4dd78b5be30550aa08fcd96c416e1d7
     patches:
     - patches/003-lin-arm64-compute-lib.patch  # [aarch64]
     - patches/004-mha-build-fix.patch  # [arm64]
