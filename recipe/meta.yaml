@@ -7,8 +7,8 @@ package:
   version: {{ version }}
 
 source:
-  - url: https://github.com/openvinotoolkit/openvino/archive/47b736f63edda256d66e2bbb572f42a9d6549f6e.tar.gz
-    sha256: 8a1dd5b35fe4b60440e97ee61e12e01aa4dd78b5be30550aa08fcd96c416e1d7
+  - url: https://github.com/openvinotoolkit/openvino/archive/refs/tags/2023.1.0.tar.gz
+    sha256: ff88596b342440185874ddbe22874b47ad7b923f14671921af760b15c98aacd6
     patches:
     - patches/001-python-osx-arm64.patch  # [arm64]
     - patches/002-win32-python-search.patch
