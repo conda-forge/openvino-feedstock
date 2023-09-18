@@ -1,8 +1,42 @@
 diff --git a/src/bindings/python/CMakeLists.txt b/src/bindings/python/CMakeLists.txt
-index 2e41c7e780..5194bf3de5 100644
+index f337f40318..ae6ba739cb 100644
 --- a/src/bindings/python/CMakeLists.txt
 +++ b/src/bindings/python/CMakeLists.txt
-@@ -72,7 +72,7 @@ function(ov_check_python_build_conditions)
+@@ -20,7 +20,6 @@ endif()
+ # Check python requirements
+ #
+ 
+-set(ov_python_req "${OpenVINOPython_SOURCE_DIR}/requirements.txt")
+ set(ie_python_req "${OpenVINOPython_SOURCE_DIR}/src/compatibility/openvino/requirements-dev.txt")
+ 
+ function(ov_check_python_build_conditions)
+@@ -34,7 +33,7 @@ function(ov_check_python_build_conditions)
+     endif()
+ 
+     # Try to find python3 and its libs
+-    find_host_package(PythonInterp 3 ${find_package_mode})
++    find_package(PythonInterp 3 ${find_package_mode})
+     if(PYTHONINTERP_FOUND)
+         if(PYTHON_VERSION_MINOR GREATER_EQUAL 11)
+             set(pybind11_min_version 2.9.2)
+@@ -57,14 +56,14 @@ function(ov_check_python_build_conditions)
+             if(EXISTS ${pybind11_tools_dir})
+                 list(APPEND CMAKE_MODULE_PATH ${pybind11_tools_dir})
+             else()
+-                find_host_package(pybind11 ${pybind11_min_version} QUIET)
++                find_package(pybind11 ${pybind11_min_version} QUIET)
+                 if(pybind11_FOUND)
+                     list(APPEND CMAKE_MODULE_PATH "${pybind11_DIR}")
+                 endif()
+             endif()
+             # use libraries with the same version as python itself
+             set(PYBIND11_PYTHON_VERSION ${PYTHON_VERSION_STRING})
+-            find_host_package(PythonLibsNew ${PYBIND11_PYTHON_VERSION} EXACT ${find_package_mode})
++            find_package(PythonLibsNew ${PYBIND11_PYTHON_VERSION} EXACT ${find_package_mode})
+             set(PYTHONLIBSNEW_FOUND ${PYTHONLIBS_FOUND} PARENT_SCOPE)
+         endfunction()
+         # try to find python libraries
+@@ -72,7 +71,7 @@ function(ov_check_python_build_conditions)
          if(PYTHONLIBSNEW_FOUND)
              # clear Python_ADDITIONAL_VERSIONS to find only python library matching PYTHON_EXECUTABLE
              unset(Python_ADDITIONAL_VERSIONS CACHE)
@@ -11,3 +45,36 @@ index 2e41c7e780..5194bf3de5 100644
          endif()
          if(NOT PYTHONLIBS_FOUND)
              message(${message_mode} "Python development libraries are not found. OpenVINO Python API will be turned off (ENABLE_PYTHON is OFF)")
+@@ -81,14 +80,6 @@ function(ov_check_python_build_conditions)
+         message(${message_mode} "Python 3.x interpreter is not found. OpenVINO Python API will be turned off (ENABLE_PYTHON is OFF)")
+     endif()
+ 
+-    # check pyopenvino requirements to OV 2.0 API
+-    ov_check_pip_packages(REQUIREMENTS_FILE ${ov_python_req}
+-                          RESULT_VAR ov_python_req_FOUND
+-                          WARNING_MESSAGE "install python3 -m pip install -r ${ov_python_req} for OV API 2.0 requirements"
+-                          MESSAGE_MODE TRACE)
+-    # ov_python_req are not mandatory for build
+-    set(ov_python_req_FOUND ON)
+-
+     # check for Cython requirement for build IE API 1.0
+     ov_check_pip_packages(REQUIREMENTS_FILE ${ie_python_req}
+                           RESULT_VAR ie_python_req_FOUND
+@@ -116,7 +107,7 @@ function(ov_check_python_build_conditions)
+         set(python_debug OFF)
+     endif()
+ 
+-    if(PYTHONLIBS_FOUND AND ov_python_req_FOUND AND ie_python_req_FOUND AND NOT python_debug)
++    if(PYTHONLIBS_FOUND AND ie_python_req_FOUND AND NOT python_debug)
+         set(ENABLE_PYTHON_DEFAULT ON PARENT_SCOPE)
+     else()
+         set(ENABLE_PYTHON_DEFAULT OFF PARENT_SCOPE)
+@@ -178,7 +169,7 @@ ie_dependent_option(ENABLE_WHEEL "Build wheel packages for PyPI" ${ENABLE_WHEEL_
+ 
+ if(NOT ENABLE_PYTHON)
+     if(CMAKE_SOURCE_DIR STREQUAL OpenVINOPython_SOURCE_DIR)
+-        message(FATAL_ERROR "Python OpenVINO API requirements are not satisfied. Please, install ${ie_python_req} and ${ov_python_req}")
++        message(FATAL_ERROR "Python OpenVINO API requirements are not satisfied. Please, install ${ie_python_req}")
+     else()
+         return()
+     endif()
