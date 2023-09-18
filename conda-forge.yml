@@ -3,6 +3,7 @@ azure:
     pool:
       vmImage: windows-2019
   store_build_artifacts: true
+  timeout_minutes: 600
 build_platform:
   linux_aarch64: linux_64
   osx_arm64: osx_64

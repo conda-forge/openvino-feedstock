@@ -1,8 +1,8 @@
 diff --git a/src/plugins/intel_cpu/thirdparty/ACLConfig.cmake b/src/plugins/intel_cpu/thirdparty/ACLConfig.cmake
-index 2df390711a..416b6ad44f 100644
+index b2614a7301..4638f3f98e 100644
 --- a/src/plugins/intel_cpu/thirdparty/ACLConfig.cmake
 +++ b/src/plugins/intel_cpu/thirdparty/ACLConfig.cmake
-@@ -178,7 +178,7 @@ elseif(NOT TARGET arm_compute::arm_compute)
+@@ -197,7 +197,7 @@ elseif(NOT TARGET arm_compute::arm_compute)
          list(APPEND ARM_COMPUTE_OPTIONS os=windows)
      endif()
  
