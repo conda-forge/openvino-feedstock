@@ -1,7 +1,33 @@
 diff --git a/src/bindings/python/CMakeLists.txt b/src/bindings/python/CMakeLists.txt
-index 2e41c7e780..5194bf3de5 100644
+index f337f40318..c8866c86b9 100644
 --- a/src/bindings/python/CMakeLists.txt
 +++ b/src/bindings/python/CMakeLists.txt
+@@ -34,7 +34,7 @@ function(ov_check_python_build_conditions)
+     endif()
+ 
+     # Try to find python3 and its libs
+-    find_host_package(PythonInterp 3 ${find_package_mode})
++    find_package(PythonInterp 3 ${find_package_mode})
+     if(PYTHONINTERP_FOUND)
+         if(PYTHON_VERSION_MINOR GREATER_EQUAL 11)
+             set(pybind11_min_version 2.9.2)
+@@ -57,14 +57,14 @@ function(ov_check_python_build_conditions)
+             if(EXISTS ${pybind11_tools_dir})
+                 list(APPEND CMAKE_MODULE_PATH ${pybind11_tools_dir})
+             else()
+-                find_host_package(pybind11 ${pybind11_min_version} QUIET)
++                find_package(pybind11 ${pybind11_min_version} QUIET)
+                 if(pybind11_FOUND)
+                     list(APPEND CMAKE_MODULE_PATH "${pybind11_DIR}")
+                 endif()
+             endif()
+             # use libraries with the same version as python itself
+             set(PYBIND11_PYTHON_VERSION ${PYTHON_VERSION_STRING})
+-            find_host_package(PythonLibsNew ${PYBIND11_PYTHON_VERSION} EXACT ${find_package_mode})
++            find_package(PythonLibsNew ${PYBIND11_PYTHON_VERSION} EXACT ${find_package_mode})
+             set(PYTHONLIBSNEW_FOUND ${PYTHONLIBS_FOUND} PARENT_SCOPE)
+         endfunction()
+         # try to find python libraries
 @@ -72,7 +72,7 @@ function(ov_check_python_build_conditions)
          if(PYTHONLIBSNEW_FOUND)
              # clear Python_ADDITIONAL_VERSIONS to find only python library matching PYTHON_EXECUTABLE
