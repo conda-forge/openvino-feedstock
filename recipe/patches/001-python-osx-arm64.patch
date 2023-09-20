@@ -1,0 +1,1323 @@
+diff --git a/.ci/azure/linux_arm64.yml b/.ci/azure/linux_arm64.yml
+index ecde288fc4..c60df689a0 100644
+--- a/.ci/azure/linux_arm64.yml
++++ b/.ci/azure/linux_arm64.yml
+@@ -192,10 +192,10 @@ jobs:
+         -DENABLE_INTEL_GPU=ON \
+         -DENABLE_PYTHON=ON \
+         -DENABLE_WHEEL=ON \
+-        -DPYBIND11_PYTHONLIBS_OVERWRITE=OFF \
+         -DPYTHON_MODULE_EXTENSION=$(aarch64-linux-gnu-python3-config --extension-suffix) \
+-        -DPYTHON_LIBRARY=/usr/lib/aarch64-linux-gnu/libc-2.31.so \
+-        -DPYTHON_INCLUDE_DIR=$(Agent.ToolsDirectory)/Python/$(OV_PYTHON_VERSION)/x64/include/python$(OV_PYTHON_VERSION_MAJOR_MINOR) \
++        -DPYBIND11_PYTHON_EXECUTABLE_LAST=$(Agent.ToolsDirectory)/Python/$(OV_PYTHON_VERSION)/x64/bin/python$(OV_PYTHON_VERSION_MAJOR_MINOR) \
++        -DPython3_EXECUTABLE=$(Agent.ToolsDirectory)/Python/$(OV_PYTHON_VERSION)/x64/bin/python$(OV_PYTHON_VERSION_MAJOR_MINOR) \
++        -DPython3_INCLUDE_DIR=$(Agent.ToolsDirectory)/Python/$(OV_PYTHON_VERSION)/x64/include/python$(OV_PYTHON_VERSION_MAJOR_MINOR) \
+         -DENABLE_DATA=OFF \
+         -DENABLE_SYSTEM_TBB=ON \
+         -DENABLE_SYSTEM_PROTOBUF=ON \
+diff --git a/.ci/azure/linux_debian.yml b/.ci/azure/linux_debian.yml
+index 1b83eb9f8f..20ea5c132e 100644
+--- a/.ci/azure/linux_debian.yml
++++ b/.ci/azure/linux_debian.yml
+@@ -165,7 +165,7 @@ jobs:
+         -DCMAKE_COMPILE_WARNING_AS_ERROR=ON
+         -DENABLE_PYTHON=ON
+         -DENABLE_INTEL_GNA=OFF
+-        -DPYTHON_EXECUTABLE=$(BUILD_VENV)/bin/python3
++        -DPython3_EXECUTABLE=$(BUILD_VENV)/bin/python3
+         -DENABLE_TESTS=ON
+         -DENABLE_FASTER_BUILD=ON
+         -DENABLE_STRICT_DEPENDENCIES=OFF
+diff --git a/.ci/azure/linux_lohika.yml b/.ci/azure/linux_lohika.yml
+index 3f6ab66f80..6ad38137fa 100644
+--- a/.ci/azure/linux_lohika.yml
++++ b/.ci/azure/linux_lohika.yml
+@@ -57,7 +57,7 @@ jobs:
+ #        -DCMAKE_VERBOSE_MAKEFILE=ON
+ #        -DCMAKE_BUILD_TYPE=$(BUILD_TYPE)
+ #        -DENABLE_PYTHON=ON
+-#        -DPYTHON_EXECUTABLE=/usr/bin/python3.8
++#        -DPython3_EXECUTABLE=/usr/bin/python3.8
+ #        -DENABLE_TESTS=ON
+ #        -DENABLE_OV_ONNX_FRONTEND=ON
+ #        -DENABLE_FASTER_BUILD=ON
+diff --git a/.ci/azure/windows.yml b/.ci/azure/windows.yml
+index 36d55f05fb..cf26f114d1 100644
+--- a/.ci/azure/windows.yml
++++ b/.ci/azure/windows.yml
+@@ -178,9 +178,7 @@ jobs:
+         -DENABLE_PYTHON=ON ^
+         -DBUILD_nvidia_plugin=OFF ^
+         -DCUSTOM_OPERATIONS="calculate_grid;complex_mul;fft;grid_sample;sparse_conv;sparse_conv_transpose" ^
+-        -DPYTHON_EXECUTABLE="C:\hostedtoolcache\windows\Python\3.11.2\x64\python.exe" ^
+-        -DPYTHON_INCLUDE_DIR="C:\hostedtoolcache\windows\Python\3.11.2\x64\include" ^
+-        -DPYTHON_LIBRARY="C:\hostedtoolcache\windows\Python\3.11.2\x64\libs\python311.lib" ^
++        -DPython3_EXECUTABLE="C:\hostedtoolcache\windows\Python\3.11.2\x64\python.exe" ^
+         -DOPENVINO_EXTRA_MODULES=$(OPENVINO_CONTRIB_REPO_DIR)\modules ^
+         -DCMAKE_C_COMPILER:PATH="$(MSVC_COMPILER_PATH)" ^
+         -DCMAKE_CXX_COMPILER:PATH="$(MSVC_COMPILER_PATH)" ^
+diff --git a/cmake/developer_package/IEDevScriptsConfig.cmake b/cmake/developer_package/IEDevScriptsConfig.cmake
+index 66d784b2d3..52c5b82e88 100644
+--- a/cmake/developer_package/IEDevScriptsConfig.cmake
++++ b/cmake/developer_package/IEDevScriptsConfig.cmake
+@@ -200,6 +200,8 @@ set(CMAKE_POLICY_DEFAULT_CMP0068 NEW)
+ set(CMAKE_POLICY_DEFAULT_CMP0074 NEW)
+ # CMake 3.13+: option() honors normal variables.
+ set(CMAKE_POLICY_DEFAULT_CMP0077 NEW)
++# CMake 3.15: Modules FindPython3, FindPython2 and FindPython use LOCATION for lookup strategy
++set(CMAKE_POLICY_DEFAULT_CMP0094 NEW)
+ # CMake 3.19+: An imported target missing its location property fails during generation.
+ set(CMAKE_POLICY_DEFAULT_CMP0111 NEW)
+ # CMake 3.22+ :cmake_dependent_option() supports full Condition Syntax
+diff --git a/cmake/developer_package/cpplint/cpplint.cmake b/cmake/developer_package/cpplint/cpplint.cmake
+index a4f0394056..d4da25ea31 100644
+--- a/cmake/developer_package/cpplint/cpplint.cmake
++++ b/cmake/developer_package/cpplint/cpplint.cmake
+@@ -3,9 +3,9 @@
+ #
+ 
+ if(ENABLE_CPPLINT)
+-    find_host_package(PythonInterp 3 QUIET)
++    find_host_package(Python3 QUIET COMPONENTS Interpreter)
+ 
+-    if(NOT PYTHONINTERP_FOUND)
++    if(NOT Python3_Interpreter_FOUND)
+         message(WARNING "Python3 interpreter was not found (required for cpplint check)")
+         set(ENABLE_CPPLINT OFF)
+     endif()
+@@ -68,7 +68,7 @@ function(add_cpplint_target TARGET_NAME)
+                 "${output_file}"
+             COMMAND
+                 "${CMAKE_COMMAND}"
+-                -D "PYTHON_EXECUTABLE=${PYTHON_EXECUTABLE}"
++                -D "Python3_EXECUTABLE=${Python3_EXECUTABLE}"
+                 -D "CPPLINT_SCRIPT=${IEDevScripts_DIR}/cpplint/cpplint.py"
+                 -D "INPUT_FILE=${source_file}"
+                 -D "OUTPUT_FILE=${output_file}"
+diff --git a/cmake/developer_package/cpplint/cpplint_html.cmake b/cmake/developer_package/cpplint/cpplint_html.cmake
+index 28ebad97d3..23268099ee 100644
+--- a/cmake/developer_package/cpplint/cpplint_html.cmake
++++ b/cmake/developer_package/cpplint/cpplint_html.cmake
+@@ -10,7 +10,7 @@ file(MAKE_DIRECTORY "${REPORT_DIR}")
+ 
+ execute_process(
+     COMMAND
+-        "${PYTHON_EXECUTABLE}"
++        "${Python3_EXECUTABLE}"
+         "${CONVERT_SCRIPT}"
+         "--file=${INPUT_FILE}"
+         "--report-dir=${REPORT_DIR}"
+diff --git a/cmake/developer_package/cpplint/cpplint_run.cmake b/cmake/developer_package/cpplint/cpplint_run.cmake
+index b10580655b..e477c9b0b7 100644
+--- a/cmake/developer_package/cpplint/cpplint_run.cmake
++++ b/cmake/developer_package/cpplint/cpplint_run.cmake
+@@ -25,7 +25,7 @@ set(FILTER "${DEFAULT_FILTER}${CUSTOM_FILTER}")
+ 
+ execute_process(
+     COMMAND
+-        "${PYTHON_EXECUTABLE}"
++        "${Python3_EXECUTABLE}"
+         "${CPPLINT_SCRIPT}"
+         "--linelength=160"
+         "--counting=detailed"
+diff --git a/cmake/developer_package/cpplint/cpplint_to_cppcheck_xml.cmake b/cmake/developer_package/cpplint/cpplint_to_cppcheck_xml.cmake
+index db3aa1417a..6853f544c2 100644
+--- a/cmake/developer_package/cpplint/cpplint_to_cppcheck_xml.cmake
++++ b/cmake/developer_package/cpplint/cpplint_to_cppcheck_xml.cmake
+@@ -4,7 +4,7 @@
+ 
+ execute_process(
+     COMMAND
+-        "${PYTHON_EXECUTABLE}"
++        "${Python3_EXECUTABLE}"
+         "${CONVERT_SCRIPT}"
+     INPUT_FILE "${INPUT_FILE}"
+     OUTPUT_FILE "${OUTPUT_FILE}"
+diff --git a/cmake/developer_package/ncc_naming_style/ncc_naming_style.cmake b/cmake/developer_package/ncc_naming_style/ncc_naming_style.cmake
+index b22930fb20..cf2f447565 100644
+--- a/cmake/developer_package/ncc_naming_style/ncc_naming_style.cmake
++++ b/cmake/developer_package/ncc_naming_style/ncc_naming_style.cmake
+@@ -12,28 +12,28 @@ set(ncc_style_bin_dir "${CMAKE_CURRENT_BINARY_DIR}/ncc_naming_style")
+ # find python3
+ 
+ if(ENABLE_NCC_STYLE)
+-    find_host_package(PythonInterp 3 QUIET)
+-    if(NOT PYTHONINTERP_FOUND)
++    find_host_package(Python3 QUIET COMPONENTS Interpreter)
++    if(NOT Python3_Interpreter_FOUND)
+         message(WARNING "Python3 interpreter was not found (required for ncc naming style check)")
+         set(ENABLE_NCC_STYLE OFF)
+     endif()
+ endif()
+ 
+ if(ENABLE_NCC_STYLE)
+-    if(PYTHON_VERSION_MINOR EQUAL 6)
++    if(Python3_VERSION_MINOR EQUAL 6)
+         set(clang_version 10)
+-    elseif(PYTHON_VERSION_MINOR EQUAL 7)
++    elseif(Python3_VERSION_MINOR EQUAL 7)
+         set(clang_version 11)
+-    elseif(PYTHON_VERSION_MINOR EQUAL 8)
++    elseif(Python3_VERSION_MINOR EQUAL 8)
+         set(clang_version 12)
+-    elseif(PYTHON_VERSION_MINOR EQUAL 9)
++    elseif(Python3_VERSION_MINOR EQUAL 9)
+         set(clang_version 12)
+-    elseif(PYTHON_VERSION_MINOR EQUAL 10)
++    elseif(Python3_VERSION_MINOR EQUAL 10)
+         set(clang_version 14)
+-    elseif(PYTHON_VERSION_MINOR EQUAL 11)
++    elseif(Python3_VERSION_MINOR EQUAL 11)
+         set(clang_version 14)
+     else()
+-        message(WARNING "Cannot suggest clang package for python ${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}")
++        message(WARNING "Cannot suggest clang package for python ${Python3_VERSION_MAJOR}.${Python3_VERSION_MINOR}")
+     endif()
+ endif()
+ 
+@@ -170,7 +170,7 @@ function(ov_ncc_naming_style)
+                 ${output_file}
+             COMMAND
+                 "${CMAKE_COMMAND}"
+-                -D "PYTHON_EXECUTABLE=${PYTHON_EXECUTABLE}"
++                -D "Python3_EXECUTABLE=${Python3_EXECUTABLE}"
+                 -D "NCC_PY_SCRIPT=${ncc_script_py}"
+                 -D "INPUT_FILE=${source_file}"
+                 -D "OUTPUT_FILE=${output_file}"
+diff --git a/cmake/developer_package/ncc_naming_style/ncc_run.cmake b/cmake/developer_package/ncc_naming_style/ncc_run.cmake
+index f37124df9b..6f87be15c1 100644
+--- a/cmake/developer_package/ncc_naming_style/ncc_run.cmake
++++ b/cmake/developer_package/ncc_naming_style/ncc_run.cmake
+@@ -2,7 +2,7 @@
+ # SPDX-License-Identifier: Apache-2.0
+ #
+ 
+-foreach(var NCC_PY_SCRIPT PYTHON_EXECUTABLE OUTPUT_FILE DEFINITIONS EXPECTED_FAIL
++foreach(var NCC_PY_SCRIPT Python3_EXECUTABLE OUTPUT_FILE DEFINITIONS EXPECTED_FAIL
+     INPUT_FILE ADDITIONAL_INCLUDE_DIRECTORIES STYLE_FILE CLANG_LIB_PATH)
+     if(NOT DEFINED ${var})
+         message(FATAL_ERROR "${var} is not defined for ncc_run.cmake")
+@@ -17,7 +17,7 @@ endif()
+ 
+ execute_process(
+     COMMAND
+-        "${PYTHON_EXECUTABLE}"
++        "${Python3_EXECUTABLE}"
+         "${NCC_PY_SCRIPT}"
+         --path ${INPUT_FILE}
+         --style ${STYLE_FILE}
+diff --git a/cmake/developer_package/packaging/packaging.cmake b/cmake/developer_package/packaging/packaging.cmake
+index 4eb70ab7f5..03f67623bf 100644
+--- a/cmake/developer_package/packaging/packaging.cmake
++++ b/cmake/developer_package/packaging/packaging.cmake
+@@ -35,9 +35,9 @@ endmacro()
+ # ov_get_pyversion(<OUT pyversion>)
+ #
+ function(ov_get_pyversion pyversion)
+-    find_package(PythonInterp 3 QUIET)
+-    if(PYTHONINTERP_FOUND)
+-        set(${pyversion} "python${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}" PARENT_SCOPE)
++    find_package(Python3 QUIET COMPONENTS Interpreter Develoment.Module)
++    if(Python3_Interpreter_FOUND)
++        set(${pyversion} "python${Python3_VERSION_MAJOR}.${Python3_VERSION_MINOR}" PARENT_SCOPE)
+     else()
+         set(${pyversion} "NOT-FOUND" PARENT_SCOPE)
+     endif()
+diff --git a/cmake/developer_package/python_requirements.cmake b/cmake/developer_package/python_requirements.cmake
+index 3f5dcd6bd0..4d031f22c8 100644
+--- a/cmake/developer_package/python_requirements.cmake
++++ b/cmake/developer_package/python_requirements.cmake
+@@ -9,7 +9,7 @@
+ #                      [MESSAGE_MODE <WARNING | FATAL_ERROR | TRACE>])
+ #
+ function(ov_check_pip_package)
+-    find_host_package(PythonInterp 3 QUIET)
++    find_host_package(Python3 QUIET COMPONENTS Interpreter)
+ 
+     set(oneValueOptionalArgs
+         MESSAGE_MODE            # Set the type of message: { FATAL_ERROR | WARNING | ... }
+@@ -42,19 +42,21 @@ function(ov_check_pip_package)
+     # quote '3.x' with \'3.x\'
+     string(REPLACE "'" "\\'" REQ "${ARG_REQUIREMENT}")
+ 
+-    if(PYTHONINTERP_FOUND)
++    if(Python3_Interpreter_FOUND)
+         execute_process(
+-            COMMAND ${PYTHON_EXECUTABLE} -c "import pkg_resources ; pkg_resources.require('${REQ}')"
++            COMMAND ${Python3_EXECUTABLE} -c "import pkg_resources ; pkg_resources.require('${REQ}')"
+             RESULT_VARIABLE EXIT_CODE
+             OUTPUT_VARIABLE OUTPUT_TEXT
+             ERROR_VARIABLE ERROR_TEXT)
++    else()
++        set(EXIT_CODE 1)
+     endif()
+ 
+-    if(NOT EXIT_CODE EQUAL 0)
++    if(EXIT_CODE EQUAL 0)
++        set(${ARG_RESULT_VAR} ON PARENT_SCOPE)
++    else()
+         set(${ARG_RESULT_VAR} OFF PARENT_SCOPE)
+         message(${ARG_MESSAGE_MODE} "Python module '${REQ}' is missed, ${ARG_WARNING_MESSAGE}")
+-    else()
+-        set(${ARG_RESULT_VAR} ON PARENT_SCOPE)
+     endif()
+ endfunction()
+ 
+@@ -65,7 +67,7 @@ endfunction()
+ #                      [MESSAGE_MODE <WARNING | FATAL_ERROR | TRACE>])
+ #
+ function(ov_check_pip_packages)
+-    find_host_package(PythonInterp 3 QUIET)
++    find_host_package(Python3 QUIET COMPONENTS Interpreter)
+ 
+     set(oneValueOptionalArgs
+         MESSAGE_MODE            # Set the type of message: { FATAL_ERROR | WARNING | ... }
+@@ -95,9 +97,9 @@ function(ov_check_pip_packages)
+         message(SEND_ERROR "Unexpected parameters have passed to the function: ${ARG_UNPARSED_ARGUMENTS}")
+     endif()
+ 
+-    if(PYTHONINTERP_FOUND)
++    if(Python3_Interpreter_FOUND)
+         execute_process(
+-            COMMAND ${PYTHON_EXECUTABLE} -c "
++            COMMAND ${Python3_EXECUTABLE} -c "
+ from check_python_requirements import check_python_requirements ;
+ check_python_requirements('${ARG_REQUIREMENTS_FILE}') ;
+             "
+@@ -105,12 +107,14 @@ check_python_requirements('${ARG_REQUIREMENTS_FILE}') ;
+             RESULT_VARIABLE EXIT_CODE
+             OUTPUT_VARIABLE OUTPUT_TEXT
+             ERROR_VARIABLE ERROR_TEXT)
++    else()
++        set(EXIT_CODE 1)
+     endif()
+ 
+-    if(NOT EXIT_CODE EQUAL 0)
++    if(EXIT_CODE EQUAL 0)
++        set(${ARG_RESULT_VAR} ON PARENT_SCOPE)
++    else()
+         set(${ARG_RESULT_VAR} OFF PARENT_SCOPE)
+         message(${ARG_MESSAGE_MODE} "Python requirement file ${ARG_REQUIREMENTS_FILE} is not installed, ${ARG_WARNING_MESSAGE}")
+-    else()
+-        set(${ARG_RESULT_VAR} ON PARENT_SCOPE)
+     endif()
+ endfunction()
+diff --git a/cmake/features.cmake b/cmake/features.cmake
+index e4b60c89e0..30a596a055 100644
+--- a/cmake/features.cmake
++++ b/cmake/features.cmake
+@@ -84,6 +84,7 @@ else()
+ endif()
+ 
+ ie_dependent_option (ENABLE_TBBBIND_2_5 "Enable TBBBind_2_5 static usage in OpenVINO runtime" ${ENABLE_TBBBIND_2_5_DEFAULT} "THREADING MATCHES TBB; NOT APPLE" OFF)
++ie_dependent_option (ENABLE_TBB_RELEASE_ONLY "Only Release TBB libraries are linked to the OpenVINO Runtime binaries" ON "THREADING MATCHES TBB;LINUX" OFF)
+ 
+ ie_dependent_option (ENABLE_INTEL_GNA "GNA support for OpenVINO Runtime" ON
+     "NOT APPLE;NOT ANDROID;X86_64;CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL 5.4" OFF)
+@@ -112,10 +113,12 @@ ie_option (ENABLE_SAMPLES "console samples are part of OpenVINO Runtime package"
+ 
+ set(OPENVINO_EXTRA_MODULES "" CACHE STRING "Extra paths for extra modules to include into OpenVINO build")
+ 
+-ie_dependent_option(ENABLE_TBB_RELEASE_ONLY "Only Release TBB libraries are linked to the OpenVINO Runtime binaries" ON "THREADING MATCHES TBB;LINUX" OFF)
+-
+-find_host_package(PythonInterp 3 QUIET)
+-ie_option(ENABLE_OV_ONNX_FRONTEND "Enable ONNX FrontEnd" ${PYTHONINTERP_FOUND})
++find_host_package(Python3 QUIET COMPONENTS Interpreter)
++if(Python3_Interpreter_FOUND)
++    ie_option(ENABLE_OV_ONNX_FRONTEND "Enable ONNX FrontEnd" ON)
++else()
++    ie_option(ENABLE_OV_ONNX_FRONTEND "Enable ONNX FrontEnd" OFF)
++endif()
+ ie_option(ENABLE_OV_PADDLE_FRONTEND "Enable PaddlePaddle FrontEnd" ON)
+ ie_option(ENABLE_OV_IR_FRONTEND "Enable IR FrontEnd" ON)
+ ie_option(ENABLE_OV_PYTORCH_FRONTEND "Enable PyTorch FrontEnd" ON)
+diff --git a/cmake/packaging/debian.cmake b/cmake/packaging/debian.cmake
+index 48adc7acf3..8c3e517e64 100644
+--- a/cmake/packaging/debian.cmake
++++ b/cmake/packaging/debian.cmake
+@@ -47,9 +47,9 @@ macro(ov_cpack_settings)
+         string(TOUPPER ${item} UPPER_COMP)
+         # filter out some components, which are not needed to be wrapped to .deb package
+         if(NOT OV_CPACK_COMP_${UPPER_COMP}_EXCLUDE_ALL AND
+-           # skip OpenVINO Python API (pattern in form of "pyopenvino_python${PYTHON_VERSION_MAJOR}${PYTHON_VERSION_MINOR}")
++           # skip OpenVINO Python API (pattern in form of "pyopenvino_python${Python3_VERSION_MAJOR}${Python3_VERSION_MINOR}")
+            NOT item MATCHES "^${OV_CPACK_COMP_PYTHON_OPENVINO}_python.*" AND
+-           # because in case of .deb package, pyopenvino_package_python${PYTHON_VERSION_MAJOR}${PYTHON_VERSION_MINOR} is installed
++           # because in case of .deb package, pyopenvino_package_python${Python3_VERSION_MAJOR}${Python3_VERSION_MINOR} is installed
+            (NOT item MATCHES "^${OV_CPACK_COMP_PYTHON_OPENVINO_PACKAGE}_python.*" OR ENABLE_PYTHON_PACKAGING) AND
+            # see ticket # 82605
+            NOT item STREQUAL "gna" AND
+diff --git a/cmake/packaging/rpm.cmake b/cmake/packaging/rpm.cmake
+index ad1172b6c8..d0a77abbb0 100644
+--- a/cmake/packaging/rpm.cmake
++++ b/cmake/packaging/rpm.cmake
+@@ -33,9 +33,9 @@ macro(ov_cpack_settings)
+         string(TOUPPER ${item} UPPER_COMP)
+         # filter out some components, which are not needed to be wrapped to .rpm package
+         if(NOT OV_CPACK_COMP_${UPPER_COMP}_EXCLUDE_ALL AND
+-           # skip OpenVINO Python API (pattern in form of "pyopenvino_python${PYTHON_VERSION_MAJOR}${PYTHON_VERSION_MINOR}")
++           # skip OpenVINO Python API (pattern in form of "pyopenvino_python${Python3_VERSION_MAJOR}${Python3_VERSION_MINOR}")
+            NOT item MATCHES "^${OV_CPACK_COMP_PYTHON_OPENVINO}_python.*" AND
+-           # because in case of .rpm package, pyopenvino_package_python${PYTHON_VERSION_MAJOR}${PYTHON_VERSION_MINOR} is installed
++           # because in case of .rpm package, pyopenvino_package_python${Python3_VERSION_MAJOR}${Python3_VERSION_MINOR} is installed
+            (NOT item MATCHES "^${OV_CPACK_COMP_PYTHON_OPENVINO_PACKAGE}_python.*" OR ENABLE_PYTHON_PACKAGING) AND
+            # see ticket # 82605
+            NOT item STREQUAL "gna" AND
+diff --git a/cmake/test_model_zoo.cmake b/cmake/test_model_zoo.cmake
+index f065b9ca4d..49d4c92f09 100644
+--- a/cmake/test_model_zoo.cmake
++++ b/cmake/test_model_zoo.cmake
+@@ -22,6 +22,7 @@ function(ov_model_convert SRC DST OUT)
+ 
+     if(onnx_FOUND)
+         file(GLOB_RECURSE prototxt_models RELATIVE "${SRC}" "${SRC}/*.prototxt")
++        find_host_package(Python3 REQUIRED COMPONENTS Interpreter)
+     endif()
+ 
+     foreach(in_file IN LISTS prototxt_models xml_models bin_models onnx_models data_models)
+@@ -48,7 +49,7 @@ function(ov_model_convert SRC DST OUT)
+             add_custom_command(OUTPUT ${full_out_name}
+                 COMMAND ${CMAKE_COMMAND} -E make_directory
+                     "${DST}/${rel_dir}"
+-                COMMAND ${PYTHON_EXECUTABLE} ${onnx_gen_script}
++                COMMAND ${Python3_EXECUTABLE} ${onnx_gen_script}
+                     "${SRC}/${in_file}" ${full_out_name}
+                 DEPENDS ${onnx_gen_script} "${SRC}/${in_file}"
+                 COMMENT "Generate ${rel_out_name}"
+diff --git a/docs/CMakeLists.txt b/docs/CMakeLists.txt
+index 1f7d3a5357..debd39fc5d 100644
+--- a/docs/CMakeLists.txt
++++ b/docs/CMakeLists.txt
+@@ -66,7 +66,7 @@ function(build_docs)
+     set(DOXYFILE_BUILD "${DOCS_BUILD_DIR}/Doxyfile.config")
+     configure_file(${DOXYFILE_SOURCE} ${DOXYFILE_BUILD} @ONLY)
+ 
+-    list(APPEND commands COMMAND ${PYTHON_EXECUTABLE} ${DOXY_MD_FILTER}
++    list(APPEND commands COMMAND ${Python3_EXECUTABLE} ${DOXY_MD_FILTER}
+         --input_dir=${OpenVINO_SOURCE_DIR}
+         --output_dir=${DOCS_BUILD_DIR}/openvino
+         --exclude_dir=${DOCS_BUILD_DIR})
+@@ -77,7 +77,7 @@ function(build_docs)
+     if(ENABLE_OPENVINO_NOTEBOOKS)
+         set(NBDOC_SCRIPT "${DOCS_SOURCE_DIR}/nbdoc/nbdoc.py")
+         list(PREPEND commands
+-            COMMAND ${PYTHON_EXECUTABLE} "${NBDOC_SCRIPT}" "${DOCS_SOURCE_DIR}/notebooks" "${RST_OUTPUT}/notebooks"
++            COMMAND ${Python3_EXECUTABLE} "${NBDOC_SCRIPT}" "${DOCS_SOURCE_DIR}/notebooks" "${RST_OUTPUT}/notebooks"
+         )
+     endif()
+ 
+@@ -97,8 +97,8 @@ function(build_docs)
+     if(EXISTS "${OMZ_DOCS_DIR}")
+         get_filename_component(OMZ_DOCS_DIR "${OMZ_DOCS_DIR}" ABSOLUTE)
+         list(APPEND commands
+-        COMMAND ${PYTHON_EXECUTABLE} ${OMZ_DOCS_DIR}/ci/prepare-documentation.py ${CMAKE_BINARY_DIR}/open_model_zoo)
+-        list(APPEND commands COMMAND ${PYTHON_EXECUTABLE} ${DOXY_MD_FILTER}
++        COMMAND ${Python3_EXECUTABLE} ${OMZ_DOCS_DIR}/ci/prepare-documentation.py ${CMAKE_BINARY_DIR}/open_model_zoo)
++        list(APPEND commands COMMAND ${Python3_EXECUTABLE} ${DOXY_MD_FILTER}
+             --input_dir=${CMAKE_BINARY_DIR}/open_model_zoo
+             --output_dir=${DOCS_BUILD_DIR}/open_model_zoo)
+     endif()
+@@ -107,7 +107,7 @@ function(build_docs)
+     if(EXISTS "${WORKBENCH_DOCS_DIR}")
+         get_filename_component(WORKBENCH_DOCS_DIR "${WORKBENCH_DOCS_DIR}" ABSOLUTE)
+ 
+-        list(APPEND commands COMMAND ${PYTHON_EXECUTABLE} ${DOXY_MD_FILTER}
++        list(APPEND commands COMMAND ${Python3_EXECUTABLE} ${DOXY_MD_FILTER}
+             --input_dir=${WORKBENCH_DOCS_DIR}
+             --output_dir=${DOCS_BUILD_DIR}/workbench)
+     endif()
+@@ -116,7 +116,7 @@ function(build_docs)
+     if(EXISTS "${OTE_DOCS_DIR}")
+         get_filename_component(WORKBENCH_DOCS_DIR "${OTE_DOCS_DIR}" ABSOLUTE)
+ 
+-        list(APPEND commands COMMAND ${PYTHON_EXECUTABLE} ${DOXY_MD_FILTER}
++        list(APPEND commands COMMAND ${Python3_EXECUTABLE} ${DOXY_MD_FILTER}
+             --input_dir=${OTE_DOCS_DIR}
+             --output_dir=${DOCS_BUILD_DIR}/ote)
+     endif()
+@@ -125,7 +125,7 @@ function(build_docs)
+     if(EXISTS "${OVMS_DOCS_DIR}")
+         get_filename_component(OVMS_DOCS_DIR "${OVMS_DOCS_DIR}" ABSOLUTE)
+ 
+-        list(APPEND commands COMMAND ${PYTHON_EXECUTABLE} ${DOXY_MD_FILTER}
++        list(APPEND commands COMMAND ${Python3_EXECUTABLE} ${DOXY_MD_FILTER}
+             --input_dir=${OVMS_DOCS_DIR}
+             --output_dir=${DOCS_BUILD_DIR}/ovms)
+     endif()
+@@ -144,7 +144,7 @@ function(build_docs)
+ 
+     add_custom_target(doxygen_xml
+                       DEPENDS preprocess_docs
+-                      COMMAND ${PYTHON_EXECUTABLE} ${REMOVE_XML_SCRIPT} ${XML_OUTPUT}
++                      COMMAND ${Python3_EXECUTABLE} ${REMOVE_XML_SCRIPT} ${XML_OUTPUT}
+                       COMMAND ${DOXYGEN_EXECUTABLE} ${DOXYFILE_BUILD}
+                       WORKING_DIRECTORY ${DOCS_BUILD_DIR}
+                       COMMENT "Generate doxygen XML output"
+@@ -153,11 +153,11 @@ function(build_docs)
+     # Post-process docs
+     add_custom_command(TARGET doxygen_xml
+                        POST_BUILD
+-                       COMMAND ${PYTHON_EXECUTABLE} ${PREPARE_XML_SCRIPT} ${XML_OUTPUT}
++                       COMMAND ${Python3_EXECUTABLE} ${PREPARE_XML_SCRIPT} ${XML_OUTPUT}
+                        COMMAND ${CMAKE_COMMAND} -E copy_directory ${DOXYREST_IN} ${DOXYREST_OUT}
+                        COMMAND ${DOXYREST_EXECUTABLE} -c ${DOXYREST_CONFIG_OUT}
+-                       COMMAND ${PYTHON_EXECUTABLE} ${COPY_IMAGES_SCRIPT} ${XML_OUTPUT} ${RST_OUTPUT}
+-                       COMMAND ${PYTHON_EXECUTABLE} ${DOXYGEN_MAPPING_SCRIPT} ${XML_OUTPUT} ${DOCS_BUILD_DIR} ${OpenVINO_SOURCE_DIR}/../
++                       COMMAND ${Python3_EXECUTABLE} ${COPY_IMAGES_SCRIPT} ${XML_OUTPUT} ${RST_OUTPUT}
++                       COMMAND ${Python3_EXECUTABLE} ${DOXYGEN_MAPPING_SCRIPT} ${XML_OUTPUT} ${DOCS_BUILD_DIR} ${OpenVINO_SOURCE_DIR}/../
+                        COMMAND ${CMAKE_COMMAND} -E copy ${SPHINX_INDEX_IN} ${SPHINX_INDEX_OUT}
+                        COMMAND ${CMAKE_COMMAND} -E copy_directory ${SPHINX_TEMPLATES_IN} ${SPHINX_TEMPLATES_OUT}
+                        COMMAND ${CMAKE_COMMAND} -E copy_directory ${DOXYREST_IN} ${DOXYREST_OUT}
+diff --git a/docs/dev/build_linux.md b/docs/dev/build_linux.md
+index dc617ed433..468cb3bae6 100644
+--- a/docs/dev/build_linux.md
++++ b/docs/dev/build_linux.md
+@@ -72,11 +72,9 @@ You can use the following additional build options:
+      ```sh
+      pip install -r requirements-dev.txt
+      ```
+-  2. Enable the `-DENABLE_PYTHON=ON` option in the CMake step above (Step 4). To specify an exact Python version, use the following options:
++  2. Enable the `-DENABLE_PYTHON=ON` option in the CMake step above (Step 4). To specify an exact Python version, use the following options (requires cmake 3.16 and higher):
+      ```
+-     -DPYTHON_EXECUTABLE=`which python3.7` \
+-     -DPYTHON_LIBRARY=/usr/lib/x86_64-linux-gnu/libpython3.7m.so \
+-     -DPYTHON_INCLUDE_DIR=/usr/include/python3.7
++     -DPython3_EXECUTABLE=/usr/bin/python3.8
+      ```
+   3. To build a wheel package (.whl), enable the `-DENABLE_WHEEL=ON` option in the CMake step above (Step 4), and install requirements:
+      ```sh
+diff --git a/docs/dev/build_raspbian.md b/docs/dev/build_raspbian.md
+index 8743c3321c..6b81e9d3c4 100644
+--- a/docs/dev/build_raspbian.md
++++ b/docs/dev/build_raspbian.md
+@@ -43,9 +43,7 @@ git clone --recurse-submodules --single-branch --branch=master https://github.co
+   via `pip3`, adding the following options:
+    ```sh
+    -DENABLE_PYTHON=ON \
+-   -DPYTHON_EXECUTABLE=/usr/bin/python3.7 \
+-   -DPYTHON_LIBRARY=/usr/lib/arm-linux-gnueabihf/libpython3.7m.so \
+-   -DPYTHON_INCLUDE_DIR=/usr/include/python3.7
++   -DPython3_EXECUTABLE=/usr/bin/python3.8
+    ```
+ 
+ ## See also
+diff --git a/docs/dev/build_windows.md b/docs/dev/build_windows.md
+index bc555ee1a0..13c43ff6e7 100644
+--- a/docs/dev/build_windows.md
++++ b/docs/dev/build_windows.md
+@@ -69,11 +69,9 @@ Supported configurations:
+       ```sh
+       pip install -r <openvino>\src\bindings\python\src\compatibility\openvino\requirements-dev.txt
+       ```
+-  2. Second, enable the `-DENABLE_PYTHON=ON` in the CMake (Step #4) option above. To specify an exact Python version, use the following options:
++  2. Second, enable the `-DENABLE_PYTHON=ON` in the CMake (Step #4) option above. To specify an exact Python version, use the following options (requires cmake 3.16 and higher):
+      ```sh
+-     -DPYTHON_EXECUTABLE="C:\Program Files\Python11\python.exe" ^
+-     -DPYTHON_LIBRARY="C:\Program Files\Python11\libs\python11.lib" ^
+-     -DPYTHON_INCLUDE_DIR="C:\Program Files\Python11\include"
++     -DPython3_EXECUTABLE="C:\Program Files\Python11\python.exe"
+      ```
+   3. To build a wheel package (.whl), enable the `-DENABLE_WHEEL=ON` option in the CMake step above (Step 4), and install requirements:
+      ```sh
+diff --git a/src/bindings/python/CMakeLists.txt b/src/bindings/python/CMakeLists.txt
+index f337f40318..ef6e7fb733 100644
+--- a/src/bindings/python/CMakeLists.txt
++++ b/src/bindings/python/CMakeLists.txt
+@@ -16,12 +16,33 @@ if(NOT DEFINED OpenVINO_SOURCE_DIR)
+     set(OpenVINO_BINARY_DIR "${OpenVINODeveloperPackage_DIR}")
+ endif()
+ 
++#
++# Settings for FindPython3.cmake
++#
++
++if(NOT DEFINED Python3_USE_STATIC_LIBS)
++    set(Python3_USE_STATIC_LIBS OFF)
++endif()
++
++if(NOT DEFINED Python3_FIND_VIRTUALENV)
++    set(Python3_FIND_VIRTUALENV FIRST)
++endif()
++
++if(NOT DEFINED Python3_FIND_IMPLEMENTATIONS)
++    set(Python3_FIND_IMPLEMENTATIONS CPython PyPy)
++endif()
++
++if(CMAKE_VERSION VERSION_GREATER_EQUAL 3.18)
++    set(python3_development_component Development.Module)
++else()
++    set(python3_development_component Development)
++endif()
++
+ #
+ # Check python requirements
+ #
+ 
+-set(ov_python_req "${OpenVINOPython_SOURCE_DIR}/requirements.txt")
+-set(ie_python_req "${OpenVINOPython_SOURCE_DIR}/src/compatibility/openvino/requirements-dev.txt")
++set(ie_build_python_req "${OpenVINOPython_SOURCE_DIR}/src/compatibility/openvino/requirements-dev.txt")
+ 
+ function(ov_check_python_build_conditions)
+     # user explicitly specified ENABLE_PYTHON=ON
+@@ -33,79 +54,43 @@ function(ov_check_python_build_conditions)
+         set(message_mode WARNING)
+     endif()
+ 
+-    # Try to find python3 and its libs
+-    find_host_package(PythonInterp 3 ${find_package_mode})
+-    if(PYTHONINTERP_FOUND)
+-        if(PYTHON_VERSION_MINOR GREATER_EQUAL 11)
+-            set(pybind11_min_version 2.9.2)
+-        else()
+-            set(pybind11_min_version 2.8.0)
++    find_package(Python3 ${find_package_mode} COMPONENTS Interpreter ${python3_development_component})
++    if(Python3_Development.Module_FOUND OR Python3_Development_FOUND)
++        message(STATUS "Python3 executable: ${Python3_EXECUTABLE}")
++        message(STATUS "Python3 version: ${Python3_VERSION}")
++        if(Python3_PyPy_VERSION)
++            message(STATUS "Python3 PyPy version: ${Python3_PyPy_VERSION}")
+         endif()
+-        if(CMAKE_CROSSCOMPILING)
+-            # since this version pybind11 has PYBIND11_PYTHONLIBS_OVERWRITE option
+-            # to properly cross-compile, users need to set:
+-            #  -DPYTHON_EXECUTABLE=<python interpreter of our choice version 3.X>
+-            #  -DPYTHON_LIBRARY=/usr/lib/aarch64-linux-gnu/libc-2.31.so
+-            #  -DPYTHON_INCLUDE_DIR=<path to includes for python 3.X>
+-            #  -DPYBIND11_PYTHONLIBS_OVERWRITE=OFF
+-            #  -DPYTHON_MODULE_EXTENSION=$(aarch64-linux-gnu-python3-config --extension-suffix)
+-            set(pybind11_min_version 2.10.1)
+-        endif()
+-
+-        function(_ov_find_python_libs_new)
+-            set(pybind11_tools_dir "${OpenVINOPython_SOURCE_DIR}/thirdparty/pybind11/tools")
+-            if(EXISTS ${pybind11_tools_dir})
+-                list(APPEND CMAKE_MODULE_PATH ${pybind11_tools_dir})
+-            else()
+-                find_host_package(pybind11 ${pybind11_min_version} QUIET)
+-                if(pybind11_FOUND)
+-                    list(APPEND CMAKE_MODULE_PATH "${pybind11_DIR}")
+-                endif()
+-            endif()
+-            # use libraries with the same version as python itself
+-            set(PYBIND11_PYTHON_VERSION ${PYTHON_VERSION_STRING})
+-            find_host_package(PythonLibsNew ${PYBIND11_PYTHON_VERSION} EXACT ${find_package_mode})
+-            set(PYTHONLIBSNEW_FOUND ${PYTHONLIBS_FOUND} PARENT_SCOPE)
+-        endfunction()
+-        # try to find python libraries
+-        _ov_find_python_libs_new()
+-        if(PYTHONLIBSNEW_FOUND)
+-            # clear Python_ADDITIONAL_VERSIONS to find only python library matching PYTHON_EXECUTABLE
+-            unset(Python_ADDITIONAL_VERSIONS CACHE)
+-            find_host_package(PythonLibs ${PYTHON_VERSION_STRING} EXACT ${find_package_mode})
++        message(STATUS "Python3 interpreter ID: ${Python3_INTERPRETER_ID}")
++        if(Python3_SOABI)
++            message(STATUS "Python3 SOABI: ${Python3_SOABI}")
+         endif()
+-        if(NOT PYTHONLIBS_FOUND)
+-            message(${message_mode} "Python development libraries are not found. OpenVINO Python API will be turned off (ENABLE_PYTHON is OFF)")
++        if(PYTHON_MODULE_EXTENSION)
++            message(STATUS "PYTHON_MODULE_EXTENSION: ${PYTHON_MODULE_EXTENSION}")
+         endif()
++        message(STATUS "Python3 include dirs: ${Python3_INCLUDE_DIRS}")
++        message(STATUS "Python3 libraries: ${Python3_LIBRARIES}")
+     else()
+-        message(${message_mode} "Python 3.x interpreter is not found. OpenVINO Python API will be turned off (ENABLE_PYTHON is OFF)")
++        message(${message_mode} "Python 3.x Interpreter and Development.Module components are not found. OpenVINO Python API will be turned off (ENABLE_PYTHON is OFF)")
+     endif()
+ 
+-    # check pyopenvino requirements to OV 2.0 API
+-    ov_check_pip_packages(REQUIREMENTS_FILE ${ov_python_req}
+-                          RESULT_VAR ov_python_req_FOUND
+-                          WARNING_MESSAGE "install python3 -m pip install -r ${ov_python_req} for OV API 2.0 requirements"
+-                          MESSAGE_MODE TRACE)
+-    # ov_python_req are not mandatory for build
+-    set(ov_python_req_FOUND ON)
+-
+     # check for Cython requirement for build IE API 1.0
+-    ov_check_pip_packages(REQUIREMENTS_FILE ${ie_python_req}
+-                          RESULT_VAR ie_python_req_FOUND
+-                          WARNING_MESSAGE "install python3 -m pip install -r ${ie_python_req} for IE API 1.0 requirements"
++    ov_check_pip_packages(REQUIREMENTS_FILE ${ie_build_python_req}
++                          RESULT_VAR ie_build_python_req_FOUND
++                          WARNING_MESSAGE "install python3 -m pip install -r ${ie_build_python_req} for IE API 1.0 requirements"
+                           MESSAGE_MODE TRACE)
+ 
+     # cython can be installed as a debian package, so pip requirements can be unsatisfied
+     # so, let's check to find cython anyway
+-    if(NOT ie_python_req_FOUND)
++    if(NOT ie_build_python_req_FOUND)
+         find_package(Cython QUIET
+                      PATHS "${OpenVINOPython_SOURCE_DIR}/src/compatibility/openvino/cmake"
+                      NO_CMAKE_FIND_ROOT_PATH
+                      NO_DEFAULT_PATH)
+         if(CYTHON_VERSION VERSION_GREATER_EQUAL 0.29)
+-            set(ie_python_req_FOUND ON)
++            set(ie_build_python_req_FOUND ON)
+         else()
+-            message(${message_mode} "Python requirements '${ie_python_req}' are missed, IE Python API 1.0 will not be built (ENABLE_PYTHON is OFF)")
++            message(${message_mode} "Python requirements '${ie_build_python_req}' are missed, IE Python API 1.0 will not be built (ENABLE_PYTHON is OFF)")
+         endif()
+     endif()
+ 
+@@ -116,16 +101,15 @@ function(ov_check_python_build_conditions)
+         set(python_debug OFF)
+     endif()
+ 
+-    if(PYTHONLIBS_FOUND AND ov_python_req_FOUND AND ie_python_req_FOUND AND NOT python_debug)
++    if((Python3_Development.Module_FOUND OR Python3_Development_FOUND) AND
++        ie_build_python_req_FOUND AND NOT python_debug)
+         set(ENABLE_PYTHON_DEFAULT ON PARENT_SCOPE)
+     else()
+         set(ENABLE_PYTHON_DEFAULT OFF PARENT_SCOPE)
+     endif()
+ 
+     # to disable API 1.0
+-    set(ie_python_req_FOUND ${ie_python_req_FOUND} PARENT_SCOPE)
+-    # set pybind11 minimal version
+-    set(pybind11_min_version ${pybind11_min_version} PARENT_SCOPE)
++    set(ie_build_python_req_FOUND ${ie_build_python_req_FOUND} PARENT_SCOPE)
+ endfunction()
+ 
+ ov_check_python_build_conditions()
+@@ -178,7 +162,7 @@ ie_dependent_option(ENABLE_WHEEL "Build wheel packages for PyPI" ${ENABLE_WHEEL_
+ 
+ if(NOT ENABLE_PYTHON)
+     if(CMAKE_SOURCE_DIR STREQUAL OpenVINOPython_SOURCE_DIR)
+-        message(FATAL_ERROR "Python OpenVINO API requirements are not satisfied. Please, install ${ie_python_req} and ${ov_python_req}")
++        message(FATAL_ERROR "Python OpenVINO API build requirements are not satisfied. Please, install ${ie_build_python_req}")
+     else()
+         return()
+     endif()
+@@ -192,10 +176,13 @@ endif()
+ # Build the code
+ #
+ 
+-# TODO: find a real root cause and remove this workaround
+-# or localize it to the specific place of the code
+-add_definitions(-DPYBIND11_NO_ASSERT_GIL_HELD_INCREF_DECREF)
++if(Python3_VERSION_MINOR GREATER_EQUAL 11)
++    set(pybind11_min_version 2.9.2)
++else()
++    set(pybind11_min_version 2.8.0)
++endif()
+ 
++find_package(Python3 REQUIRED COMPONENTS Interpreter ${python3_development_component})
+ find_package(pybind11 ${pybind11_min_version} QUIET)
+ 
+ if(NOT pybind11_FOUND)
+@@ -205,7 +192,7 @@ endif()
+ add_subdirectory(src/compatibility/pyngraph)
+ add_subdirectory(src/pyopenvino)
+ 
+-if(ie_python_req_FOUND)
++if(ie_build_python_req_FOUND)
+     add_subdirectory(src/compatibility/openvino)
+ else()
+     message(WARNING "NOTE: Python API for OpenVINO 1.0 is disabled")
+@@ -216,8 +203,8 @@ endif()
+ #
+ 
+ macro(ov_define_setup_py_packaging_vars)
+-    # PYTHON_VERSION_MAJOR and PYTHON_VERSION_MINOR are defined inside pybind11
+-    set(pyversion python${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR})
++    # Python3_VERSION_MAJOR and Python3_VERSION_MINOR are defined inside pybind11
++    set(pyversion python${Python3_VERSION_MAJOR}.${Python3_VERSION_MINOR})
+ 
+     # define version (syncronize with tools/openvino_dev/CMakeLists.txt)
+     if(DEFINED ENV{CI_BUILD_DEV_TAG} AND NOT "$ENV{CI_BUILD_DEV_TAG}" STREQUAL "")
+@@ -304,9 +291,9 @@ endif()
+ 
+ if(ENABLE_PYTHON_PACKAGING)
+     # site-packages depending on package type
+-    set(python_xy "${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}")
++    set(python_xy "${Python3_VERSION_MAJOR}.${Python3_VERSION_MINOR}")
+     if(CPACK_GENERATOR STREQUAL "DEB")
+-        set(python_versioned_folder "python${PYTHON_VERSION_MAJOR}")
++        set(python_versioned_folder "python${Python3_VERSION_MAJOR}")
+         set(ov_site_packages "dist-packages")
+     elseif(CPACK_GENERATOR STREQUAL "RPM")
+         set(python_versioned_folder "python${python_xy}")
+@@ -325,7 +312,7 @@ if(ENABLE_PYTHON_PACKAGING)
+                 # variables to reflect options (extensions only or full wheel package)
+                 PYTHON_EXTENSIONS_ONLY=ON
+                 SKIP_RPATH=ON
+-            "${PYTHON_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/wheel/setup.py"
++            "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/wheel/setup.py"
+                 --no-user-cfg
+                 --quiet
+                 build
+diff --git a/src/bindings/python/docs/build.md b/src/bindings/python/docs/build.md
+index 8aa8bcf3be..4786332647 100644
+--- a/src/bindings/python/docs/build.md
++++ b/src/bindings/python/docs/build.md
+@@ -48,15 +48,10 @@ OpenVINO can be built based on specific virtual environments such as [venv](http
+     pip install -r src/bindings/python/wheel/requirements-dev.txt
+     ```
+ 
+-6. Add following flags to the main `cmake` command to use specific virtual environment:
++6. Add following flags to the main `cmake` command to use specific virtual environment (requires cmake 3.16 and higher):
+     ```shell
+-    -DPYTHON_EXECUTABLE=`which python` \
+-    -DPYTHON_LIBRARY=/home/user/.pyenv/versions/3.10.7/lib/libpython3.10.so \
+-    -DPYTHON_INCLUDE_DIR=/home/user/.pyenv/versions/3.10.7/include/python3.10
++    -DPython3_EXECUTABLE=/home/user/.pyenv/versions/3.10.7/bin/python
+     ```
+-    *Note: In order to use `which python`, specific virtual environment has to be activated in a current shell.*
+-
+-    *Note: `libpython3.10.so` is created with `--enable-shared` flag while installing specific Python version. For static build name of library may differ.*
+ 
+ 7. Follow the rest of building and installation steps from ["How to build OpenVINO" developer documentation](../../../../docs/dev/build.md).
+ 
+diff --git a/src/bindings/python/src/compatibility/openvino/CMakeLists.txt b/src/bindings/python/src/compatibility/openvino/CMakeLists.txt
+index 6a1c48777c..e6f7f2aec3 100644
+--- a/src/bindings/python/src/compatibility/openvino/CMakeLists.txt
++++ b/src/bindings/python/src/compatibility/openvino/CMakeLists.txt
+@@ -27,7 +27,8 @@ else()
+     message(STATUS "Found Cython version ${CYTHON_VERSION}")
+ endif()
+ 
+-set(pyversion python${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR})
++# Python3_VERSION_MAJOR and Python3_VERSION_MINOR are defined in FindPython3
++set(pyversion python${Python3_VERSION_MAJOR}.${Python3_VERSION_MINOR})
+ 
+ set(PYTHON_COMPONENT ${OV_CPACK_COMP_PYTHON_OPENVINO}_${pyversion})
+ if(OV_GENERATOR_MULTI_CONFIG)
+diff --git a/src/bindings/python/src/compatibility/openvino/cmake/CythonConfig.cmake b/src/bindings/python/src/compatibility/openvino/cmake/CythonConfig.cmake
+index 4cc32dacec..b27dcbc7e8 100644
+--- a/src/bindings/python/src/compatibility/openvino/cmake/CythonConfig.cmake
++++ b/src/bindings/python/src/compatibility/openvino/cmake/CythonConfig.cmake
+@@ -30,21 +30,26 @@
+ # Use the Cython executable that lives next to the Python executable
+ # if it is a local installation.
+ 
+-find_package(PythonInterp 3 QUIET)
+-if( PYTHONINTERP_FOUND )
+-  get_filename_component( _python_path ${PYTHON_EXECUTABLE} PATH )
+-  file(TO_CMAKE_PATH "$ENV{HOME}" ENV_HOME)
+-  find_host_program( CYTHON_EXECUTABLE
+-    NAMES cython cython.bat cython3
+-    HINTS ${_python_path} ${ENV_HOME}/.local/bin $ENV{HOMEBREW_OPT}/cython/bin 
+-          ${ENV_HOME}/Library/Python/${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}/bin
+-    )
+-else()
+-  find_host_program( CYTHON_EXECUTABLE
+-    NAMES cython cython.bat cython3
+-    )
+-endif()
++function( _find_cython_executable )
++  find_host_package(Python3 QUIET COMPONENTS Interpreter)
++  if( Python3_Interpreter_FOUND )
++    get_filename_component( _python_path ${Python3_EXECUTABLE} PATH )
++    file(TO_CMAKE_PATH "$ENV{HOME}" ENV_HOME)
++    find_host_program( CYTHON_EXECUTABLE
++      NAMES cython cython.bat cython3
++      HINTS ${_python_path} ${ENV_HOME}/.local/bin $ENV{HOMEBREW_OPT}/cython/bin
++            ${ENV_HOME}/Library/Python/${Python3_VERSION_MAJOR}.${Python3_VERSION_MINOR}/bin
++      )
++  else()
++    find_host_program( CYTHON_EXECUTABLE
++      NAMES cython cython.bat cython3
++      )
++  endif()
++
++  set(CYTHON_EXECUTABLE "${CYTHON_EXECUTABLE}" PARENT_SCOPE)
++endfunction()
+ 
++_find_cython_executable()
+ 
+ include( FindPackageHandleStandardArgs )
+ FIND_PACKAGE_HANDLE_STANDARD_ARGS( Cython REQUIRED_VARS CYTHON_EXECUTABLE )
+diff --git a/src/bindings/python/src/compatibility/openvino/cmake/UseCython.cmake b/src/bindings/python/src/compatibility/openvino/cmake/UseCython.cmake
+index 6b30c0c96f..ae8921f5ef 100644
+--- a/src/bindings/python/src/compatibility/openvino/cmake/UseCython.cmake
++++ b/src/bindings/python/src/compatibility/openvino/cmake/UseCython.cmake
+@@ -13,7 +13,7 @@
+ #
+ #   cython_add_module( <module_name> <src1> <src2> ... <srcN> )
+ #
+-# To avoid dependence on Python, set the PYTHON_LIBRARY cache variable to point
++# To avoid dependence on Python, set the Python3_LIBRARY cache variable to point
+ # to a static library.  If a MAIN_MODULE source is specified,
+ # the "if __name__ == '__main__':" from that module is used as the C main() method
+ # for the executable.  If MAIN_MODULE, the source with the same basename as
+@@ -89,7 +89,7 @@ find_package( Cython REQUIRED
+               NO_CMAKE_FIND_ROOT_PATH
+               NO_DEFAULT_PATH )
+ 
+-find_package(PythonInterp 3 REQUIRED)
++find_package(Python3 REQUIRED COMPONENTS Interpreter ${python3_development_component})
+ 
+ set( CYTHON_CXX_EXTENSION "cxx" )
+ set( CYTHON_C_EXTENSION "c" )
+@@ -233,7 +233,7 @@ function( compile_pyx _name generated_file )
+ 
+   set( cython_debug_arg "$<$<OR:$<CONFIG:Debug>,$<CONFIG:RelWithDebInfo>>:--gdb>" )
+ 
+-  if( "${PYTHONLIBS_VERSION_STRING}" MATCHES "^3." )
++  if( Python3_VERSION_MAJOR EQUAL 3 )
+     set( version_arg "-3" )
+   else()
+     set( version_arg )
+@@ -284,16 +284,15 @@ function( cython_add_module _name )
+     endif()
+   endforeach()
+   compile_pyx( ${_name} generated_file ${pyx_module_sources} )
+-  python_add_module ( ${_name} ${generated_file} ${other_module_sources} )
+-  target_include_directories( ${_name} PRIVATE ${PYTHON_INCLUDE_DIRS} )
+-  if(PYTHON_MODULE_EXTENSION)
+-    set_target_properties(${_name} PROPERTIES PREFIX "" SUFFIX "${PYTHON_MODULE_EXTENSION}")
+-  else()
+-    message(FATAL_ERROR "Internal error: PYTHON_MODULE_EXTENSION is not defined")
++  python3_add_library ( ${_name} MODULE ${generated_file} ${other_module_sources} )
++  # Python3_SOABI is not defined during cross-compilation
++  if (Python3_SOABI AND NOT PYTHON_MODULE_EXTENSION MATCHES "^\.${Python3_SOABI}\.[a-z]+$")
++    message(FATAL_ERROR "Python3_SOABI (${Python3_SOABI}) and PYTHON_MODULE_EXTENSION (${PYTHON_MODULE_EXTENSION}) are not matching")
+   endif()
++  pybind11_extension( ${_name} )
+   if( APPLE )
+     set_target_properties( ${_name} PROPERTIES LINK_FLAGS "-undefined dynamic_lookup" )
+   else()
+-    target_link_libraries( ${_name} PRIVATE ${PYTHON_LIBRARIES} )
++    target_link_libraries( ${_name} PRIVATE ${Python3_LIBRARIES} )
+   endif()
+ endfunction()
+diff --git a/src/bindings/python/src/compatibility/pyngraph/CMakeLists.txt b/src/bindings/python/src/compatibility/pyngraph/CMakeLists.txt
+index ea17ddc968..93b663ea26 100644
+--- a/src/bindings/python/src/compatibility/pyngraph/CMakeLists.txt
++++ b/src/bindings/python/src/compatibility/pyngraph/CMakeLists.txt
+@@ -12,8 +12,8 @@ if(NOT DEFINED OpenVINO_SOURCE_DIR)
+     find_package(OpenVINO REQUIRED)
+ endif()
+ 
+-# PYTHON_VERSION_MAJOR and PYTHON_VERSION_MINOR are defined inside pybind11
+-set(pyversion python${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR})
++# Python3_VERSION_MAJOR and Python3_VERSION_MINOR are defined in FindPython3
++set(pyversion python${Python3_VERSION_MAJOR}.${Python3_VERSION_MINOR})
+ 
+ if(OpenVINO_SOURCE_DIR)
+     if(OV_GENERATOR_MULTI_CONFIG)
+diff --git a/src/bindings/python/src/pyopenvino/CMakeLists.txt b/src/bindings/python/src/pyopenvino/CMakeLists.txt
+index 988d3f703b..97cbeac746 100644
+--- a/src/bindings/python/src/pyopenvino/CMakeLists.txt
++++ b/src/bindings/python/src/pyopenvino/CMakeLists.txt
+@@ -7,8 +7,8 @@ if(NOT DEFINED OpenVINO_SOURCE_DIR)
+     find_package(OpenVINODeveloperPackage REQUIRED)
+ endif()
+ 
+-# PYTHON_VERSION_MAJOR and PYTHON_VERSION_MINOR are defined inside pybind11
+-set(pyversion python${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR})
++# Python3_VERSION_MAJOR and Python3_VERSION_MINOR are defined by FindPython3
++set(pyversion python${Python3_VERSION_MAJOR}.${Python3_VERSION_MINOR})
+ 
+ if(OpenVINO_SOURCE_DIR)
+     if(OV_GENERATOR_MULTI_CONFIG)
+diff --git a/src/bindings/python/src/pyopenvino/core/compiled_model.cpp b/src/bindings/python/src/pyopenvino/core/compiled_model.cpp
+index 9ddfa9e075..e14e82a55f 100644
+--- a/src/bindings/python/src/pyopenvino/core/compiled_model.cpp
++++ b/src/bindings/python/src/pyopenvino/core/compiled_model.cpp
+@@ -28,9 +28,13 @@ void regclass_CompiledModel(py::module m) {
+         "create_infer_request",
+         [](ov::CompiledModel& self) {
+             // Create temporary ov::InferRequest and move it to actual wrapper class.
+-            return std::make_shared<InferRequestWrapper>(self.create_infer_request(), self.inputs(), self.outputs());
++            ov::InferRequest request;
++            {
++                py::gil_scoped_release release;
++                request = self.create_infer_request();
++            }
++            return std::make_shared<InferRequestWrapper>(std::move(request), self.inputs(), self.outputs());
+         },
+-        py::call_guard<py::gil_scoped_release>(),
+         R"(
+             Creates an inference request object used to infer the compiled model.
+             The created request has allocated input and output tensors.
+diff --git a/src/bindings/python/wheel/CMakeLists.txt b/src/bindings/python/wheel/CMakeLists.txt
+index 0641f6f788..d2cc6f348a 100644
+--- a/src/bindings/python/wheel/CMakeLists.txt
++++ b/src/bindings/python/wheel/CMakeLists.txt
+@@ -6,11 +6,11 @@
+ # Define proper package name
+ #
+ 
+-execute_process(COMMAND ${PYTHON_EXECUTABLE} -c "import wheel.vendored.packaging.tags as tags ; print(f'{tags.interpreter_name()}{tags.interpreter_version()}')"
++execute_process(COMMAND ${Python3_EXECUTABLE} -c "import wheel.vendored.packaging.tags as tags ; print(f'{tags.interpreter_name()}{tags.interpreter_version()}')"
+                 OUTPUT_VARIABLE PYTHON_TAG OUTPUT_STRIP_TRAILING_WHITESPACE)
+-execute_process(COMMAND ${PYTHON_EXECUTABLE} -c "import wheel.bdist_wheel ; print(f'{wheel.bdist_wheel.get_abi_tag()}')"
++execute_process(COMMAND ${Python3_EXECUTABLE} -c "import wheel.bdist_wheel ; print(f'{wheel.bdist_wheel.get_abi_tag()}')"
+                 OUTPUT_VARIABLE ABI_TAG OUTPUT_STRIP_TRAILING_WHITESPACE)
+-execute_process(COMMAND ${PYTHON_EXECUTABLE} -c "import wheel.vendored.packaging.tags as tags ; print(f'{next(tags.platform_tags())}')"
++execute_process(COMMAND ${Python3_EXECUTABLE} -c "import wheel.vendored.packaging.tags as tags ; print(f'{next(tags.platform_tags())}')"
+                 OUTPUT_VARIABLE PLATFORM_TAG OUTPUT_STRIP_TRAILING_WHITESPACE)
+ 
+ # defines wheel architecture part of `PLATFORM_TAG`
+@@ -81,7 +81,7 @@ set(openvino_wheel_path "${openvino_wheels_output_dir}/${openvino_wheel_name}")
+ # create target for openvino.wheel
+ #
+ 
+-execute_process(COMMAND ${PYTHON_EXECUTABLE} -m pip --version
++execute_process(COMMAND ${Python3_EXECUTABLE} -m pip --version
+                 OUTPUT_VARIABLE pip_version OUTPUT_STRIP_TRAILING_WHITESPACE)
+ 
+ string(REGEX MATCH "pip[ ]+([\\.0-9]*)" pip_version "${pip_version}")
+@@ -89,7 +89,7 @@ set(pip_version ${CMAKE_MATCH_1})
+ 
+ if(pip_version VERSION_GREATER_EQUAL 22.0)
+     set(wheel_build_command
+-        ${PYTHON_EXECUTABLE} -m pip wheel
++        ${Python3_EXECUTABLE} -m pip wheel
+             --no-deps
+             --wheel-dir ${openvino_wheels_output_dir}
+             # --verbose
+@@ -98,7 +98,7 @@ if(pip_version VERSION_GREATER_EQUAL 22.0)
+             "${CMAKE_CURRENT_SOURCE_DIR}")
+ else()
+     set(wheel_build_command
+-        ${PYTHON_EXECUTABLE} "${CMAKE_CURRENT_SOURCE_DIR}/setup.py"
++        ${Python3_EXECUTABLE} "${CMAKE_CURRENT_SOURCE_DIR}/setup.py"
+             --quiet
+             --no-user-cfg
+             bdist_wheel
+@@ -119,7 +119,7 @@ add_custom_command(OUTPUT ${openvino_wheel_path}
+ set(fdupes_report ${CMAKE_CURRENT_BINARY_DIR}/fdupes_report.txt)
+ add_custom_command(OUTPUT "${fdupes_report}"
+     COMMAND ${CMAKE_COMMAND}
+-        -D PYTHON_EXECUTABLE=${PYTHON_EXECUTABLE}
++        -D Python3_EXECUTABLE=${Python3_EXECUTABLE}
+         -D WORKING_DIRECTORY=${CMAKE_CURRENT_BINARY_DIR}
+         -D WHEEL_VERSION=${WHEEL_VERSION}
+         -D PACKAGE_FILE=${openvino_wheel_path}
+diff --git a/src/bindings/python/wheel/fdupes_check.cmake b/src/bindings/python/wheel/fdupes_check.cmake
+index 2709b1fdfb..da9e1711dc 100644
+--- a/src/bindings/python/wheel/fdupes_check.cmake
++++ b/src/bindings/python/wheel/fdupes_check.cmake
+@@ -2,7 +2,7 @@
+ # SPDX-License-Identifier: Apache-2.0
+ #
+ 
+-foreach(var PYTHON_EXECUTABLE WORKING_DIRECTORY REPORT_FILE WHEEL_VERSION PACKAGE_FILE CMAKE_SHARED_LIBRARY_SUFFIX)
++foreach(var Python3_EXECUTABLE WORKING_DIRECTORY REPORT_FILE WHEEL_VERSION PACKAGE_FILE CMAKE_SHARED_LIBRARY_SUFFIX)
+     if(NOT DEFINED ${var})
+         message(FATAL_ERROR "Variable ${var} is not defined")
+     endif()
+@@ -20,7 +20,7 @@ endif()
+ 
+ get_filename_component(wheel_name "${PACKAGE_FILE}" NAME)
+ 
+-execute_process(COMMAND ${PYTHON_EXECUTABLE} -m wheel unpack ${PACKAGE_FILE}
++execute_process(COMMAND ${Python3_EXECUTABLE} -m wheel unpack ${PACKAGE_FILE}
+                 WORKING_DIRECTORY ${WORKING_DIRECTORY}
+                 OUTPUT_VARIABLE output_message
+                 ERROR_VARIABLE error_message
+diff --git a/src/bindings/python/wheel/setup.py b/src/bindings/python/wheel/setup.py
+index 04323a8ba4..a03bc9c075 100644
+--- a/src/bindings/python/wheel/setup.py
++++ b/src/bindings/python/wheel/setup.py
+@@ -253,7 +253,7 @@ class CustomBuild(build):
+                     binary_dir = os.path.join(self.build_temp, binary_dir)
+                     self.announce(f"Configuring {comp} cmake project", level=3)
+                     self.spawn(["cmake", f"-DOpenVINODeveloperPackage_DIR={OPENVINO_BINARY_DIR}",
+-                                         f"-DPYTHON_EXECUTABLE={sys.executable}",
++                                         f"-DPython3_EXECUTABLE={sys.executable}",
+                                          f"-DCPACK_GENERATOR={CPACK_GENERATOR}",
+                                          "-DCMAKE_BUILD_TYPE=Release",
+                                          "-DENABLE_WHEEL=OFF",
+diff --git a/src/common/conditional_compilation/CMakeLists.txt b/src/common/conditional_compilation/CMakeLists.txt
+index af2e1e1724..60271085ab 100644
+--- a/src/common/conditional_compilation/CMakeLists.txt
++++ b/src/common/conditional_compilation/CMakeLists.txt
+@@ -20,7 +20,7 @@ elseif(SELECTIVE_BUILD STREQUAL "ON")
+         message(FATAL_ERROR "In case SELECTIVE_BUILD is enabled, the SELECTIVE_BUILD_STAT variable should contain the path to the collected IntelSEAPI statistics.\
+  Usage: -DSELECTIVE_BUILD=ON -DSELECTIVE_BUILD_STAT=/path/*.csv")
+     endif()
+-    find_package (PythonInterp 3 REQUIRED)
++    find_host_package (Python3 REQUIRED COMPONENTS Interpreter)
+ 
+     file(GLOB STAT_FILES ${SELECTIVE_BUILD_STAT})
+ 
+@@ -42,7 +42,7 @@ elseif(SELECTIVE_BUILD STREQUAL "ON")
+     set(GENERATOR ${CMAKE_CURRENT_SOURCE_DIR}/scripts/ccheader.py)
+ 
+     add_custom_command(OUTPUT ${GENERATED_HEADER}
+-                       COMMAND ${PYTHON_EXECUTABLE} ${GENERATOR} --stat ${SELECTIVE_BUILD_STAT} --out ${GENERATED_HEADER}
++                       COMMAND ${Python3_EXECUTABLE} ${GENERATOR} --stat ${SELECTIVE_BUILD_STAT} --out ${GENERATED_HEADER}
+                        DEPENDS ${STAT_FILES})
+     add_custom_target(conditional_compilation_gen DEPENDS ${GENERATED_HEADER})
+     add_dependencies(${TARGET_NAME} conditional_compilation_gen)
+diff --git a/src/frontends/onnx/docs/tests.md b/src/frontends/onnx/docs/tests.md
+index 1b75aae45e..6dc6068b2f 100644
+--- a/src/frontends/onnx/docs/tests.md
++++ b/src/frontends/onnx/docs/tests.md
+@@ -23,7 +23,7 @@ For example:
+ 
+ 
+ ## Pre-steps for all Python tests
+-1. Build OpenVINO with `-DENABLE_PYTHON=ON`, preferably in a `Python` virtual environment. To avoid problems with too many Python interpreters installed on the host, you can also set the `-DPYTHON_EXECUTABLE=PYTHON_INTERPRETER_PATH` build option.
++1. Build OpenVINO with `-DENABLE_PYTHON=ON`, preferably in a `Python` virtual environment. To avoid problems with too many Python interpreters installed on the host, you can also set the `-DPython3_EXECUTABLE=<PYTHON_INTERPRETER_PATH>` build option (requires cmake 3.16 and higher).
+ > **NOTE**: If you want to run the tests from the installation directory (like in the CI), add the `-P cmake_install.cmake` and `-DCOMPONENT=tests` CMake build options, and install OpenVINO via `cmake --build . --target install` as additional steps.
+ 2. Set up Python paths via `source <OV_INSTALL_DIR>/setupvars.sh` for Linux, or `sh <INSTALL_DIR>\setupvars.bat` for Windows.
+ 3. Install Python dependencies:
+diff --git a/src/frontends/paddle/tests/CMakeLists.txt b/src/frontends/paddle/tests/CMakeLists.txt
+index 2dc4d5e672..6ddc0d4167 100644
+--- a/src/frontends/paddle/tests/CMakeLists.txt
++++ b/src/frontends/paddle/tests/CMakeLists.txt
+@@ -26,9 +26,9 @@ ov_add_test_target(
+ 
+ # Test model generating
+ set(PADDLE_REQ "${CMAKE_CURRENT_SOURCE_DIR}/requirements.txt")
+-if(PYTHONINTERP_FOUND)
++if(Python3_Interpreter_FOUND)
+     execute_process(
+-        COMMAND ${PYTHON_EXECUTABLE} "${CMAKE_CURRENT_SOURCE_DIR}/paddle_pip_check.py" ${PADDLE_REQ}
++        COMMAND ${Python3_EXECUTABLE} "${CMAKE_CURRENT_SOURCE_DIR}/paddle_pip_check.py" ${PADDLE_REQ}
+         RESULT_VARIABLE EXIT_CODE
+         OUTPUT_VARIABLE OUTPUT_TEXT
+         ERROR_VARIABLE ERROR_TEXT)
+@@ -57,23 +57,15 @@ DownloadAndCheck(${PADDLEDET_OPS_URL} ${PADDLEDET_DIRNAME}/ops.py PADDLEDET_FATA
+ if(paddlepaddle_FOUND AND PADDLEDET_RESULT)
+     set(TEST_PADDLE_MODELS ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${TEST_PADDLE_MODELS_DIRNAME}/)
+ 
+-    if(WIN32)
+-        set(SETENV "set")
+-        set(PATHSEP ";")
+-    else()
+-        set(SETENV "export")
+-        set(PATHSEP ":")
+-    endif()
+-
+     file(GLOB_RECURSE PADDLE_ALL_SCRIPTS ${CMAKE_CURRENT_SOURCE_DIR}/*.py)
+     set(OUT_FILE ${TEST_PADDLE_MODELS}/generate_done.txt)
+     add_custom_command(OUTPUT ${OUT_FILE}
+-            COMMAND ${SETENV} PYTHONPATH=${PADDLEDET_DIRNAME}${PATHSEP}$ENV{PYTHONPATH} && ${PYTHON_EXECUTABLE}
+-            ${CMAKE_CURRENT_SOURCE_DIR}/test_models/gen_wrapper.py
+-            ${CMAKE_CURRENT_SOURCE_DIR}/test_models/gen_scripts
+-            ${TEST_PADDLE_MODELS}
+-            DEPENDS ${PADDLE_ALL_SCRIPTS}
+-            )
++            COMMAND ${CMAKE_COMMAND} -E env PYTHONPATH=${PADDLEDET_DIRNAME}
++                ${Python3_EXECUTABLE}
++                    ${CMAKE_CURRENT_SOURCE_DIR}/test_models/gen_wrapper.py
++                    ${CMAKE_CURRENT_SOURCE_DIR}/test_models/gen_scripts
++                    ${TEST_PADDLE_MODELS}
++            DEPENDS ${PADDLE_ALL_SCRIPTS})
+     add_custom_target(paddle_test_models DEPENDS ${OUT_FILE})
+ 
+     install(DIRECTORY ${TEST_PADDLE_MODELS}
+diff --git a/src/frontends/tensorflow/tests/CMakeLists.txt b/src/frontends/tensorflow/tests/CMakeLists.txt
+index 89552e8dea..d17024f1aa 100644
+--- a/src/frontends/tensorflow/tests/CMakeLists.txt
++++ b/src/frontends/tensorflow/tests/CMakeLists.txt
+@@ -53,14 +53,13 @@ if (tensorflow_FOUND)
+         set(OUT_DONE_FILE ${TEST_TENSORFLOW_MODELS}/${FILE_WE}_done.txt)
+         set(OUT_FILES ${OUT_DONE_FILE} ${OUT_FILES})
+         add_custom_command(OUTPUT ${OUT_DONE_FILE}
+-                COMMAND ${PYTHON_EXECUTABLE}
+-                ${CMAKE_CURRENT_SOURCE_DIR}/test_models/gen_wrapper.py
+-                ${GEN_SCRIPT}
+-                ${TEST_TENSORFLOW_MODELS}
+-                ${OUT_DONE_FILE}
++                COMMAND ${Python3_EXECUTABLE}
++                    ${CMAKE_CURRENT_SOURCE_DIR}/test_models/gen_wrapper.py
++                    ${GEN_SCRIPT}
++                    ${TEST_TENSORFLOW_MODELS}
++                    ${OUT_DONE_FILE}
+                 JOB_POOL four_jobs
+-                DEPENDS ${TENSORFLOW_ALL_SCRIPTS}
+-                )
++                DEPENDS ${TENSORFLOW_ALL_SCRIPTS})
+     endforeach()
+     add_custom_target(tensorflow_test_models DEPENDS ${OUT_FILES})
+ 
+diff --git a/src/frontends/tensorflow_lite/tests/CMakeLists.txt b/src/frontends/tensorflow_lite/tests/CMakeLists.txt
+index 6202dc7fcc..dfff5cda3b 100644
+--- a/src/frontends/tensorflow_lite/tests/CMakeLists.txt
++++ b/src/frontends/tensorflow_lite/tests/CMakeLists.txt
+@@ -45,14 +45,13 @@ if (tensorflow_FOUND)
+         set(OUT_DONE_FILE ${TEST_TENSORFLOW_LITE_MODELS}/${FILE_WE}_done.txt)
+         set(OUT_FILES ${OUT_DONE_FILE} ${OUT_FILES})
+         add_custom_command(OUTPUT ${OUT_DONE_FILE}
+-                COMMAND ${PYTHON_EXECUTABLE}
+-                ${CMAKE_CURRENT_SOURCE_DIR}/test_models/gen_wrapper.py
+-                ${GEN_SCRIPT}
+-                ${TEST_TENSORFLOW_LITE_MODELS}
+-                ${OUT_DONE_FILE}
++                COMMAND ${Python3_EXECUTABLE}
++                    ${CMAKE_CURRENT_SOURCE_DIR}/test_models/gen_wrapper.py
++                    ${GEN_SCRIPT}
++                    ${TEST_TENSORFLOW_LITE_MODELS}
++                    ${OUT_DONE_FILE}
+                 JOB_POOL four_jobs
+-                DEPENDS ${TENSORFLOW_ALL_SCRIPTS}
+-                )
++                DEPENDS ${TENSORFLOW_ALL_SCRIPTS})
+     endforeach()
+     add_custom_target(tensorflow_lite_test_models DEPENDS ${OUT_FILES})
+ 
+diff --git a/src/plugins/intel_cpu/docs/selective_build.md b/src/plugins/intel_cpu/docs/selective_build.md
+index 714a385b43..e781109124 100644
+--- a/src/plugins/intel_cpu/docs/selective_build.md
++++ b/src/plugins/intel_cpu/docs/selective_build.md
+@@ -69,7 +69,7 @@ cmake .. \
+ -DENABLE_DEBUG_CAPS=ON \
+ -DSELECTIVE_BUILD=ON \
+ -DSELECTIVE_BUILD_STAT=<CSV_PATH> \
+--DPYTHON_EXECUTABLE=/usr/bin/python3.7 \
++-DPython3_EXECUTABLE=/usr/bin/python3.7 \
+ -DCMAKE_INSTALL_PREFIX=`pwd`/install \
+ -DCMAKE_INSTALL_RPATH=`pwd`/install/runtime/3rdparty/tbb/lib:`pwd`/install/runtime/lib/intel64
+ 
+diff --git a/src/plugins/intel_cpu/thirdparty/CMakeLists.txt b/src/plugins/intel_cpu/thirdparty/CMakeLists.txt
+index 98935a0792..b3afe156e2 100644
+--- a/src/plugins/intel_cpu/thirdparty/CMakeLists.txt
++++ b/src/plugins/intel_cpu/thirdparty/CMakeLists.txt
+@@ -16,6 +16,7 @@ if(ENABLE_LTO)
+ endif()
+ 
+ function(ov_add_onednn)
++    set(CMAKE_DISABLE_FIND_PACKAGE_PythonInterp ON)
+     set(DNNL_ENABLE_JIT_PROFILING ${BUILD_SHARED_LIBS} CACHE BOOL "" FORCE)
+     if(BUILD_SHARED_LIBS AND ENABLE_PROFILING_ITT)
+         set(DNNL_ENABLE_ITT_TASKS ON CACHE BOOL "" FORCE)
+diff --git a/src/plugins/intel_cpu/tools/commit_slider/utils/cfg_samples/e2e.json b/src/plugins/intel_cpu/tools/commit_slider/utils/cfg_samples/e2e.json
+index 6d5251c55b..23cffb03ba 100644
+--- a/src/plugins/intel_cpu/tools/commit_slider/utils/cfg_samples/e2e.json
++++ b/src/plugins/intel_cpu/tools/commit_slider/utils/cfg_samples/e2e.json
+@@ -7,7 +7,7 @@
+         {"name" : "MO_ROOT", "val" : "/<ov_path>/tools/mo/openvino/tools/"},
+         {"name" : "OPENVINO_ROOT_DIR", "val" : "/<ov_path>/"}
+     ],
+-    "makeCmd" : "cmake -DCMAKE_BUILD_TYPE=Release -DENABLE_PYTHON=ON -DPYTHON_EXECUTABLE=/usr/bin/python3.8 -DPYTHON_LIBRARY=/usr/lib/x86_64-linux-gnu/libpython3.8.so -DPYTHON_INCLUDE_DIR=/usr/include/python3.8 -DTHREADING=TBB -DENABLE_INTEL_GPU=OFF -DENABLE_INTEL_GNA=OFF -DENABLE_MODELS=OFF -DENABLE_SAMPLES=OFF -DENABLE_TESTS=OFF -DENABLE_CPU_DEBUG_CAPS=OFF -DENABLE_HETERO=OFF -DENABLE_TEMPLATE=OFF -DENABLE_CPU_DEBUG_CAPS=OFF -DENABLE_DEBUG_CAPS=OFF -DENABLE_OPENVINO_DEBUG=OFF -DCMAKE_CXX_FLAGS=-Wno-deprecated -DCMAKE_C_FLAGS=-Wno-deprecated -DCMAKE_CXX_FLAGS=-Wno-deprecated-declarations -DCMAKE_C_FLAGS=-Wno-deprecated-declarations ..",
++    "makeCmd" : "cmake -DCMAKE_BUILD_TYPE=Release -DENABLE_PYTHON=ON -DPython3_EXECUTABLE=/usr/bin/python3.8 -DTHREADING=TBB -DENABLE_INTEL_GPU=OFF -DENABLE_INTEL_GNA=OFF -DENABLE_MODELS=OFF -DENABLE_SAMPLES=OFF -DENABLE_TESTS=OFF -DENABLE_CPU_DEBUG_CAPS=OFF -DENABLE_HETERO=OFF -DENABLE_TEMPLATE=OFF -DENABLE_CPU_DEBUG_CAPS=OFF -DENABLE_DEBUG_CAPS=OFF -DENABLE_OPENVINO_DEBUG=OFF -DCMAKE_CXX_FLAGS=-Wno-deprecated -DCMAKE_C_FLAGS=-Wno-deprecated -DCMAKE_CXX_FLAGS=-Wno-deprecated-declarations -DCMAKE_C_FLAGS=-Wno-deprecated-declarations ..",
+     "runConfig" : {
+         "commitList" : {
+             "getCommitListCmd" : "git log <start_commit>..<end_commit> --boundary --pretty=\"%h\""
+diff --git a/src/plugins/intel_gpu/src/kernel_selector/CMakeLists.txt b/src/plugins/intel_gpu/src/kernel_selector/CMakeLists.txt
+index b76d8ee732..258e178279 100644
+--- a/src/plugins/intel_gpu/src/kernel_selector/CMakeLists.txt
++++ b/src/plugins/intel_gpu/src/kernel_selector/CMakeLists.txt
+@@ -4,7 +4,7 @@
+ 
+ set(TARGET_NAME "openvino_intel_gpu_kernels")
+ 
+-find_host_package(PythonInterp 3 REQUIRED)
++find_host_package(Python3 REQUIRED COMPONENTS Interpreter)
+ 
+ file(GLOB_RECURSE LIBRARY_SRC
+     "${CMAKE_CURRENT_SOURCE_DIR}/*.h"
+@@ -37,10 +37,10 @@ set_property(SOURCE ${CODEGEN_CACHE_SOURCES} PROPERTY GENERATED TRUE)
+ 
+ add_custom_command(OUTPUT "${CODEGEN_CACHE_DIR}/${PRIM_DB}"
+   COMMAND "${CMAKE_COMMAND}" -E make_directory "${CODEGEN_CACHE_DIR}"
+-  COMMAND "${PYTHON_EXECUTABLE}" "${CODEGEN_SCRIPT}" -out_path "${CODEGEN_CACHE_DIR}"
+-                                                     -out_file_name_prim_db "${PRIM_DB}"
+-                                                     -out_file_name_batch_headers "${PRIM_DB_BATCH_HEADERS}"
+-                                                     -kernels "${CMAKE_CURRENT_SOURCE_DIR}/cl_kernels/"
++  COMMAND "${Python3_EXECUTABLE}" "${CODEGEN_SCRIPT}" -out_path "${CODEGEN_CACHE_DIR}"
++                                                      -out_file_name_prim_db "${PRIM_DB}"
++                                                      -out_file_name_batch_headers "${PRIM_DB_BATCH_HEADERS}"
++                                                      -kernels "${CMAKE_CURRENT_SOURCE_DIR}/cl_kernels/"
+   DEPENDS ${KERNELS} "${CODEGEN_SCRIPT}"
+   COMMENT "Generating ${CODEGEN_CACHE_DIR}/${PRIM_DB} ..."
+ )
+diff --git a/tests/conditional_compilation/test_utils.py b/tests/conditional_compilation/test_utils.py
+index 312065cea0..76e384f92c 100644
+--- a/tests/conditional_compilation/test_utils.py
++++ b/tests/conditional_compilation/test_utils.py
+@@ -83,7 +83,7 @@ def make_build(openvino_root_dir, build_dir, install_dir, build_target: dict = N
+     nproc = multiprocessing.cpu_count()
+     cmd = (
+         f"cmake -DENABLE_PROFILING_ITT=ON -DCMAKE_BUILD_TYPE=Release "
+-        f"-DPYTHON_EXECUTABLE={sys.executable} {additional_args_line}"
++        f"-DPython3_EXECUTABLE={sys.executable} {additional_args_line}"
+         f"-S {openvino_root_dir} -B {build_dir} && "
+         f"cmake --build {build_dir} -j{nproc} && "
+         f"{' '.join(build_target_arg_line)}"
+diff --git a/thirdparty/gtest/CMakeLists.txt b/thirdparty/gtest/CMakeLists.txt
+index 76e0463ea0..f527552903 100644
+--- a/thirdparty/gtest/CMakeLists.txt
++++ b/thirdparty/gtest/CMakeLists.txt
+@@ -6,6 +6,7 @@
+ # Google Tests framework
+ #
+ 
++set(CMAKE_DISABLE_FIND_PACKAGE_PythonInterp ON)
+ set(gtest_force_shared_crt ON CACHE BOOL "disable static CRT for google test")
+ 
+ set(BUILD_SHARED_LIBS OFF)
+diff --git a/thirdparty/onnx/CMakeLists.txt b/thirdparty/onnx/CMakeLists.txt
+index 19d8aabd4e..f8803eac8b 100644
+--- a/thirdparty/onnx/CMakeLists.txt
++++ b/thirdparty/onnx/CMakeLists.txt
+@@ -23,14 +23,12 @@ if(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+     ie_add_compiler_flags(/wd4244)
+ endif()
+ 
++set(PYTHON_EXECUTABLE "${Python3_EXECUTABLE}")
+ set(ONNX_USE_PROTOBUF_SHARED_LIBS OFF CACHE BOOL "Use dynamic protobuf by ONNX library" FORCE)
+ set(ONNX_NAMESPACE ${OV_ONNX_NAMESPACE})
+ set(ONNX_USE_LITE_PROTO ${ONNX_USE_LITE_PROTO_DEFAULT} CACHE BOOL "Use protobuf lite for ONNX library" FORCE)
+ set(ONNX_ML ON CACHE BOOL "Use ONNX ML" FORCE)
+-set(ONNX_CUSTOM_PROTOC_EXECUTABLE ${PROTOC_EXECUTABLE})
+-
+-# clear Python_ADDITIONAL_VERSIONS to find only python library matching PYTHON_EXECUTABLE
+-unset(Python_ADDITIONAL_VERSIONS CACHE)
++set(ONNX_CUSTOM_PROTOC_EXECUTABLE "${PROTOC_EXECUTABLE}")
+ 
+ # build targets
+ 
+diff --git a/tools/mo/unit_tests/mock_mo_frontend/mock_mo_python_api/CMakeLists.txt b/tools/mo/unit_tests/mock_mo_frontend/mock_mo_python_api/CMakeLists.txt
+index 141dbf88cd..0fa6f0fdcc 100644
+--- a/tools/mo/unit_tests/mock_mo_frontend/mock_mo_python_api/CMakeLists.txt
++++ b/tools/mo/unit_tests/mock_mo_frontend/mock_mo_python_api/CMakeLists.txt
+@@ -25,15 +25,11 @@ set(PYBIND_FE_SRC ${CMAKE_CURRENT_SOURCE_DIR}/mock_mo_python_api.cpp)
+ 
+ source_group("src" FILES ${PYBIND_FE_SRC})
+ 
+-if(PYTHON_VERSION_MINOR GREATER_EQUAL 11)
++if(Python3_VERSION_MINOR GREATER_EQUAL 11)
+     set(pybind11_min_version 2.9.2)
+ else()
+     set(pybind11_min_version 2.8.0)
+ endif()
+-if(CMAKE_CROSSCOMPILING)
+-    # since this version pybind11 has PYBIND11_PYTHONLIBS_OVERWRITE
+-    set(pybind11_min_version 2.10.1)
+-endif()
+ 
+ find_package(pybind11 ${pybind11_min_version} QUIET)
+ 
+@@ -43,6 +39,13 @@ if(NOT pybind11_FOUND)
+                     EXCLUDE_FROM_ALL)
+ endif()
+ 
++if(CMAKE_VERSION VERSION_GREATER_EQUAL 3.18)
++    set(python3_development_component Development.Module)
++else()
++    set(python3_development_component Development)
++endif()
++
++find_package(Python3 REQUIRED COMPONENTS Interpreter ${python3_development_component})
+ pybind11_add_module(${PYBIND_FE_NAME} MODULE NO_EXTRAS ${PYBIND_FE_SRC})
+ 
+ target_link_libraries(${PYBIND_FE_NAME} PRIVATE openvino::runtime)
+diff --git a/tools/openvino_dev/CMakeLists.txt b/tools/openvino_dev/CMakeLists.txt
+index 2d2066d660..9a28a279c1 100644
+--- a/tools/openvino_dev/CMakeLists.txt
++++ b/tools/openvino_dev/CMakeLists.txt
+@@ -73,14 +73,14 @@ add_custom_command(OUTPUT ${openvino_wheel_path}
+     COMMAND ${CMAKE_COMMAND} -E copy "${CMAKE_CURRENT_SOURCE_DIR}/readme.txt" "${CMAKE_CURRENT_BINARY_DIR}"
+     COMMAND ${CMAKE_COMMAND} -E copy "${CMAKE_CURRENT_SOURCE_DIR}/setup.cfg" "${CMAKE_CURRENT_BINARY_DIR}"
+     COMMAND ${CMAKE_COMMAND} -E env OPENVINO_VERSION=${WHEEL_VERSION}
+-        ${PYTHON_EXECUTABLE} ${SETUP_PY}
++        ${Python3_EXECUTABLE} ${SETUP_PY}
+             --quiet
+             --no-user-cfg
+              bdist_wheel
+             --dist-dir ${openvino_wheels_output_dir}
+             --build=${WHEEL_BUILD}
+     COMMAND ${CMAKE_COMMAND} -E env OPENVINO_VERSION=${WHEEL_VERSION}
+-        ${PYTHON_EXECUTABLE} ${SETUP_PY} clean
++        ${Python3_EXECUTABLE} ${SETUP_PY} clean
+     WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}"
+     COMMENT "Building Python wheel ${openvino_wheel_name}"
+     VERBATIM)
