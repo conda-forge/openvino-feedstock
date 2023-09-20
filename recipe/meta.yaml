@@ -1,14 +1,14 @@
 {% set name = "openvino" %}
-{% set version_postfix = "2023.1.0" %}
-{% set version = "2023.1.0" %}
+{% set version_postfix = "2023.2.0" %}
+{% set version = "2023.2.0" %}
 
 package:
   name: {{ name|lower }}-split
   version: {{ version }}
 
 source:
-  - url: https://github.com/ilya-lavrenov/openvino/archive/38085e2893a4523fa9ce1efc231de433970020f5.tar.gz
-    sha256: 201ab3bed195f617f672e33d18d89cd344d16d62cef685811a97fe6b9dcbdf43
+  - url: https://github.com/ilya-lavrenov/openvino/archive/a7fb5ba3c134dedf180f8c4300184e47acae8d53.tar.gz
+    sha256: 5f40ffbbdc09a98f7c072357682c14e87aebe43e182a7405b72f04961eb65498
     patches:
     - patches/002-win32-python-search.patch
     - patches/003-lin-arm64-compute-lib.patch
@@ -33,7 +33,7 @@ source:
     folder: thirdparty/onnx/onnx
 
 build:
-  number: 1
+  number: 0
 
 requirements:
   build:
