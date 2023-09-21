@@ -1,5 +1,6 @@
 # !/usr/bin/env bash
 
+export CMAKE_BUILD_TYPE="Debug"
 export OPENVINO_BINARY_DIR="$SRC_DIR/build"
 export PY_PACKAGES_DIR="lib/python$PY_VER/site-packages"
 export WHEEL_VERSION="$PKG_VERSION"

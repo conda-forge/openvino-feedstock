@@ -8,7 +8,7 @@ mkdir -p build
 
 cmake                                                                        ^
     -DCMAKE_INSTALL_PREFIX="%LIBRARY_PREFIX%"                                ^
-    -DCMAKE_BUILD_TYPE=Release                                               ^
+    -DCMAKE_BUILD_TYPE=Debug                                                 ^
     -DENABLE_INTEL_GNA=OFF                                                   ^
     -DENABLE_SYSTEM_TBB=ON                                                   ^
     -DENABLE_SYSTEM_PUGIXML=ON                                               ^
@@ -30,7 +30,7 @@ cmake                                                                        ^
     -B "%SRC_DIR%\build"
 if errorlevel 1 exit 1
 
-cmake --build "%SRC_DIR%\build" --config Release --parallel %CPU_COUNT% --verbose
+cmake --build "%SRC_DIR%\build" --config Debug --parallel %CPU_COUNT% --verbose
 if errorlevel 1 exit 1
 
 COPY "%SRC_DIR%\licensing\third-party-programs.txt" third-party-programs.txt
