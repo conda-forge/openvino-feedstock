@@ -1,7 +1,7 @@
 echo ON
 setlocal enabledelayedexpansion
 
-# use rapidjson from conda-forge dependencies
+rem use rapidjson from conda-forge dependencies
 RMDIR /S /Q "$SRC_DIR/src/plugins/intel_gpu/thirdparty/rapidjson"
 
 mkdir -p build

@@ -7,8 +7,8 @@ package:
   version: {{ version }}
 
 source:
-  - url: https://github.com/ilya-lavrenov/openvino/archive/5b462af28c701813d9a5991028fa398785e4beae.tar.gz
-    sha256: 5b0c2e162c0ccabf0f860c9d8fae26f3099aada1197afb6520b9155336c2d6a2
+  - url: https://github.com/ilya-lavrenov/openvino/archive/88490632928bfa917ea5e5646248e6ae3bdb80eb.tar.gz
+    sha256: 5b80dfcae7b18a6c7666df862f8a866268088ac14a477216fd3be9e76adc021a
     patches:
     - patches/002-win32-python-search.patch
     - patches/003-lin-arm64-compute-lib.patch
@@ -54,6 +54,7 @@ requirements:
     - ocl-icd  # [linux64]
     - clhpp  # [linux64 or win64]
     - khronos-opencl-icd-loader  # [win64]
+    - rapidjson  # [linux64 or win64]
     - pugixml >=1.12.1 # starting from this version shared libraries are provided
     - xbyak >=6.69.1  # [x86_64]
     - libprotobuf-static =3.20.3  # [not win64]
@@ -340,7 +341,6 @@ outputs:
         - tbb-devel =2021.5 # starting from this version TBB uses hwloc in conda
         - ocl-icd  # [linux64]
         - clhpp
-        - rapidjson
         - khronos-opencl-icd-loader  # [win64]
         - pugixml >=1.12.1 # starting from this version shared libraries are provided
         - {{ pin_subpackage('libopenvino', exact=True) }}
@@ -393,6 +393,7 @@ outputs:
         - {{ compiler('c') }}
         - cmake >=3.15 # to have new cmake cmd interface (-S, --install and other options)
       host:
+        - tbb-devel =2021.5 # starting from this version TBB uses hwloc in conda
         - {{ pin_subpackage('libopenvino', exact=True) }}
       run:
         - {{ pin_subpackage('libopenvino', exact=True) }}
