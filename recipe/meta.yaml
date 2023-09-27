@@ -10,11 +10,9 @@ source:
   - url: https://github.com/openvinotoolkit/openvino/archive/e7c1344d3c390ae3dd1e827de18a0b76be15e3a5.tar.gz
     sha256: 620f618403bbc7d7289e1e2e09deca83b91de1f7da27583ea2bf95f94873c421
     patches:
-    - patches/001-python-osx-arm64.patch  # [arm64]
     - patches/002-win32-python-search.patch
     - patches/003-lin-arm64-compute-lib.patch  # [aarch64]
     - patches/004-gflags-samples.patch
-    - patches/005-wheel-package.patch
   - url: https://github.com/ARM-software/ComputeLibrary/archive/refs/tags/v23.08.tar.gz  # [aarch64 or arm64]
     sha256: 62f514a555409d4401e5250b290cdf8cf1676e4eb775e5bd61ea6a740a8ce24f  # [aarch64 or arm64]
     folder: src/plugins/intel_cpu/thirdparty/ComputeLibrary  # [aarch64 or arm64]
@@ -397,6 +395,7 @@ outputs:
         - {{ compiler('c') }}
         - cmake >=3.15 # to have new cmake cmd interface (-S, --install and other options)
       host:
+        - tbb-devel =2021.5 # starting from this version TBB uses hwloc in conda
         - {{ pin_subpackage('libopenvino', exact=True) }}
       run:
         - {{ pin_subpackage('libopenvino', exact=True) }}
@@ -455,7 +454,7 @@ outputs:
         - cross-python_{{ target_platform }}  # [build_platform != target_platform]
         - sysroot_linux-64 =2.17  # [linux64]
         - make  # [unix]
-        - cython =0.29.36
+        - cython =>3.0.2
         - ccache
         - cmake >=3.15  # to have new cmake cmd interface (-S, --install and other options)
         - pybind11 >=2.10.1  # this versions works well for cross-compilation

@@ -6,6 +6,9 @@ if [[ "$CONDA_BUILD_CROSS_COMPILATION" == 1 ]]; then
     CMAKE_ARGS="${CMAKE_ARGS} -DProtobuf_PROTOC_EXECUTABLE=$BUILD_PREFIX/bin/protoc"
 fi
 
+# use rapidjson from conda-forge dependencies
+rm -fr "$SRC_DIR/src/plugins/intel_gpu/thirdparty/rapidjson"
+
 mkdir -p build
 
 cmake ${CMAKE_ARGS}                                                          \
