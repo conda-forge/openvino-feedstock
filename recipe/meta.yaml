@@ -1,29 +1,25 @@
 {% set name = "openvino" %}
 {% set version_postfix = "2023.2.0" %}
-{% set version = "2023.2.0.dev20230922" %}
+{% set version = "2023.2.0.dev20231007" %}
 
 package:
   name: {{ name|lower }}-split
   version: {{ version }}
 
 source:
-  - url: https://github.com/openvinotoolkit/openvino/archive/e7c1344d3c390ae3dd1e827de18a0b76be15e3a5.tar.gz
-    sha256: 620f618403bbc7d7289e1e2e09deca83b91de1f7da27583ea2bf95f94873c421
+  - url: https://github.com/ilya-lavrenov/openvino/archive/7b7e596e1d6342d6eb4647bbc34d7c5a33513f83.tar.gz
+    sha256: 39a3fbf2c4f593f9d7a93f9cb5d80eb8fa75ba0b32784a981b16205171b0039b
     patches:
-    - patches/002-win32-python-search.patch
     - patches/003-lin-arm64-compute-lib.patch  # [aarch64]
     - patches/004-gflags-samples.patch
   - url: https://github.com/ARM-software/ComputeLibrary/archive/refs/tags/v23.08.tar.gz  # [aarch64 or arm64]
     sha256: 62f514a555409d4401e5250b290cdf8cf1676e4eb775e5bd61ea6a740a8ce24f  # [aarch64 or arm64]
     folder: src/plugins/intel_cpu/thirdparty/ComputeLibrary  # [aarch64 or arm64]
-  - url: https://github.com/openvinotoolkit/oneDNN/archive/3767662f257270921b64ec9a40e45a46b4ef048c.tar.gz
-    sha256: 477e3156b77a88f9e77bbbaaf071e19ed19f631972edf902dbefdf8f63062dfd
+  - url: https://github.com/openvinotoolkit/oneDNN/archive/36c2060a0dc85b4def72ea30823936c2ef861b82.tar.gz
+    sha256: e0cb0d8b81d3f4cf8b251492400f9371684a05855d37bd24e4fb7cf5864e530d
     folder: src/plugins/intel_cpu/thirdparty/onednn
   - url: https://github.com/openvinotoolkit/mlas/archive/c7c8a631315000f17c650af34431009d2f22129c.tar.gz
     sha256: 7b790dfeef8e1dd612f920c85186c52ad3a3e2245e2a2afd6cc91ce4b1dc64a9
-    folder: src/plugins/intel_cpu/thirdparty/mlas
-  - url: https://github.com/openvinotoolkit/mlas/archive/219f114e988527bb0ecaf2636622562859afa6e1.tar.gz
-    sha256: c97dcca992a4bb24f2936558304bd8ac0ce10d2cb9b8f2f3eadf4d0b14995e93
     folder: src/plugins/intel_cpu/thirdparty/mlas
   - url: https://github.com/oneapi-src/oneDNN/archive/4b82a66ed38ecaa993352e5cc6ed7753656b8a26.tar.gz  # [win64 or linux64]
     sha256: cb17c003fe51bc9b4e20189573956b4446468162adf0fc4cea2ee0820cff0cd0  # [win64 or linux64]
@@ -36,7 +32,7 @@ source:
     folder: thirdparty/onnx/onnx
 
 build:
-  number: 0
+  number: 1
 
 requirements:
   build:
