@@ -370,6 +370,3 @@ Feedstock Maintainers
 * [@evgenytalanin-intel](https://github.com/evgenytalanin-intel/)
 * [@ilya-lavrenov](https://github.com/ilya-lavrenov/)
 
-
-<!-- dummy commit to enable rerendering -->
-
