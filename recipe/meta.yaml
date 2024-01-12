@@ -564,6 +564,11 @@ outputs:
     requirements:
       build:
         - cmake >=3.15  # to have new cmake cmd interface (-S, --install and other options)
+      host:
+        # hmaarrfk: 2024/01
+        # without the tbb-devel package in the host section, we won't be able to drag on
+        # the comaptible dependency below
+        - tbb-devel
       run:
         # the subpackages below can be linked with
         - {{ pin_subpackage('libopenvino-onnx-frontend', exact=True) }}
