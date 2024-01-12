@@ -579,7 +579,7 @@ outputs:
         - {{ pin_subpackage('libopenvino-auto-plugin', exact=True) }}
         - {{ pin_subpackage('libopenvino-hetero-plugin', exact=True) }}
         - {{ pin_subpackage('libopenvino-auto-batch-plugin', exact=True) }}
-        - {{ pin_compatible('tbb-devel', max_pin='x.x') }}  # to property find libs via openvino.pc
+        - tbb-devel  # to property find libs via openvino.pc
       host:
         - tbb-devel
     test:
