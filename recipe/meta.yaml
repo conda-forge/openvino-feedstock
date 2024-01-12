@@ -578,6 +578,7 @@ outputs:
         - {{ pin_subpackage('libopenvino-auto-plugin', exact=True) }}
         - {{ pin_subpackage('libopenvino-hetero-plugin', exact=True) }}
         - {{ pin_subpackage('libopenvino-auto-batch-plugin', exact=True) }}
+        - tbb-devel =2021.5  # to property find libs via openvino.pc
     test:
       requires:
         - {{ compiler('cxx') }}
@@ -588,7 +589,6 @@ outputs:
         - zlib
         - nlohmann_json
         - sysroot_linux-64 =2.17  # [linux64]
-        - tbb-devel =2021.5 # starting from this version TBB uses hwloc in conda
         - gflags
       source_files:
         - samples
@@ -647,7 +647,7 @@ outputs:
         - cmake --build samples_c_build --config Release --verbose  # [win]
 
         # check that devices are found using OpenVINO C API
-        - $CC snippets/openvino_available_devices.c $(pkg-config --cflags --libs pugixml tbb openvino) -Wl,-rpath,$PREFIX/lib -o openvino_devices_test  # [unix]
+        - $CC snippets/openvino_available_devices.c $(pkg-config --cflags --libs openvino) -Wl,-rpath,$PREFIX/lib -o openvino_devices_test  # [unix]
         - if [[ $(./openvino_devices_test) != "passed" ]]; then exit 1 ; fi  # [unix]
 
         # check that frontends are found using OpenVINO C++ API
@@ -695,7 +695,6 @@ outputs:
         - pkg-config
         - cmake >=3.15 # to have new cmake cmd interface (-S, --install and other options)
         - sysroot_linux-64 =2.17  # [linux64]
-        - tbb-devel =2021.5 # starting from this version TBB uses hwloc in conda
       files:
         - snippets/
       commands:
@@ -703,7 +702,7 @@ outputs:
         - $PYTHON snippets/openvino_available_components.py  # [unix]
 
         # check that devices are found using OpenVINO C API
-        - $CC snippets/openvino_available_devices.c $(pkg-config --cflags --libs pugixml tbb openvino) -Wl,-rpath,$PREFIX/lib -o openvino_devices_test  # [unix]
+        - $CC snippets/openvino_available_devices.c $(pkg-config --cflags --libs openvino) -Wl,-rpath,$PREFIX/lib -o openvino_devices_test  # [unix]
         - if [[ $(./openvino_devices_test) != "passed" ]]; then exit 1 ; fi  # [unix]
 
         # check that frontends are found using OpenVINO C++ API
