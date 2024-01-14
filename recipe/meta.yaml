@@ -31,15 +31,6 @@ source:
   - url: https://github.com/onnx/onnx/archive/refs/tags/v1.14.1.tar.gz
     sha256: e296f8867951fa6e71417a18f2e550a730550f8829bd35e947b4df5e3e777aa1
     folder: thirdparty/onnx/onnx
-  - url: https://github.com/gflags/gflags/archive/refs/tags/v2.2.2.tar.gz
-    sha256: 34af2f15cf7367513b352bdcd2493ab14ce43692d2dcd9dfc499492966c64dcf
-    folder: thirdparty/gflags/gflags
-  - url: https://github.com/nlohmann/json/archive/refs/tags/v3.11.2.tar.gz
-    sha256: d69f9deb6a75e2580465c6c4c5111b89c4dc2fa94e3a85fcd2ffcd9a143d9273
-    folder: thirdparty/json/nlohmann_json
-  - url: https://github.com/madler/zlib/archive/refs/tags/v1.2.13.tar.gz
-    sha256: 1525952a0a567581792613a9723333d7f8cc20b87a81f920fb8bc7e3f2251428
-    folder: thirdparty/zlib/zlib
 
 
 
@@ -68,6 +59,8 @@ requirements:
     - pugixml
     - xbyak >=6.69.1  # [x86_64]
     - libprotobuf
+    - nlohmann_json
+    - zlib
 
 outputs:
   - name: libopenvino
@@ -91,6 +84,8 @@ outputs:
       host:
         - pugixml
         - tbb-devel
+        - nlohmann_json
+        - zlib
     test:
       commands:
         {% set openvino_libs = [] %}
@@ -124,6 +119,8 @@ outputs:
         - cmake >=3.15 # to have new cmake cmd interface (-S, --install and other options)
       host:
         - pugixml
+        - nlohmann_json
+        - zlib
         - {{ pin_subpackage('libopenvino', exact=True) }}
       run:
         - {{ pin_subpackage('libopenvino', exact=True) }}
@@ -153,6 +150,8 @@ outputs:
         - cmake >=3.15 # to have new cmake cmd interface (-S, --install and other options)
       host:
         - libprotobuf
+        - nlohmann_json
+        - zlib
         - {{ pin_subpackage('libopenvino', exact=True) }}
       run:
         - {{ pin_subpackage('libopenvino', exact=True) }}
@@ -182,6 +181,8 @@ outputs:
         - cmake >=3.15 # to have new cmake cmd interface (-S, --install and other options)
       host:
         - libprotobuf
+        - nlohmann_json
+        - zlib
         - {{ pin_subpackage('libopenvino', exact=True) }}
       run:
         - {{ pin_subpackage('libopenvino', exact=True) }}
@@ -241,6 +242,8 @@ outputs:
         - snappy
         - libabseil
         - libprotobuf
+        - nlohmann_json
+        - zlib
         - {{ pin_subpackage('libopenvino', exact=True) }}
       run:
         - {{ pin_subpackage('libopenvino', exact=True) }}
@@ -269,6 +272,8 @@ outputs:
         - {{ compiler('c') }}
         - cmake >=3.15 # to have new cmake cmd interface (-S, --install and other options)
       host:
+        - nlohmann_json
+        - zlib
         - {{ pin_subpackage('libopenvino', exact=True) }}
       run:
         - {{ pin_subpackage('libopenvino', exact=True) }}
@@ -298,6 +303,8 @@ outputs:
       host:
         - pugixml
         - tbb-devel
+        - nlohmann_json
+        - zlib
         - {{ pin_subpackage('libopenvino', exact=True) }}
       run:
         - {{ pin_subpackage('libopenvino', exact=True) }}
@@ -326,6 +333,8 @@ outputs:
       host:
         - pugixml
         - tbb-devel
+        - nlohmann_json
+        - zlib
         - {{ pin_subpackage('libopenvino', exact=True) }}
       run:
         - {{ pin_subpackage('libopenvino', exact=True) }}
@@ -356,6 +365,8 @@ outputs:
         - clhpp
         - khronos-opencl-icd-loader  # [win64]
         - pugixml
+        - nlohmann_json
+        - zlib
         - {{ pin_subpackage('libopenvino', exact=True) }}
       run:
         - {{ pin_subpackage('libopenvino', exact=True) }}
@@ -382,6 +393,8 @@ outputs:
         - cmake >=3.15 # to have new cmake cmd interface (-S, --install and other options)
       host:
         - tbb-devel
+        - nlohmann_json
+        - zlib
         - {{ pin_subpackage('libopenvino', exact=True) }}
       run:
         - {{ pin_subpackage('libopenvino', exact=True) }}
@@ -406,6 +419,8 @@ outputs:
         - {{ compiler('c') }}
         - cmake >=3.15 # to have new cmake cmd interface (-S, --install and other options)
       host:
+        - nlohmann_json
+        - zlib
         - {{ pin_subpackage('libopenvino', exact=True) }}
       run:
         - {{ pin_subpackage('libopenvino', exact=True) }}
@@ -431,6 +446,8 @@ outputs:
         - cmake >=3.15 # to have new cmake cmd interface (-S, --install and other options)
       host:
         - pugixml
+        - nlohmann_json
+        - zlib
         - {{ pin_subpackage('libopenvino', exact=True) }}
       run:
         - {{ pin_subpackage('libopenvino', exact=True) }}
@@ -474,6 +491,8 @@ outputs:
         - pugixml  # for developer package only
         - python
         - pip
+        - nlohmann_json
+        - zlib
         - {{ pin_subpackage('libopenvino', exact=True) }}
         # subpackages below have explicit python bindings
         - {{ pin_subpackage('libopenvino-onnx-frontend', exact=True) }}
@@ -573,6 +592,8 @@ outputs:
         # without the tbb-devel package in the host section, we won't be able to drag on
         # the comaptible dependency below
         - tbb-devel
+        - nlohmann_json
+        - zlib
       run:
         # the subpackages below can be linked with
         - {{ pin_subpackage('libopenvino-onnx-frontend', exact=True) }}
@@ -675,7 +696,7 @@ outputs:
         - onednn_third-party-programs.txt
         - runtime-third-party-programs.txt
     build:
-      string: py{{ CONDA_PY }}h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}
+      noarch: python
       run_exports:
         - {{ pin_subpackage('libopenvino-python', max_pin='x.x.x') }}
         - {{ pin_subpackage('libopenvino-intel-cpu-plugin', max_pin='x.x.x') }}  # [x86_64]
