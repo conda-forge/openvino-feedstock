@@ -7,41 +7,44 @@ package:
   version: {{ version }}
 
 source:
-  - url: https://github.com/openvinotoolkit/openvino/archive/ceeafaf64f346c6f14a67c612e131da5c27ef620.tar.gz
-    sha256: 7e3dff6e1bc77b990c9d2fb231aa16c335208ca6191cd068febd8c4423265e33
+  - url: https://github.com/openvinotoolkit/openvino/archive/refs/tags/2023.2.0.tar.gz
+    sha256: 419b3137a1a549fc5054edbba5b71da76cbde730e8a271769126e021477ad47b
     patches:
     - patches/001-cross-compile-protobuf.patch
+    - patches/001-win-cmake-version.patch  # [win64]
     - patches/003-lin-arm64-compute-lib.patch  # [aarch64]
   - url: https://github.com/ARM-software/ComputeLibrary/archive/refs/tags/v23.08.tar.gz  # [aarch64 or arm64]
     sha256: 62f514a555409d4401e5250b290cdf8cf1676e4eb775e5bd61ea6a740a8ce24f  # [aarch64 or arm64]
     folder: src/plugins/intel_cpu/thirdparty/ComputeLibrary  # [aarch64 or arm64]
-  - url: https://github.com/openvinotoolkit/oneDNN/archive/cb3060bbf4694e46a1359a3d4dfe70500818f72d.tar.gz
-    sha256: 9dea3da8dab8511677db3db68ff4d9cdbfd31d8614bf04fd79a7610892bb991c
+  - url: https://github.com/openvinotoolkit/oneDNN/archive/2ead5d4fe5993a797d9a7a4b8b5557b96f6ec90e.tar.gz
+    sha256: 3c51d577f9e7e4cbd94ad08d267502953ec64513241dda6595b2608fafc8314c
     folder: src/plugins/intel_cpu/thirdparty/onednn
-  - url: https://github.com/openvinotoolkit/mlas/archive/7a35e48a723944972088627be1a8b60841e8f6a5.tar.gz
-    sha256: b7fdd19523a88373d19fd8d5380f64c2834040fa50a6f0774acf08f3fa858daa
+  - url: https://github.com/openvinotoolkit/mlas/archive/f6425b1394334822390fcd9da12788c9cd0d11da.tar.gz
+    sha256: 707a6634d62ea5563042a67161472b4be3ffe73c9783719519abdd583b0295f4
     folder: src/plugins/intel_cpu/thirdparty/mlas
-  - url: https://github.com/oneapi-src/oneDNN/archive/cb77937ffcf5e83b5d1cf2940c94e8b508d8f7b4.tar.gz  # [win64 or linux64]
-    sha256: 2ca304c033786aa5c3ec1ec6f8fc3936ae5c6874d5964b586311da11bec2ec4a  # [win64 or linux64]
+  - url: https://github.com/oneapi-src/oneDNN/archive/284ad4574939fa784e4ddaa1f4aa577b8eb7a017.tar.gz  # [win64 or linux64]
+    sha256: 16f36078339cd08b949efea1d863344cb0b742d9f5898937d07a591b0c4da517  # [win64 or linux64]
     folder: src/plugins/intel_gpu/thirdparty/onednn_gpu  # [win64 or linux64]
   - url: https://github.com/opencv/ade/archive/refs/tags/v0.1.2d.tar.gz
     sha256: edefba61a33d6cd4b78a9976cb3309c95212610a81ba6dade09882d1794198ff
     folder: thirdparty/ade
-  - url: https://github.com/onnx/onnx/archive/refs/tags/v1.15.0.tar.gz
-    sha256: c757132e018dd0dd171499ef74fca88b74c5430a20781ec53da19eb7f937ef68
+  - url: https://github.com/onnx/onnx/archive/refs/tags/v1.14.1.tar.gz
+    sha256: e296f8867951fa6e71417a18f2e550a730550f8829bd35e947b4df5e3e777aa1
     folder: thirdparty/onnx/onnx
   - url: https://github.com/gflags/gflags/archive/refs/tags/v2.2.2.tar.gz
     sha256: 34af2f15cf7367513b352bdcd2493ab14ce43692d2dcd9dfc499492966c64dcf
     folder: thirdparty/gflags/gflags
-  - url: https://github.com/nlohmann/json/archive/refs/tags/v3.11.3.tar.gz
-    sha256: 0d8ef5af7f9794e3263480193c491549b2ba6cc74bb018906202ada498a79406
+  - url: https://github.com/nlohmann/json/archive/refs/tags/v3.11.2.tar.gz
+    sha256: d69f9deb6a75e2580465c6c4c5111b89c4dc2fa94e3a85fcd2ffcd9a143d9273
     folder: thirdparty/json/nlohmann_json
   - url: https://github.com/madler/zlib/archive/refs/tags/v1.2.13.tar.gz
     sha256: 1525952a0a567581792613a9723333d7f8cc20b87a81f920fb8bc7e3f2251428
     folder: thirdparty/zlib/zlib
 
+
+
 build:
-  number: 0
+  number: 2
 
 requirements:
   build:
@@ -236,6 +239,7 @@ outputs:
         - cmake >=3.15 # to have new cmake cmd interface (-S, --install and other options)
       host:
         - snappy
+        - libabseil
         - libprotobuf
         - {{ pin_subpackage('libopenvino', exact=True) }}
       run:
