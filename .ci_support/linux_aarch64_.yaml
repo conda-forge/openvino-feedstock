@@ -22,6 +22,8 @@ flatbuffers:
 - 23.5.26
 gflags:
 - '2.2'
+libprotobuf:
+- 4.24.3
 pin_run_as_build:
   python:
     min_pin: x.x
