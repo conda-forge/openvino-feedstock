@@ -10,6 +10,7 @@ source:
   - url: https://github.com/openvinotoolkit/openvino/archive/refs/tags/2023.2.0.tar.gz
     sha256: 419b3137a1a549fc5054edbba5b71da76cbde730e8a271769126e021477ad47b
     patches:
+    - patches/001-cross-compile-protobuf.patch
     - patches/001-win-cmake-version.patch  # [win64]
     - patches/003-lin-arm64-compute-lib.patch  # [aarch64]
   - url: https://github.com/ARM-software/ComputeLibrary/archive/refs/tags/v23.08.tar.gz  # [aarch64 or arm64]
@@ -43,7 +44,7 @@ source:
 
 
 build:
-  number: 1
+  number: 2
 
 requirements:
   build:
@@ -55,7 +56,7 @@ requirements:
     - cmake >=3.15 # to have new cmake cmd interface (-S, --install and other options)
     - python >=3.7
     - ccache
-    - libprotobuf =3.20.3 # for protoc compiler, libraries are used from libprotobuf-static
+    - libprotobuf # for protoc compiler
     - flatbuffers
     - sysroot_linux-64 =2.17  # [linux64]
   host:
@@ -66,8 +67,7 @@ requirements:
     - khronos-opencl-icd-loader  # [win64]
     - pugixml
     - xbyak >=6.69.1  # [x86_64]
-    - libprotobuf-static =3.20.3  # [not win64]
-    - libprotobuf-static  # [win64]
+    - libprotobuf
 
 outputs:
   - name: libopenvino
@@ -152,6 +152,7 @@ outputs:
         - {{ compiler('c') }}
         - cmake >=3.15 # to have new cmake cmd interface (-S, --install and other options)
       host:
+        - libprotobuf
         - {{ pin_subpackage('libopenvino', exact=True) }}
       run:
         - {{ pin_subpackage('libopenvino', exact=True) }}
@@ -180,6 +181,7 @@ outputs:
         - {{ compiler('c') }}
         - cmake >=3.15 # to have new cmake cmd interface (-S, --install and other options)
       host:
+        - libprotobuf
         - {{ pin_subpackage('libopenvino', exact=True) }}
       run:
         - {{ pin_subpackage('libopenvino', exact=True) }}
@@ -237,6 +239,8 @@ outputs:
         - cmake >=3.15 # to have new cmake cmd interface (-S, --install and other options)
       host:
         - snappy
+        - libabseil
+        - libprotobuf
         - {{ pin_subpackage('libopenvino', exact=True) }}
       run:
         - {{ pin_subpackage('libopenvino', exact=True) }}
