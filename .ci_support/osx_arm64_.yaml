@@ -12,6 +12,8 @@ cxx_compiler:
 - clangxx
 cxx_compiler_version:
 - '16'
+flatbuffers:
+- 23.5.26
 gflags:
 - '2.2'
 macos_machine:
