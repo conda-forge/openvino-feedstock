@@ -29,7 +29,8 @@ cmake ${CMAKE_ARGS}                                                          \
     -S "$SRC_DIR"                                                            \
     -B "$SRC_DIR/build"
 
-cmake --build "$SRC_DIR/build" --config Release --parallel $CPU_COUNT --verbose
+# use --verbose to help in debugging
+cmake --build "$SRC_DIR/build" --config Release --parallel $CPU_COUNT
 
 cp "$SRC_DIR/licensing/third-party-programs.txt" third-party-programs.txt
 cp "$SRC_DIR/licensing/onednn_third-party-programs.txt" onednn_third-party-programs.txt
