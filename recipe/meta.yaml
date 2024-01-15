@@ -44,19 +44,19 @@ source:
 
 
 build:
-  number: 2
+  number: 3
 
 requirements:
   build:
     - {{ compiler('c') }}
     - {{ compiler('cxx') }}
     - ninja
-    - pkg-config # to generate openvino.pc on macOS
+    - pkg-config
     - scons  # [aarch64 or arm64]
-    - cmake >=3.15 # to have new cmake cmd interface (-S, --install and other options)
+    - cmake
     - python >=3.7
     - ccache
-    - libprotobuf # for protoc compiler
+    - libprotobuf
     - flatbuffers
     - sysroot_linux-64 =2.17  # [linux64]
   host:
@@ -404,8 +404,9 @@ outputs:
       build:
         - {{ compiler('cxx') }}
         - {{ compiler('c') }}
-        - cmake >=3.15 # to have new cmake cmd interface (-S, --install and other options)
+        - cmake
       host:
+        - tbb-devel
         - {{ pin_subpackage('libopenvino', exact=True) }}
       run:
         - {{ pin_subpackage('libopenvino', exact=True) }}
