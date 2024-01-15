@@ -19,7 +19,7 @@ gflags:
 libabseil:
 - '20230802'
 libprotobuf:
-- 4.24.3
+- 4.24.4
 macos_machine:
 - arm64-apple-darwin20.0.0
 pin_run_as_build:
