@@ -1,9 +1,11 @@
+#include <stdlib.h>
+
 #include <openvino/c/openvino.h>
 #include <openvino/core/visibility.hpp>
 
 #define OV_CALL(statement) \
     if ((statement) != 0) \
-        return 1;
+        return EXIT_FAILURE;
 
 int main() {
     ov_core_t* core = NULL;
@@ -18,6 +20,5 @@ int main() {
     OV_CALL(ov_core_get_property(core, "HETERO", "SUPPORTED_METRICS", &ret));
     OV_CALL(ov_core_get_property(core, "BATCH", "SUPPORTED_METRICS", &ret));
     ov_core_free(core);
-    printf("passed");
-    return 0;
+    return EXIT_FAILURE;
 }
