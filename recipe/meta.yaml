@@ -612,10 +612,10 @@ outputs:
         - ./openvino_devices_test  # [unix]
 
         # check that frontends are found using OpenVINO C++ API
-        - cmake -S snippets -B snippets_build
-        - cmake --build snippets_build --config Release --verbose
-        - ./snippets_build/openvino_frontends_test  # [unix]
-        - .\\snippets_build\\Release\\openvino_frontends_test.exe  # [win]
+        - cmake -G "Ninja Multi-Config" -S snippets -B snippets_openvino_dev_build
+        - cmake --build snippets_openvino_dev_build --config Release --verbose
+        - ./snippets_openvino_dev_build/Release/openvino_frontends_test  # [unix]
+        - .\\snippets_openvino_dev_build\\Release\\openvino_frontends_test.exe  # [win]
 
   - name: openvino
     version: {{ version }}
@@ -668,10 +668,10 @@ outputs:
         - ./openvino_devices_test  # [unix]
 
         # check that frontends are found using OpenVINO C++ API
-        - cmake -S snippets -B snippets_build -G Ninja
-        - cmake --build snippets_build --config Release --verbose
-        - ./snippets_build/openvino_frontends_test  # [unix]
-        - .\\snippets_build\\Release\\openvino_frontends_test.exe  # [win]
+        - cmake -G "Ninja Multi-Config" -S snippets -B snippets_openvino_{{ CONDA_PY }}_build
+        - cmake --build snippets_openvino_{{ CONDA_PY }}_build --config Release --verbose
+        - ./snippets_openvino_{{ CONDA_PY }}_build/Release/openvino_frontends_test  # [unix]
+        - .\\snippets_openvino_{{ CONDA_PY }}_build\\Release\\openvino_frontends_test.exe  # [win]
 
 about:
   home: https://github.com/openvinotoolkit/openvino
