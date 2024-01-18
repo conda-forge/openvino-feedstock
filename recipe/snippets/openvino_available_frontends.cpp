@@ -1,7 +1,7 @@
+#include <cstdlib>
+
 #include <openvino/frontend/manager.hpp>
-#include <iostream>
 
 int main() {
-    std::cout << ov::frontend::FrontEndManager().get_available_front_ends().size();
-    return 0;
+    return ov::frontend::FrontEndManager().get_available_front_ends().size() == 6 ? EXIT_SUCCESS : EXIT_FAILURE;
 }

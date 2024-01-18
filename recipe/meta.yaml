@@ -31,20 +31,9 @@ source:
   - url: https://github.com/onnx/onnx/archive/refs/tags/v1.14.1.tar.gz
     sha256: e296f8867951fa6e71417a18f2e550a730550f8829bd35e947b4df5e3e777aa1
     folder: thirdparty/onnx/onnx
-  - url: https://github.com/gflags/gflags/archive/refs/tags/v2.2.2.tar.gz
-    sha256: 34af2f15cf7367513b352bdcd2493ab14ce43692d2dcd9dfc499492966c64dcf
-    folder: thirdparty/gflags/gflags
-  - url: https://github.com/nlohmann/json/archive/refs/tags/v3.11.2.tar.gz
-    sha256: d69f9deb6a75e2580465c6c4c5111b89c4dc2fa94e3a85fcd2ffcd9a143d9273
-    folder: thirdparty/json/nlohmann_json
-  - url: https://github.com/madler/zlib/archive/refs/tags/v1.2.13.tar.gz
-    sha256: 1525952a0a567581792613a9723333d7f8cc20b87a81f920fb8bc7e3f2251428
-    folder: thirdparty/zlib/zlib
-
-
 
 build:
-  number: 3
+  number: 4
 
 requirements:
   build:
@@ -54,7 +43,7 @@ requirements:
     - pkg-config
     - scons  # [aarch64 or arm64]
     - cmake
-    - python >=3.7
+    - python
     - ccache
     - libprotobuf
     - flatbuffers
@@ -66,7 +55,7 @@ requirements:
     - clhpp  # [linux64 or win64]
     - khronos-opencl-icd-loader  # [win64]
     - pugixml
-    - xbyak >=6.69.1  # [x86_64]
+    - xbyak  # [x86_64]
     - libprotobuf
 
 outputs:
@@ -87,7 +76,7 @@ outputs:
       build:
         - {{ compiler('cxx') }}
         - {{ compiler('c') }}
-        - cmake >=3.15 # to have new cmake cmd interface (-S, --install and other options)
+        - cmake
       host:
         - pugixml
         - tbb-devel
@@ -121,7 +110,7 @@ outputs:
       build:
         - {{ compiler('cxx') }}
         - {{ compiler('c') }}
-        - cmake >=3.15 # to have new cmake cmd interface (-S, --install and other options)
+        - cmake
       host:
         - pugixml
         - {{ pin_subpackage('libopenvino', exact=True) }}
@@ -150,7 +139,7 @@ outputs:
       build:
         - {{ compiler('cxx') }}
         - {{ compiler('c') }}
-        - cmake >=3.15 # to have new cmake cmd interface (-S, --install and other options)
+        - cmake
       host:
         - libprotobuf
         - {{ pin_subpackage('libopenvino', exact=True) }}
@@ -179,7 +168,7 @@ outputs:
       build:
         - {{ compiler('cxx') }}
         - {{ compiler('c') }}
-        - cmake >=3.15 # to have new cmake cmd interface (-S, --install and other options)
+        - cmake
       host:
         - libprotobuf
         - {{ pin_subpackage('libopenvino', exact=True) }}
@@ -208,7 +197,7 @@ outputs:
       build:
         - {{ compiler('cxx') }}
         - {{ compiler('c') }}
-        - cmake >=3.15 # to have new cmake cmd interface (-S, --install and other options)
+        - cmake
       host:
         - {{ pin_subpackage('libopenvino', exact=True) }}
       run:
@@ -236,7 +225,7 @@ outputs:
       build:
         - {{ compiler('cxx') }}
         - {{ compiler('c') }}
-        - cmake >=3.15 # to have new cmake cmd interface (-S, --install and other options)
+        - cmake
       host:
         - snappy
         - libabseil
@@ -267,7 +256,7 @@ outputs:
       build:
         - {{ compiler('cxx') }}
         - {{ compiler('c') }}
-        - cmake >=3.15 # to have new cmake cmd interface (-S, --install and other options)
+        - cmake
       host:
         - {{ pin_subpackage('libopenvino', exact=True) }}
       run:
@@ -294,7 +283,7 @@ outputs:
       build:
         - {{ compiler('cxx') }}
         - {{ compiler('c') }}
-        - cmake >=3.15 # to have new cmake cmd interface (-S, --install and other options)
+        - cmake
       host:
         - pugixml
         - tbb-devel
@@ -322,7 +311,7 @@ outputs:
       build:
         - {{ compiler('cxx') }}
         - {{ compiler('c') }}
-        - cmake >=3.15 # to have new cmake cmd interface (-S, --install and other options)
+        - cmake
       host:
         - pugixml
         - tbb-devel
@@ -349,7 +338,7 @@ outputs:
       build:
         - {{ compiler('cxx') }}
         - {{ compiler('c') }}
-        - cmake >=3.15 # to have new cmake cmd interface (-S, --install and other options)
+        - cmake
       host:
         - tbb-devel
         - ocl-icd  # [linux64]
@@ -379,7 +368,7 @@ outputs:
       build:
         - {{ compiler('cxx') }}
         - {{ compiler('c') }}
-        - cmake >=3.15 # to have new cmake cmd interface (-S, --install and other options)
+        - cmake
       host:
         - tbb-devel
         - {{ pin_subpackage('libopenvino', exact=True) }}
@@ -429,7 +418,7 @@ outputs:
       build:
         - {{ compiler('cxx') }}
         - {{ compiler('c') }}
-        - cmake >=3.15 # to have new cmake cmd interface (-S, --install and other options)
+        - cmake
       host:
         - pugixml
         - {{ pin_subpackage('libopenvino', exact=True) }}
@@ -455,8 +444,8 @@ outputs:
         - ovc = openvino.tools.ovc.main:main
         - benchmark_app = openvino.tools.benchmark.main:main
       ignore_run_exports_from:
-        - tbb-devel  # because required just for developer package
-        - pugixml  # because required just for developer package
+        - tbb-devel  # because required just for OpenVINO Developer package
+        - pugixml  # because required just for OpenVINO Developer package
     requirements:
       build:
         - {{ compiler('cxx') }}
@@ -467,12 +456,12 @@ outputs:
         - make  # [unix]
         - cython =0.29.36
         - ccache
-        - cmake >=3.15  # to have new cmake cmd interface (-S, --install and other options)
-        - pybind11 >=2.10.1  # this versions works well for cross-compilation
+        - cmake
+        - pybind11
         - wheel
       host:
-        - tbb-devel  # for developer package only
-        - pugixml  # for developer package only
+        - tbb-devel  # for OpenVINO Developer package only
+        - pugixml  # for OpenVINO Developer package only
         - python
         - pip
         - {{ pin_subpackage('libopenvino', exact=True) }}
@@ -568,7 +557,7 @@ outputs:
         - {{ pin_subpackage('libopenvino-tensorflow-lite-frontend', max_pin='x.x.x') }}
     requirements:
       build:
-        - cmake >=3.15  # to have new cmake cmd interface (-S, --install and other options)
+        - cmake
       host:
         # hmaarrfk: 2024/01
         # without the tbb-devel package in the host section, we won't be able to drag on
@@ -595,18 +584,9 @@ outputs:
         - {{ compiler('cxx') }}
         - {{ compiler('c') }}
         - ninja
-        - cmake >=3.15 # to have new cmake cmd interface (-S, --install and other options)
+        - cmake
         - pkg-config
-        - zlib
-        - nlohmann_json
         - sysroot_linux-64 =2.17  # [linux64]
-        - gflags
-      source_files:
-        - samples
-        - thirdparty/cnpy
-        - thirdparty/zlib
-        - thirdparty/gflags
-        - thirdparty/json/nlohmann_json
       files:
         - snippets/
       commands:
@@ -627,44 +607,15 @@ outputs:
         - if not exist %LIBRARY_BIN%\\openvino{{ openvino_lib }}%SHLIB_EXT% exit 1  # [win]
         {% endfor %}
 
-        # C++ samples on Unix
-        - mkdir -p samples/cpp/thirdparty  # [unix]
-        - cp -R thirdparty/cnpy samples/cpp/thirdparty/cnpy  # [unix]
-        - cp -R thirdparty/zlib samples/cpp/thirdparty/zlib  # [unix]
-        - cp -R thirdparty/gflags samples/cpp/thirdparty/gflags  # [unix]
-        - cp -R thirdparty/json/nlohmann_json samples/cpp/thirdparty/nlohmann_json  # [unix]
-        - cmake -S samples/cpp -B samples_cpp_build -DBIN_FOLDER=bin  # [unix]
-        - cmake --build samples_cpp_build --config Release --verbose  # [unix]
-        - ./samples_cpp_build/bin/hello_query_device  # [unix]
-
-        # C samples on Unix
-        - cp samples/cpp/CMakeLists.txt samples/c/CMakeLists.txt  # [unix]
-        - cmake -S samples/c -B samples_c_build -DBIN_FOLDER=bin  # [unix]
-        - cmake --build samples_c_build --config Release --verbose  # [unix]
-
-        # C++ samples on Windows
-        - mkdir -p samples\\cpp\\thirdparty  # [win]
-        - cp -R thirdparty\\cnpy samples\\cpp\\thirdparty\\cnpy  # [win]
-        - cp -R thirdparty\\zlib samples\\cpp\\thirdparty\\zlib  # [win]
-        - cp -R thirdparty\\gflags samples\\cpp\\thirdparty\\gflags  # [win]
-        - cp -R thirdparty\\json\\nlohmann_json samples\\cpp\\thirdparty\\nlohmann_json  # [win]
-        - cmake -S samples\\cpp -B samples_cpp_build -DBIN_FOLDER=bin  # [win]
-        - cmake --build samples_cpp_build --config Release --verbose  # [win]
-        - .\\samples_cpp_build\\bin\\Release\\hello_query_device.exe  # [win]
-
-        # C samples on Windows
-        - cp samples\\cpp\\CMakeLists.txt samples\\c\\CMakeLists.txt  # [win]
-        - cmake -S samples\\c -B samples_c_build -DBIN_FOLDER=bin  # [win]
-        - cmake --build samples_c_build --config Release --verbose  # [win]
-
         # check that devices are found using OpenVINO C API
         - $CC snippets/openvino_available_devices.c $(pkg-config --cflags --libs openvino) -Wl,-rpath,$PREFIX/lib -o openvino_devices_test  # [unix]
-        - if [[ $(./openvino_devices_test) != "passed" ]]; then exit 1 ; fi  # [unix]
+        - ./openvino_devices_test  # [unix]
 
         # check that frontends are found using OpenVINO C++ API
-        - cmake -S snippets -B snippets_build
-        - cmake --build snippets_build --config Release --verbose
-        - if [[ $(./snippets_build/openvino_frontends_test) != 6 ]]; then exit 1 ; fi  # [unix]
+        - cmake -G "Ninja Multi-Config" -S snippets -B snippets_openvino_dev_build
+        - cmake --build snippets_openvino_dev_build --config Release --verbose
+        - ./snippets_openvino_dev_build/Release/openvino_frontends_test  # [unix]
+        - .\\snippets_openvino_dev_build\\Release\\openvino_frontends_test.exe  # [win]
 
   - name: openvino
     version: {{ version }}
@@ -704,7 +655,7 @@ outputs:
         - {{ compiler('c') }}
         - ninja
         - pkg-config
-        - cmake >=3.15 # to have new cmake cmd interface (-S, --install and other options)
+        - cmake
         - sysroot_linux-64 =2.17  # [linux64]
       files:
         - snippets/
@@ -714,12 +665,13 @@ outputs:
 
         # check that devices are found using OpenVINO C API
         - $CC snippets/openvino_available_devices.c $(pkg-config --cflags --libs openvino) -Wl,-rpath,$PREFIX/lib -o openvino_devices_test  # [unix]
-        - if [[ $(./openvino_devices_test) != "passed" ]]; then exit 1 ; fi  # [unix]
+        - ./openvino_devices_test  # [unix]
 
         # check that frontends are found using OpenVINO C++ API
-        - cmake -S snippets -B snippets_build -G Ninja
-        - cmake --build snippets_build --config Release --verbose
-        - if [[ $(./snippets_build/openvino_frontends_test) != 6 ]]; then exit 1 ; fi  # [unix]
+        - cmake -G "Ninja Multi-Config" -S snippets -B snippets_openvino_{{ CONDA_PY }}_build
+        - cmake --build snippets_openvino_{{ CONDA_PY }}_build --config Release --verbose
+        - ./snippets_openvino_{{ CONDA_PY }}_build/Release/openvino_frontends_test  # [unix]
+        - .\\snippets_openvino_{{ CONDA_PY }}_build\\Release\\openvino_frontends_test.exe  # [win]
 
 about:
   home: https://github.com/openvinotoolkit/openvino
