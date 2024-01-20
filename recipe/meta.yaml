@@ -7,8 +7,8 @@ package:
   version: {{ version }}
 
 source:
-  - url: https://github.com/openvinotoolkit/openvino/archive/ceeafaf64f346c6f14a67c612e131da5c27ef620.tar.gz
-    sha256: 7e3dff6e1bc77b990c9d2fb231aa16c335208ca6191cd068febd8c4423265e33
+  - url: https://github.com/openvinotoolkit/openvino/archive/refs/tags/{{ version }}.tar.gz
+    sha256: 27cff20ac0662f5495d2c2eec47cbe5469ab2f225aa091d223f8bfc9d32f4fc3
     patches:
     - patches/001-cross-compile-protobuf.patch
     - patches/003-lin-arm64-compute-lib.patch  # [aarch64]
