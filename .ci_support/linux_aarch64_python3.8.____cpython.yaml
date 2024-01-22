@@ -1,29 +1,29 @@
-MACOSX_DEPLOYMENT_TARGET:
-- '10.13'
-MACOSX_SDK_VERSION:
-- '10.13'
+BUILD:
+- aarch64-conda_cos7-linux-gnu
 c_compiler:
-- clang
+- gcc
 c_compiler_version:
-- '16'
+- '12'
+cdt_arch:
+- aarch64
+cdt_name:
+- cos7
 channel_sources:
 - conda-forge
 channel_targets:
 - conda-forge main
 cxx_compiler:
-- clangxx
+- gxx
 cxx_compiler_version:
-- '16'
+- '12'
+docker_image:
+- quay.io/condaforge/linux-anvil-cos7-x86_64
 flatbuffers:
 - 23.5.26
-gflags:
-- '2.2'
 libabseil:
 - '20230802'
 libprotobuf:
-- 4.24.4
-macos_machine:
-- x86_64-apple-darwin13.4.0
+- 4.25.1
 pin_run_as_build:
   python:
     min_pin: x.x
@@ -31,19 +31,13 @@ pin_run_as_build:
 pugixml:
 - '1.14'
 python:
-- 3.10.* *_cpython
-- 3.11.* *_cpython
-- 3.12.* *_cpython
 - 3.8.* *_cpython
-- 3.9.* *_cpython
 snappy:
 - '1'
 target_platform:
-- osx-64
+- linux-aarch64
 tbb_devel:
 - '2021'
 zip_keys:
 - - c_compiler_version
   - cxx_compiler_version
-zlib:
-- '1.2'
