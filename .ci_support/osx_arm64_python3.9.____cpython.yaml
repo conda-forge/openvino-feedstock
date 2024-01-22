@@ -1,19 +1,25 @@
+MACOSX_DEPLOYMENT_TARGET:
+- '11.0'
 c_compiler:
-- vs2019
+- clang
+c_compiler_version:
+- '16'
 channel_sources:
 - conda-forge
 channel_targets:
 - conda-forge main
 cxx_compiler:
-- vs2019
+- clangxx
+cxx_compiler_version:
+- '16'
 flatbuffers:
 - 23.5.26
-gflags:
-- '2.2'
 libabseil:
 - '20230802'
 libprotobuf:
-- 4.24.4
+- 4.25.1
+macos_machine:
+- arm64-apple-darwin20.0.0
 pin_run_as_build:
   python:
     min_pin: x.x
@@ -21,16 +27,13 @@ pin_run_as_build:
 pugixml:
 - '1.14'
 python:
-- 3.10.* *_cpython
-- 3.11.* *_cpython
-- 3.12.* *_cpython
-- 3.8.* *_cpython
 - 3.9.* *_cpython
 snappy:
 - '1'
 target_platform:
-- win-64
+- osx-arm64
 tbb_devel:
 - '2021'
-zlib:
-- '1.2'
+zip_keys:
+- - c_compiler_version
+  - cxx_compiler_version
