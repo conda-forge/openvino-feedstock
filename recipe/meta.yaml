@@ -32,7 +32,7 @@ source:
     folder: thirdparty/onnx/onnx
 
 build:
-  number: 0
+  number: 1
 
 requirements:
   build:
@@ -347,7 +347,6 @@ outputs:
         - {{ pin_subpackage('libopenvino', exact=True) }}
       run:
         - {{ pin_subpackage('libopenvino', exact=True) }}
-        - ocl-icd-system  # [linux64]
     test:
       commands:
         - test -f $PREFIX/lib/openvino-{{ version_postfix }}/libopenvino_intel_gpu_plugin.so  # [unix]
