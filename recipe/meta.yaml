@@ -1,6 +1,6 @@
 {% set name = "openvino" %}
-{% set version_postfix = "2023.3.0" %}
-{% set version = "2023.3.0" %}
+{% set version_postfix = "2024.0.0" %}
+{% set version = "2024.0.0" %}
 
 package:
   name: {{ name|lower }}-split
@@ -29,7 +29,7 @@ source:
     folder: thirdparty/onnx/onnx
 
 build:
-  number: 2
+  number: 0
 
 requirements:
   build:
