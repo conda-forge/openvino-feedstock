@@ -1,6 +1,7 @@
 #include <stdlib.h>
 
 #include <openvino/c/openvino.h>
+#include <openvino/c/ov_core.h>
 #include <openvino/core/visibility.hpp>
 
 #define OV_CALL(statement) \
