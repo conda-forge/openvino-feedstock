@@ -5,6 +5,7 @@
 
 #define OV_CALL(statement) \
     if ((statement) != 0) \
+        printf(ov_get_last_err_msg()); \
         return EXIT_FAILURE;
 
 int main() {
