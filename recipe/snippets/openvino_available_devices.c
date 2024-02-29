@@ -4,10 +4,11 @@
 #include <openvino/c/ov_core.h>
 #include <openvino/core/visibility.hpp>
 
-#define OV_CALL(statement) \
+#define OV_CALL(statement) {\
     if ((statement) != 0) \
         printf(ov_get_last_err_msg()); \
-        return EXIT_FAILURE;
+        return EXIT_FAILURE; \
+}
 
 int main() {
     ov_core_t* core = NULL;
