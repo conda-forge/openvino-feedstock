@@ -475,19 +475,6 @@ outputs:
         - python
     test:
       imports:
-        - ngraph
-        - ngraph.opset1
-        - ngraph.opset2
-        - ngraph.opset3
-        - ngraph.opset4
-        - ngraph.opset5
-        - ngraph.opset6
-        - ngraph.opset7
-        - ngraph.opset8
-        - ngraph.opset9
-        - ngraph.opset10
-        - ngraph.opset11
-        - ngraph.utils
         - openvino.inference_engine
         - openvino.runtime
         - openvino.runtime.op
