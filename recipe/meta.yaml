@@ -475,7 +475,6 @@ outputs:
         - python
     test:
       imports:
-        - openvino.inference_engine
         - openvino.runtime
         - openvino.runtime.op
         - openvino.runtime.passes
