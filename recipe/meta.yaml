@@ -472,6 +472,7 @@ outputs:
         - numpy >=1.16.6
         - openvino-telemetry >=2023.1.1
         - singledispatchmethod  # [py <= 37]
+        - packaging
         - python
     test:
       imports:
