@@ -1,37 +1,24 @@
 #include <stdlib.h>
 
 #include <openvino/c/openvino.h>
-#include <openvino/c/ov_core.h>
 #include <openvino/core/visibility.hpp>
 
-int OV_CALL(statement) {
-    if ((statement) != 0){
-        printf(ov_get_last_err_msg());
+#define OV_CALL(statement)   \
+    if ((statement) != 0)    \
         return EXIT_FAILURE;
-    }
-    return EXIT_SUCCESS;
-}
 
 int main() {
     ov_core_t* core = NULL;
     char* ret = NULL;
-    printf("ov_core_create\n");
     OV_CALL(ov_core_create(&core));
-    printf("ov_core_get_property CPU\n");
     OV_CALL(ov_core_get_property(core, "CPU", "AVAILABLE_DEVICES", &ret));
 #if defined(OPENVINO_ARCH_X86_64) && !defined(__APPLE__)
-    printf("ov_core_get_property GPU\n");
     OV_CALL(ov_core_get_property(core, "GPU", "AVAILABLE_DEVICES", &ret));
 #endif
-    printf("ov_core_get_property AUTO\n");
-    OV_CALL(ov_core_get_property(core, "AUTO", "SUPPORTED_METRICS", &ret));
-    printf("ov_core_get_property MULTI\n");
-    OV_CALL(ov_core_get_property(core, "MULTI", "SUPPORTED_METRICS", &ret));
-    printf("ov_core_get_property HETERO\n");
-    OV_CALL(ov_core_get_property(core, "HETERO", "SUPPORTED_METRICS", &ret));
-    printf("ov_core_get_property BATCH\n");
-    OV_CALL(ov_core_get_property(core, "BATCH", "SUPPORTED_METRICS", &ret));
-    printf("ov_core_free\n");
+    OV_CALL(ov_core_get_property(core, "AUTO", "SUPPORTED_PROPERTIES", &ret));
+    OV_CALL(ov_core_get_property(core, "MULTI", "SUPPORTED_PROPERTIES", &ret));
+    OV_CALL(ov_core_get_property(core, "HETERO", "SUPPORTED_PROPERTIES", &ret));
+    OV_CALL(ov_core_get_property(core, "BATCH", "SUPPORTED_PROPERTIES", &ret));
     ov_core_free(core);
     return EXIT_SUCCESS;
 }
