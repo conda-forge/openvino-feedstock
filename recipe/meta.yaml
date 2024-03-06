@@ -1,6 +1,6 @@
 {% set name = "openvino" %}
-{% set version_postfix = "2023.3.0" %}
-{% set version = "2023.3.0" %}
+{% set version_postfix = "2024.0.0" %}
+{% set version = "2024.0.0" %}
 
 package:
   name: {{ name|lower }}-split
@@ -8,31 +8,27 @@ package:
 
 source:
   - url: https://github.com/openvinotoolkit/openvino/archive/refs/tags/{{ version }}.tar.gz
-    sha256: 27cff20ac0662f5495d2c2eec47cbe5469ab2f225aa091d223f8bfc9d32f4fc3
+    sha256: b3c257f8af9545ae68a6ea217173b2b2de9dd42d35e8703a7a51d76f4c2bfe2f
     patches:
-    - patches/001-cross-compile-protobuf.patch
     - patches/003-lin-arm64-compute-lib.patch  # [aarch64]
   - url: https://github.com/ARM-software/ComputeLibrary/archive/refs/tags/v23.08.tar.gz  # [aarch64 or arm64]
     sha256: 62f514a555409d4401e5250b290cdf8cf1676e4eb775e5bd61ea6a740a8ce24f  # [aarch64 or arm64]
     folder: src/plugins/intel_cpu/thirdparty/ComputeLibrary  # [aarch64 or arm64]
-  - url: https://github.com/openvinotoolkit/oneDNN/archive/cb3060bbf4694e46a1359a3d4dfe70500818f72d.tar.gz
-    sha256: 9dea3da8dab8511677db3db68ff4d9cdbfd31d8614bf04fd79a7610892bb991c
+  - url: https://github.com/openvinotoolkit/oneDNN/archive/f82148befdbdc9576ec721c9d500155ee4de8060.tar.gz
+    sha256: 7fce5c6b499ffe1a30c26b2d4e4a5193a38aa217b6f54e44eea52b21cf38a684
     folder: src/plugins/intel_cpu/thirdparty/onednn
-  - url: https://github.com/openvinotoolkit/mlas/archive/7a35e48a723944972088627be1a8b60841e8f6a5.tar.gz
-    sha256: b7fdd19523a88373d19fd8d5380f64c2834040fa50a6f0774acf08f3fa858daa
+  - url: https://github.com/openvinotoolkit/mlas/archive/d1bc25ec4660cddd87804fcf03b2411b5dfb2e94.tar.gz
+    sha256: 0a44fbfd4b13e8609d66ddac4b11a27c90c1074cde5244c91ad197901666004c
     folder: src/plugins/intel_cpu/thirdparty/mlas
-  - url: https://github.com/oneapi-src/oneDNN/archive/cb77937ffcf5e83b5d1cf2940c94e8b508d8f7b4.tar.gz  # [win64 or linux64]
-    sha256: 2ca304c033786aa5c3ec1ec6f8fc3936ae5c6874d5964b586311da11bec2ec4a  # [win64 or linux64]
+  - url: https://github.com/oneapi-src/oneDNN/archive/494af5f9921bdae98f1a0e2955fa7d76ff386c4f.tar.gz  # [win64 or linux64]
+    sha256: e2f36563cecf39197ad8d4f8b351ccc5a431085dad26e47c0ae6f0bb79149df7  # [win64 or linux64]
     folder: src/plugins/intel_gpu/thirdparty/onednn_gpu  # [win64 or linux64]
-  - url: https://github.com/opencv/ade/archive/refs/tags/v0.1.2d.tar.gz
-    sha256: edefba61a33d6cd4b78a9976cb3309c95212610a81ba6dade09882d1794198ff
-    folder: thirdparty/ade
   - url: https://github.com/onnx/onnx/archive/refs/tags/v1.15.0.tar.gz
     sha256: c757132e018dd0dd171499ef74fca88b74c5430a20781ec53da19eb7f937ef68
     folder: thirdparty/onnx/onnx
 
 build:
-  number: 2
+  number: 0
 
 requirements:
   build:
@@ -89,8 +85,6 @@ outputs:
         - test -f $PREFIX/lib/libopenvino{{ openvino_lib }}.{{ version_postfix }}${SHLIB_EXT}  # [osx]
         - if not exist %LIBRARY_BIN%\\openvino{{ openvino_lib }}%SHLIB_EXT% exit 1  # [win]
         {% endfor %}
-        - test -f $PREFIX/lib/openvino-{{ version_postfix }}/libopenvino_gapi_preproc.so  # [unix]
-        - if not exist %LIBRARY_BIN%\\openvino-{{ version_postfix }}\\openvino_gapi_preproc%SHLIB_EXT% exit 1  # [win]
 
   - name: libopenvino-ir-frontend
     version: {{ version }}
@@ -478,23 +472,10 @@ outputs:
         - numpy >=1.16.6
         - openvino-telemetry >=2023.1.1
         - singledispatchmethod  # [py <= 37]
+        - packaging
         - python
     test:
       imports:
-        - ngraph
-        - ngraph.opset1
-        - ngraph.opset2
-        - ngraph.opset3
-        - ngraph.opset4
-        - ngraph.opset5
-        - ngraph.opset6
-        - ngraph.opset7
-        - ngraph.opset8
-        - ngraph.opset9
-        - ngraph.opset10
-        - ngraph.opset11
-        - ngraph.utils
-        - openvino.inference_engine
         - openvino.runtime
         - openvino.runtime.op
         - openvino.runtime.passes
