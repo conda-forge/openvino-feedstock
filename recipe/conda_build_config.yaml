@@ -5,3 +5,23 @@ MACOSX_SDK_VERSION:        # [osx and x86_64]
   - "10.13"                # [osx and x86_64]
 MACOSX_DEPLOYMENT_TARGET:  # [osx and x86_64]
   - "10.13"                # [osx and x86_64]
+
+# Save the size of our build matrix.
+# Build with older protobuf upon request
+# https://github.com/conda-forge/libprotobuf-feedstock/issues/198
+# https://github.com/conda-forge/tensorflow-feedstock/issues/378
+# hmaarrfk - 2024/03 - requested to have builds for linux64
+# 4.25.2 is the latest protobuf migration as of 2024/03/11
+# 4.24.4 is the version that tensorflow 2.15 was last built with
+libprotobuf:  # [linux64]
+- '4.25.2'    # [linux64]
+- '4.24.4'    # [linux64]
+
+libgrpc:      # [linux64]
+- '1.61'      # [linux64]
+- '1.59'      # [linux64]
+
+zip_keys:            # [linux64]
+  -                  # [linux64]
+    - libgrpc        # [linux64]
+    - libprotobuf    # [linux64]
