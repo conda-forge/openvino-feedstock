@@ -21,12 +21,7 @@ libabseil:    # [linux64]
 - '20240116'  # [linux64]
 - '20230802'  # [linux64]
 
-libgrpc:      # [linux64]
-- '1.61'      # [linux64]
-- '1.59'      # [linux64]
-
 zip_keys:            # [linux64]
   -                  # [linux64]
-    - libgrpc        # [linux64]
     - libprotobuf    # [linux64]
     - libabseil      # [linux64]
