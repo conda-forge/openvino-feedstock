@@ -17,6 +17,7 @@ docker_image:
 flatbuffers:
 - 23.5.26
 libabseil:
+- '20230802'
 - '20240116'
 libprotobuf:
 - 4.24.4
