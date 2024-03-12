@@ -42,7 +42,9 @@ requirements:
     - pkg-config
     - scons  # [aarch64 or arm64]
     - cmake
-    - python
+    # Pin python here to a modern version in May 2023
+    # So that most packages get "shared"
+    - python  3.11
     - ccache
     - libprotobuf
     - flatbuffers
@@ -646,7 +648,11 @@ outputs:
       run:
         - python # dummy dependency to create python-version dependent package
         - {{ pin_subpackage('libopenvino-dev', exact=True) }}
-        - {{ pin_subpackage('libopenvino-python', exact=True) }}
+        # Do not use the exact pin here since we are generating multiple different 
+        # python packages in 1 go. Instead let the common python constraints
+        # choose the same variant of the package
+        # - {{ pin_subpackage('libopenvino-python', exact=True) }}
+        - {{ pin_subpackage('libopenvino-python', max_pin='x.x.x') }}
     test:
       requires:
         - {{ compiler('cxx') }}
