@@ -8,11 +8,16 @@ jobs:
     vmImage: ubuntu-latest
   strategy:
     matrix:
-      linux_64_:
-        CONFIG: linux_64_
+      linux_64_libprotobuf4.24.4:
+        CONFIG: linux_64_libprotobuf4.24.4
         UPLOAD_PACKAGES: 'True'
         DOCKER_IMAGE: quay.io/condaforge/linux-anvil-cos7-x86_64
-        SHORT_CONFIG: linux_64_
+        SHORT_CONFIG: linux_64_libprotobuf4.24.4
+      linux_64_libprotobuf4.25.3:
+        CONFIG: linux_64_libprotobuf4.25.3
+        UPLOAD_PACKAGES: 'True'
+        DOCKER_IMAGE: quay.io/condaforge/linux-anvil-cos7-x86_64
+        SHORT_CONFIG: linux_64_libprotobuf4.25.3
       linux_aarch64_:
         CONFIG: linux_aarch64_
         UPLOAD_PACKAGES: 'True'
