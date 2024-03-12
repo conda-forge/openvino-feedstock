@@ -1,7 +1,5 @@
 MACOSX_DEPLOYMENT_TARGET:
-- '10.13'
-MACOSX_SDK_VERSION:
-- '10.13'
+- '11.0'
 c_compiler:
 - clang
 c_compiler_version:
@@ -21,7 +19,7 @@ libabseil:
 libprotobuf:
 - 4.25.3
 macos_machine:
-- x86_64-apple-darwin13.4.0
+- arm64-apple-darwin20.0.0
 pin_run_as_build:
   python:
     min_pin: x.x
@@ -29,11 +27,15 @@ pin_run_as_build:
 pugixml:
 - '1.14'
 python:
+- 3.10.* *_cpython
 - 3.11.* *_cpython
+- 3.12.* *_cpython
+- 3.8.* *_cpython
+- 3.9.* *_cpython
 snappy:
 - '1'
 target_platform:
-- osx-64
+- osx-arm64
 tbb_devel:
 - '2021'
 zip_keys:
