@@ -17,7 +17,6 @@ docker_image:
 flatbuffers:
 - 23.5.26
 libabseil:
-- '20230802'
 - '20240116'
 libprotobuf:
 - 4.25.3
@@ -38,3 +37,5 @@ tbb_devel:
 zip_keys:
 - - c_compiler_version
   - cxx_compiler_version
+- - libprotobuf
+  - libabseil
