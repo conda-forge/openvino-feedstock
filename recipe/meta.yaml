@@ -28,7 +28,7 @@ source:
     folder: thirdparty/onnx/onnx
 
 build:
-  number: 2
+  number: 3
 
 requirements:
   build:
