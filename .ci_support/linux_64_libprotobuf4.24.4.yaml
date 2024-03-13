@@ -1,11 +1,7 @@
-BUILD:
-- aarch64-conda_cos7-linux-gnu
 c_compiler:
 - gcc
 c_compiler_version:
 - '12'
-cdt_arch:
-- aarch64
 cdt_name:
 - cos7
 channel_sources:
@@ -21,9 +17,9 @@ docker_image:
 flatbuffers:
 - 23.5.26
 libabseil:
-- '20240116'
+- '20230802'
 libprotobuf:
-- 4.25.2
+- 4.24.4
 pin_run_as_build:
   python:
     min_pin: x.x
@@ -32,12 +28,18 @@ pugixml:
 - '1.14'
 python:
 - 3.10.* *_cpython
+- 3.11.* *_cpython
+- 3.12.* *_cpython
+- 3.8.* *_cpython
+- 3.9.* *_cpython
 snappy:
 - '1'
 target_platform:
-- linux-aarch64
+- linux-64
 tbb_devel:
 - '2021'
 zip_keys:
 - - c_compiler_version
   - cxx_compiler_version
+- - libprotobuf
+  - libabseil
