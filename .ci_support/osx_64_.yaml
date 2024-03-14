@@ -22,6 +22,8 @@ libprotobuf:
 - 4.25.3
 macos_machine:
 - x86_64-apple-darwin13.4.0
+megabuild:
+- 'true'
 pin_run_as_build:
   python:
     min_pin: x.x
