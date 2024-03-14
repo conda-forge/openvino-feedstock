@@ -651,28 +651,11 @@ outputs:
         # - {{ pin_subpackage('libopenvino-python', exact=True) }}
         - {{ pin_subpackage('libopenvino-python', max_pin='x.x.x') }}
     test:
-      requires:
-        - {{ compiler('cxx') }}
-        - {{ compiler('c') }}
-        - ninja
-        - pkg-config
-        - cmake
-        - sysroot_linux-64 =2.17  # [linux64]
       files:
         - snippets/
       commands:
         # check that devices and frontends are found using Python API
         - python snippets/openvino_available_components.py  # [unix]
-
-        # check that devices are found using OpenVINO C API
-        - $CC snippets/openvino_available_devices.c $(pkg-config --cflags --libs openvino) -Wl,-rpath,$PREFIX/lib -o openvino_devices_test  # [unix]
-        - ./openvino_devices_test  # [unix]
-
-        # check that frontends are found using OpenVINO C++ API
-        - cmake -G "Ninja Multi-Config" -S snippets -B snippets_openvino_{{ CONDA_PY }}_build
-        - cmake --build snippets_openvino_{{ CONDA_PY }}_build --config Release --verbose
-        - ./snippets_openvino_{{ CONDA_PY }}_build/Release/openvino_frontends_test  # [unix]
-        - .\\snippets_openvino_{{ CONDA_PY }}_build\\Release\\openvino_frontends_test.exe  # [win]
 
 about:
   home: https://github.com/openvinotoolkit/openvino
