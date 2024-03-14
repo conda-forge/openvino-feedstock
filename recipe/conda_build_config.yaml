@@ -25,3 +25,8 @@ zip_keys:            # [linux64]
   -                  # [linux64]
     - libprotobuf    # [linux64]
     - libabseil      # [linux64]
+
+# windows has a hard time completing in under 6 hours on our CIs
+megabuild:
+- true      # [unix]
+- false     # [not unix]

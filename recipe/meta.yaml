@@ -40,7 +40,8 @@ requirements:
     - cmake
     # Pin python here to a modern version in May 2023
     # So that most packages get "shared"
-    - python  3.11
+    - python  3.11                          # [megabuild]
+    - python                                # [not megabuild]
     - ccache
     - libprotobuf
     - flatbuffers
