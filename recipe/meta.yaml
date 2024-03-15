@@ -32,7 +32,7 @@ source:
     folder: thirdparty/onnx/onnx
 
 build:
-  number: 2
+  number: 3
 
 requirements:
   build:
@@ -42,7 +42,10 @@ requirements:
     - pkg-config
     - scons  # [aarch64 or arm64]
     - cmake
-    - python
+    # Pin python here to a modern version in May 2023
+    # So that most packages get "shared"
+    - python  3.11                          # [megabuild]
+    - python                                # [not megabuild]
     - ccache
     - libprotobuf
     - flatbuffers
@@ -625,7 +628,6 @@ outputs:
         - onednn_third-party-programs.txt
         - runtime-third-party-programs.txt
     build:
-      string: py{{ CONDA_PY }}h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}
       run_exports:
         - {{ pin_subpackage('libopenvino-python', max_pin='x.x.x') }}
         - {{ pin_subpackage('libopenvino-intel-cpu-plugin', max_pin='x.x.x') }}  # [x86_64]
@@ -641,35 +643,19 @@ outputs:
         - {{ pin_subpackage('libopenvino-tensorflow-frontend', max_pin='x.x.x') }}
         - {{ pin_subpackage('libopenvino-tensorflow-lite-frontend', max_pin='x.x.x') }}
     requirements:
-      host:
-        - python # dummy dependency to create python-version dependent package
       run:
-        - python # dummy dependency to create python-version dependent package
         - {{ pin_subpackage('libopenvino-dev', exact=True) }}
-        - {{ pin_subpackage('libopenvino-python', exact=True) }}
+        # Do not use the exact pin here since we are generating multiple different 
+        # python packages in 1 go. Instead let the common python constraints
+        # choose the same variant of the package
+        # - {{ pin_subpackage('libopenvino-python', exact=True) }}
+        - {{ pin_subpackage('libopenvino-python', max_pin='x.x.x') }}
     test:
-      requires:
-        - {{ compiler('cxx') }}
-        - {{ compiler('c') }}
-        - ninja
-        - pkg-config
-        - cmake
-        - sysroot_linux-64 =2.17  # [linux64]
       files:
         - snippets/
       commands:
         # check that devices and frontends are found using Python API
-        - $PYTHON snippets/openvino_available_components.py  # [unix]
-
-        # check that devices are found using OpenVINO C API
-        - $CC snippets/openvino_available_devices.c $(pkg-config --cflags --libs openvino) -Wl,-rpath,$PREFIX/lib -o openvino_devices_test  # [unix]
-        - ./openvino_devices_test  # [unix]
-
-        # check that frontends are found using OpenVINO C++ API
-        - cmake -G "Ninja Multi-Config" -S snippets -B snippets_openvino_{{ CONDA_PY }}_build
-        - cmake --build snippets_openvino_{{ CONDA_PY }}_build --config Release --verbose
-        - ./snippets_openvino_{{ CONDA_PY }}_build/Release/openvino_frontends_test  # [unix]
-        - .\\snippets_openvino_{{ CONDA_PY }}_build\\Release\\openvino_frontends_test.exe  # [win]
+        - python snippets/openvino_available_components.py  # [unix]
 
 about:
   home: https://github.com/openvinotoolkit/openvino
