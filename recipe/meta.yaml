@@ -28,7 +28,7 @@ source:
     folder: thirdparty/onnx/onnx
 
 build:
-  number: 3
+  number: 4
 
 requirements:
   build:
@@ -76,6 +76,8 @@ outputs:
         - {{ compiler('c') }}
         - cmake
       host:
+        # hmaarrfk -- libprotobuf added to ensure that each protobuf builds has a a different hash
+        - libprotobuf
         - pugixml
         - tbb-devel
     test:
@@ -108,6 +110,8 @@ outputs:
         - {{ compiler('c') }}
         - cmake
       host:
+        # hmaarrfk -- libprotobuf added to ensure that each protobuf builds has a a different hash
+        - libprotobuf
         - pugixml
         - {{ pin_subpackage('libopenvino', exact=True) }}
       run:
@@ -195,6 +199,8 @@ outputs:
         - {{ compiler('c') }}
         - cmake
       host:
+        # hmaarrfk -- libprotobuf added to ensure that each protobuf builds has a a different hash
+        - libprotobuf
         - {{ pin_subpackage('libopenvino', exact=True) }}
       run:
         - {{ pin_subpackage('libopenvino', exact=True) }}
@@ -254,6 +260,8 @@ outputs:
         - {{ compiler('c') }}
         - cmake
       host:
+        # hmaarrfk -- libprotobuf added to ensure that each protobuf builds has a a different hash
+        - libprotobuf
         - {{ pin_subpackage('libopenvino', exact=True) }}
       run:
         - {{ pin_subpackage('libopenvino', exact=True) }}
@@ -281,6 +289,8 @@ outputs:
         - {{ compiler('c') }}
         - cmake
       host:
+        # hmaarrfk -- libprotobuf added to ensure that each protobuf builds has a a different hash
+        - libprotobuf
         - pugixml
         - tbb-devel
         - {{ pin_subpackage('libopenvino', exact=True) }}
@@ -309,6 +319,8 @@ outputs:
         - {{ compiler('c') }}
         - cmake
       host:
+        # hmaarrfk -- libprotobuf added to ensure that each protobuf builds has a a different hash
+        - libprotobuf
         - pugixml
         - tbb-devel
         - {{ pin_subpackage('libopenvino', exact=True) }}
@@ -336,6 +348,8 @@ outputs:
         - {{ compiler('c') }}
         - cmake
       host:
+        # hmaarrfk -- libprotobuf added to ensure that each protobuf builds has a a different hash
+        - libprotobuf
         - tbb-devel
         - ocl-icd  # [linux64]
         - clhpp
@@ -365,6 +379,8 @@ outputs:
         - {{ compiler('c') }}
         - cmake
       host:
+        # hmaarrfk -- libprotobuf added to ensure that each protobuf builds has a a different hash
+        - libprotobuf
         - tbb-devel
         - {{ pin_subpackage('libopenvino', exact=True) }}
       run:
@@ -390,6 +406,8 @@ outputs:
         - {{ compiler('c') }}
         - cmake
       host:
+        # hmaarrfk -- libprotobuf added to ensure that each protobuf builds has a a different hash
+        - libprotobuf
         - tbb-devel
         - {{ pin_subpackage('libopenvino', exact=True) }}
       run:
@@ -415,6 +433,8 @@ outputs:
         - {{ compiler('c') }}
         - cmake
       host:
+        # hmaarrfk -- libprotobuf added to ensure that each protobuf builds has a a different hash
+        - libprotobuf
         - pugixml
         - {{ pin_subpackage('libopenvino', exact=True) }}
       run:
@@ -455,6 +475,8 @@ outputs:
         - pybind11
         - wheel
       host:
+        # hmaarrfk -- libprotobuf added to ensure that each protobuf builds has a a different hash
+        - libprotobuf
         - tbb-devel  # for OpenVINO Developer package only
         - pugixml  # for OpenVINO Developer package only
         - python
@@ -541,6 +563,8 @@ outputs:
       build:
         - cmake
       host:
+        # hmaarrfk -- libprotobuf added to ensure that each protobuf builds has a a different hash
+        - libprotobuf
         # hmaarrfk: 2024/01
         # without the tbb-devel package in the host section, we won't be able to drag on
         # the comaptible dependency below
