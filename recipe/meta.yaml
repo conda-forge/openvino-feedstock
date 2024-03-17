@@ -667,9 +667,12 @@ outputs:
         - {{ pin_subpackage('libopenvino-tensorflow-frontend', max_pin='x.x.x') }}
         - {{ pin_subpackage('libopenvino-tensorflow-lite-frontend', max_pin='x.x.x') }}
     requirements:
+      host:
+        # hmaarrfk -- libprotobuf added to ensure that each protobuf builds has a a different hash
+        - libprotobuf
       run:
         - {{ pin_subpackage('libopenvino-dev', exact=True) }}
-        # Do not use the exact pin here since we are generating multiple different 
+        # Do not use the exact pin here since we are generating multiple different
         # python packages in 1 go. Instead let the common python constraints
         # choose the same variant of the package
         # - {{ pin_subpackage('libopenvino-python', exact=True) }}
