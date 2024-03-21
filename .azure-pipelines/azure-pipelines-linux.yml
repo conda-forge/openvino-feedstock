@@ -8,22 +8,18 @@ jobs:
     vmImage: ubuntu-latest
   strategy:
     matrix:
-      linux_64_libprotobuf4.24.4:
-        CONFIG: linux_64_libprotobuf4.24.4
+      linux_64_:
+        CONFIG: linux_64_
         UPLOAD_PACKAGES: 'True'
         DOCKER_IMAGE: quay.io/condaforge/linux-anvil-cos7-x86_64
-        SHORT_CONFIG: linux_64_libprotobuf4.24.4
-      linux_64_libprotobuf4.25.2:
-        CONFIG: linux_64_libprotobuf4.25.2
-        UPLOAD_PACKAGES: 'True'
-        DOCKER_IMAGE: quay.io/condaforge/linux-anvil-cos7-x86_64
-        SHORT_CONFIG: linux_64_libprotobuf4.25.2
+        SHORT_CONFIG: linux_64_
       linux_aarch64_:
         CONFIG: linux_aarch64_
         UPLOAD_PACKAGES: 'True'
         DOCKER_IMAGE: quay.io/condaforge/linux-anvil-cos7-x86_64
         SHORT_CONFIG: linux_aarch64_
   timeoutInMinutes: 600
+  variables: {}
 
   steps:
   # configure qemu binfmt-misc running.  This allows us to run docker containers
