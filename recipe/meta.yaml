@@ -11,8 +11,8 @@ source:
     sha256: b298a91b5aae252ef9883e0f2017e88677be88a9839b1aa2f6e9f70067d98ce6
     patches:
     - patches/003-lin-arm64-compute-lib.patch  # [aarch64]
-  - url: https://github.com/ARM-software/ComputeLibrary/archive/refs/tags/v23.08.tar.gz  # [aarch64 or arm64]
-    sha256: 62f514a555409d4401e5250b290cdf8cf1676e4eb775e5bd61ea6a740a8ce24f  # [aarch64 or arm64]
+  - url: https://github.com/ARM-software/ComputeLibrary/archive/refs/tags/v24.02.1.tar.gz  # [aarch64 or arm64]
+    sha256: 590d5cb710355bce2ddfe7117529c2f492cd253b548f709bbfe84702203d99c8  # [aarch64 or arm64]
     folder: src/plugins/intel_cpu/thirdparty/ComputeLibrary  # [aarch64 or arm64]
   - url: https://github.com/openvinotoolkit/oneDNN/archive/26633ae49edd4353a29b7170d9fcef6b2d79f4b3.tar.gz
     sha256: 3cd4a2aea30cd6ca689e63545cf986f8e83c88333b73d42bb750fcaf08940b17
