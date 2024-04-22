@@ -1,6 +1,6 @@
 {% set name = "openvino" %}
-{% set version_postfix = "2024.0.0" %}
-{% set version = "2024.0.0" %}
+{% set version_postfix = "2024.1.0" %}
+{% set version = "2024.1.0" %}
 
 package:
   name: {{ name|lower }}-split
@@ -8,20 +8,20 @@ package:
 
 source:
   - url: https://github.com/openvinotoolkit/openvino/archive/refs/tags/{{ version }}.tar.gz
-    sha256: b3c257f8af9545ae68a6ea217173b2b2de9dd42d35e8703a7a51d76f4c2bfe2f
+    sha256: b298a91b5aae252ef9883e0f2017e88677be88a9839b1aa2f6e9f70067d98ce6
     patches:
     - patches/003-lin-arm64-compute-lib.patch  # [aarch64]
   - url: https://github.com/ARM-software/ComputeLibrary/archive/refs/tags/v23.08.tar.gz  # [aarch64 or arm64]
     sha256: 62f514a555409d4401e5250b290cdf8cf1676e4eb775e5bd61ea6a740a8ce24f  # [aarch64 or arm64]
     folder: src/plugins/intel_cpu/thirdparty/ComputeLibrary  # [aarch64 or arm64]
-  - url: https://github.com/openvinotoolkit/oneDNN/archive/f82148befdbdc9576ec721c9d500155ee4de8060.tar.gz
-    sha256: 7fce5c6b499ffe1a30c26b2d4e4a5193a38aa217b6f54e44eea52b21cf38a684
+  - url: https://github.com/openvinotoolkit/oneDNN/archive/26633ae49edd4353a29b7170d9fcef6b2d79f4b3.tar.gz
+    sha256: 3cd4a2aea30cd6ca689e63545cf986f8e83c88333b73d42bb750fcaf08940b17
     folder: src/plugins/intel_cpu/thirdparty/onednn
   - url: https://github.com/openvinotoolkit/mlas/archive/d1bc25ec4660cddd87804fcf03b2411b5dfb2e94.tar.gz
     sha256: 0a44fbfd4b13e8609d66ddac4b11a27c90c1074cde5244c91ad197901666004c
     folder: src/plugins/intel_cpu/thirdparty/mlas
-  - url: https://github.com/oneapi-src/oneDNN/archive/494af5f9921bdae98f1a0e2955fa7d76ff386c4f.tar.gz  # [win64 or linux64]
-    sha256: e2f36563cecf39197ad8d4f8b351ccc5a431085dad26e47c0ae6f0bb79149df7  # [win64 or linux64]
+  - url: https://github.com/oneapi-src/oneDNN/archive/4e6ff043c439652fcf6c400ac4e0c81bbac7c71c.tar.gz  # [win64 or linux64]
+    sha256: c3543d560fbbb7297df91c191cc9bf682322c5554302e256f1bf4a757424a331  # [win64 or linux64]
     folder: src/plugins/intel_gpu/thirdparty/onednn_gpu  # [win64 or linux64]
   - url: https://github.com/onnx/onnx/archive/refs/tags/v1.15.0.tar.gz
     sha256: c757132e018dd0dd171499ef74fca88b74c5430a20781ec53da19eb7f937ef68
