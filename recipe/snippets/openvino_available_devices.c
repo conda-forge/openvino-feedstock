@@ -14,7 +14,7 @@ int main() {
     OV_CALL(ov_core_get_property(core, "CPU", "AVAILABLE_DEVICES", &ret));
 #if defined(OPENVINO_ARCH_X86_64) && !defined(__APPLE__)
     OV_CALL(ov_core_get_property(core, "GPU", "AVAILABLE_DEVICES", &ret));
-#    OV_CALL(ov_core_get_property(core, "NPU", "AVAILABLE_DEVICES", &ret));
+    // OV_CALL(ov_core_get_property(core, "NPU", "AVAILABLE_DEVICES", &ret));
 #endif
     OV_CALL(ov_core_get_property(core, "AUTO", "SUPPORTED_PROPERTIES", &ret));
     OV_CALL(ov_core_get_property(core, "MULTI", "SUPPORTED_PROPERTIES", &ret));
