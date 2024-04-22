@@ -10,7 +10,6 @@ mkdir -p build
 
 cmake ${CMAKE_ARGS}                                                          \
     -DCMAKE_BUILD_TYPE=Release                                               \
-    -DENABLE_INTEL_GNA=OFF                                                   \
     -DENABLE_SYSTEM_TBB=ON                                                   \
     -DENABLE_SYSTEM_PUGIXML=ON                                               \
     -DENABLE_SYSTEM_PROTOBUF=ON                                              \

@@ -6,7 +6,6 @@ mkdir -p build
 cmake                                                                        ^
     -DCMAKE_INSTALL_PREFIX="%LIBRARY_PREFIX%"                                ^
     -DCMAKE_BUILD_TYPE=Release                                               ^
-    -DENABLE_INTEL_GNA=OFF                                                   ^
     -DENABLE_SYSTEM_TBB=ON                                                   ^
     -DENABLE_SYSTEM_PUGIXML=ON                                               ^
     -DENABLE_SYSTEM_OPENCL=ON                                                ^
