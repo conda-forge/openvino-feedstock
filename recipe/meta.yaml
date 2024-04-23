@@ -376,7 +376,9 @@ outputs:
         - onednn_third-party-programs.txt
         - runtime-third-party-programs.txt
     build:
-      skip: True  # [not linux64 and not win64]
+        skip: True  # [not linux64 and not win64]
+        missing_dso_whitelist:
+          - "*/libze_loader.so*"   # [linux64]
     requirements:
       build:
         - {{ compiler('cxx') }}
