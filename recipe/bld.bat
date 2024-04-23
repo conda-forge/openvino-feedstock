@@ -17,7 +17,6 @@ cmake                                                                        ^
     -DENABLE_NCC_STYLE=OFF                                                   ^
     -DENABLE_TEMPLATE=OFF                                                    ^
     -DENABLE_SAMPLES=OFF                                                     ^
-    -DENABLE_DATA=OFF                                                        ^
     -DCMAKE_CXX_FLAGS="/wd4996"                                              ^
     -DCMAKE_C_FLAGS="/wd4996"                                                ^
     -DCPACK_GENERATOR=CONDA-FORGE                                            ^
