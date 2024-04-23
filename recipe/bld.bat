@@ -7,6 +7,7 @@ cmake                                                                        ^
     -DCMAKE_INSTALL_PREFIX="%LIBRARY_PREFIX%"                                ^
     -DCMAKE_BUILD_TYPE=Release                                               ^
     -DENABLE_SYSTEM_TBB=ON                                                   ^
+    -DENABLE_INTEL_NPU=OFF                                                   ^
     -DENABLE_SYSTEM_PUGIXML=ON                                               ^
     -DENABLE_SYSTEM_OPENCL=ON                                                ^
     -DENABLE_SYSTEM_PROTOBUF=ON                                              ^

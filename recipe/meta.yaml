@@ -23,12 +23,12 @@ source:
   - url: https://github.com/oneapi-src/oneDNN/archive/4e6ff043c439652fcf6c400ac4e0c81bbac7c71c.tar.gz  # [win64 or linux64]
     sha256: c3543d560fbbb7297df91c191cc9bf682322c5554302e256f1bf4a757424a331  # [win64 or linux64]
     folder: src/plugins/intel_gpu/thirdparty/onednn_gpu  # [win64 or linux64]
-  - url: https://github.com/oneapi-src/level-zero/archive/4ed13f327d3389285592edcf7598ec3cb2bc712e.tar.gz  # [win64 or linux64]
-    sha256: e9fe67f792c7d8f0243eef6ad4e3bb0bb484cc5dfa6790c4fe13289d4fc4df2c  # [win64 or linux64]
-    folder: src/plugins/intel_npu/thirdparty/level-zero  # [win64 or linux64]
-  - url: https://github.com/intel/level-zero-npu-extensions/archive/0e1c471356a724ef6d176ba027a68e210d90939e.tar.gz  # [win64 or linux64]
-    sha256: 66f8b5a1ff7e9b404470f76c17ea9c35ecdca506b0fdc37540766b46ca2f085d  # [win64 or linux64]
-    folder: src/plugins/intel_npu/thirdparty/level-zero-ext  # [win64 or linux64]
+  - url: https://github.com/oneapi-src/level-zero/archive/4ed13f327d3389285592edcf7598ec3cb2bc712e.tar.gz  # [linux64]
+    sha256: e9fe67f792c7d8f0243eef6ad4e3bb0bb484cc5dfa6790c4fe13289d4fc4df2c  # [linux64]
+    folder: src/plugins/intel_npu/thirdparty/level-zero  # [linux64]
+  - url: https://github.com/intel/level-zero-npu-extensions/archive/0e1c471356a724ef6d176ba027a68e210d90939e.tar.gz  # [linux64]
+    sha256: 66f8b5a1ff7e9b404470f76c17ea9c35ecdca506b0fdc37540766b46ca2f085d  # [linux64]
+    folder: src/plugins/intel_npu/thirdparty/level-zero-ext  # [linux64]
   - url: https://github.com/onnx/onnx/archive/refs/tags/v1.15.0.tar.gz
     sha256: c757132e018dd0dd171499ef74fca88b74c5430a20781ec53da19eb7f937ef68
     folder: thirdparty/onnx/onnx
@@ -376,7 +376,7 @@ outputs:
         - onednn_third-party-programs.txt
         - runtime-third-party-programs.txt
     build:
-        skip: True  # [not linux64 and not win64]
+        skip: True  # [not linux64]
         missing_dso_whitelist:
           - "*/libze_loader.so*"   # [linux64]
     requirements:
@@ -576,7 +576,7 @@ outputs:
         - {{ pin_subpackage('libopenvino-intel-cpu-plugin', max_pin='x.x.x') }}  # [x86_64]
         - {{ pin_subpackage('libopenvino-arm-cpu-plugin', max_pin='x.x.x') }}  # [aarch64 or arm64]
         - {{ pin_subpackage('libopenvino-intel-gpu-plugin', max_pin='x.x.x') }}  # [win64 or linux64]
-        - {{ pin_subpackage('libopenvino-intel-npu-plugin', max_pin='x.x.x') }}  # [win64 or linux64]
+        - {{ pin_subpackage('libopenvino-intel-npu-plugin', max_pin='x.x.x') }}  # [linux64]
         - {{ pin_subpackage('libopenvino-auto-plugin', max_pin='x.x.x') }}
         - {{ pin_subpackage('libopenvino-hetero-plugin', max_pin='x.x.x') }}
         - {{ pin_subpackage('libopenvino-auto-batch-plugin', max_pin='x.x.x') }}
@@ -606,7 +606,7 @@ outputs:
         - {{ pin_subpackage('libopenvino-intel-cpu-plugin', exact=True) }}  # [x86_64]
         - {{ pin_subpackage('libopenvino-arm-cpu-plugin', exact=True) }}  # [aarch64 or arm64]
         - {{ pin_subpackage('libopenvino-intel-gpu-plugin', exact=True) }}  # [win64 or linux64]
-        - {{ pin_subpackage('libopenvino-intel-npu-plugin', exact=True) }}  # [win64 or linux64]
+        - {{ pin_subpackage('libopenvino-intel-npu-plugin', exact=True) }}  # [linux64]
         - {{ pin_subpackage('libopenvino-auto-plugin', exact=True) }}
         - {{ pin_subpackage('libopenvino-hetero-plugin', exact=True) }}
         - {{ pin_subpackage('libopenvino-auto-batch-plugin', exact=True) }}
@@ -664,7 +664,7 @@ outputs:
         - {{ pin_subpackage('libopenvino-intel-cpu-plugin', max_pin='x.x.x') }}  # [x86_64]
         - {{ pin_subpackage('libopenvino-arm-cpu-plugin', max_pin='x.x.x') }}  # [aarch64 or arm64]
         - {{ pin_subpackage('libopenvino-intel-gpu-plugin', max_pin='x.x.x') }}  # [win64 or linux64]
-        - {{ pin_subpackage('libopenvino-intel-npu-plugin', exact=True) }}  # [win64 or linux64]
+        - {{ pin_subpackage('libopenvino-intel-npu-plugin', exact=True) }}  # [linux64]
         - {{ pin_subpackage('libopenvino-auto-plugin', max_pin='x.x.x') }}
         - {{ pin_subpackage('libopenvino-hetero-plugin', max_pin='x.x.x') }}
         - {{ pin_subpackage('libopenvino-auto-batch-plugin', max_pin='x.x.x') }}
