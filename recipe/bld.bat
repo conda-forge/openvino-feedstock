@@ -6,8 +6,8 @@ mkdir -p build
 cmake                                                                        ^
     -DCMAKE_INSTALL_PREFIX="%LIBRARY_PREFIX%"                                ^
     -DCMAKE_BUILD_TYPE=Release                                               ^
-    -DENABLE_INTEL_GNA=OFF                                                   ^
     -DENABLE_SYSTEM_TBB=ON                                                   ^
+    -DENABLE_INTEL_NPU=OFF                                                   ^
     -DENABLE_SYSTEM_PUGIXML=ON                                               ^
     -DENABLE_SYSTEM_OPENCL=ON                                                ^
     -DENABLE_SYSTEM_PROTOBUF=ON                                              ^
@@ -18,7 +18,6 @@ cmake                                                                        ^
     -DENABLE_NCC_STYLE=OFF                                                   ^
     -DENABLE_TEMPLATE=OFF                                                    ^
     -DENABLE_SAMPLES=OFF                                                     ^
-    -DENABLE_DATA=OFF                                                        ^
     -DCMAKE_CXX_FLAGS="/wd4996"                                              ^
     -DCMAKE_C_FLAGS="/wd4996"                                                ^
     -DCPACK_GENERATOR=CONDA-FORGE                                            ^
