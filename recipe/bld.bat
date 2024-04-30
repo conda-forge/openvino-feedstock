@@ -21,6 +21,7 @@ cmake                                                                        ^
     -DCMAKE_CXX_FLAGS="/wd4996"                                              ^
     -DCMAKE_C_FLAGS="/wd4996"                                                ^
     -DCPACK_GENERATOR=CONDA-FORGE                                            ^
+    -DCMAKE_VS_WINDOWS_TARGET_PLATFORM_VERSION="10.0.22621.0"                ^
     -G "Visual Studio 17 2022"                                               ^
     -S "%SRC_DIR%"                                                           ^
     -B "%SRC_DIR%\build"
