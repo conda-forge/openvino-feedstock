@@ -9,8 +9,6 @@ c_compiler:      # [win]
 - vs2022         # [win]
 cxx_compiler:    # [win]
 - vs2022         # [win]
-flatbuffers:
-- 24.3.7
 
 # windows has a hard time completing in under 6 hours on our CIs
 megabuild:
