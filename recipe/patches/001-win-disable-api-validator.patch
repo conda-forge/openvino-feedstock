@@ -1,0 +1,23 @@
+diff --git a/cmake/developer_package/api_validator/api_validator.cmake b/cmake/developer_package/api_validator/api_validator.cmake
+index 0fd1f2c03a..2fef542815 100644
+--- a/cmake/developer_package/api_validator/api_validator.cmake
++++ b/cmake/developer_package/api_validator/api_validator.cmake
+@@ -103,7 +103,6 @@ function(_ov_add_api_validator_post_build_step)
+     else()
+         message(FATAL_ERROR "Unknown configuration: ${CMAKE_HOST_SYSTEM_PROCESSOR}")
+     endif()
+-
+     find_file(ONECORE_API_VALIDATOR_APIS NAMES UniversalDDIs.xml
+               PATHS "${PROGRAMFILES}/Windows Kits/10/build/${CMAKE_VS_WINDOWS_TARGET_PLATFORM_VERSION}/universalDDIs/${wdk_platform}"
+                     "${PROGRAMFILES}/Windows Kits/10/build/universalDDIs/${wdk_platform}"
+@@ -208,5 +207,9 @@ endfunction()
+ # ov_add_api_validator_post_build_step(TARGET <name>)
+ #
+ function(ov_add_api_validator_post_build_step)
+-    _ov_add_api_validator_post_build_step(${ARGN})
++    if(NOT CPACK_GENERATOR STREQUAL "CONDA-FORGE")
++        _ov_add_api_validator_post_build_step(${ARGN})
++    else()
++        message(WARNING "API validator has been disabled for Conda-forge")
++    endif()
+ endfunction()

@@ -10,7 +10,7 @@ source:
   - url: https://github.com/openvinotoolkit/openvino/archive/refs/tags/{{ version }}.tar.gz
     sha256: b298a91b5aae252ef9883e0f2017e88677be88a9839b1aa2f6e9f70067d98ce6
     patches:
-    - patches/001-win-define-target-platform.patch  # [win64]
+    - patches/001-win-disable-api-validator.patch  # [win64]
     - patches/003-lin-arm64-compute-lib.patch  # [aarch64]
   - url: https://github.com/ARM-software/ComputeLibrary/archive/refs/tags/v24.02.1.tar.gz  # [aarch64 or arm64]
     sha256: 590d5cb710355bce2ddfe7117529c2f492cd253b548f709bbfe84702203d99c8  # [aarch64 or arm64]
