@@ -19,7 +19,7 @@ cxx_compiler:
 cxx_compiler_version:
 - '16'
 flatbuffers:
-- 23.5.26
+- 24.3.6
 libabseil:
 - '20240116'
 libprotobuf:
