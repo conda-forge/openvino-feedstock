@@ -9,7 +9,7 @@ channel_targets:
 cxx_compiler:
 - vs2019
 flatbuffers:
-- 23.5.26
+- 24.3.7
 libabseil:
 - '20240116'
 libprotobuf:
