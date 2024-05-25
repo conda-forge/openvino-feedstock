@@ -35,7 +35,7 @@ source:
     folder: thirdparty/onnx/onnx
 
 build:
-  number: 6
+  number: 8
 
 requirements:
   build:
@@ -392,7 +392,7 @@ outputs:
         - {{ pin_subpackage('libopenvino', exact=True) }}
     test:
       commands:
-        - test -f $PREFIX/lib/openvino-{{ version_postfix }}/libopenvino_intel_npu_plugin.so  # [unix]
+        - test -f $PREFIX/lib/openvino-{{ version_postfix }}/libopenvino_intel_npu_plugin.so  # [linux64]
         - if not exist %LIBRARY_BIN%\\openvino-{{ version_postfix }}\\openvino_intel_npu_plugin%SHLIB_EXT% exit 1  # [win]
 
   - name: libopenvino-auto-plugin
