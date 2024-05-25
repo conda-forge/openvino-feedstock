@@ -1,29 +1,32 @@
 c_compiler:
 - vs2019
+c_stdlib:
+- vs
 channel_sources:
 - conda-forge
 channel_targets:
 - conda-forge openvino_dev
 cxx_compiler:
 - vs2019
-gflags:
-- '2.2'
+flatbuffers:
+- 24.3.25
+libabseil:
+- '20240116'
+libprotobuf:
+- 4.25.3
+megabuild:
+- 'false'
 pin_run_as_build:
   python:
     min_pin: x.x
     max_pin: x.x
 pugixml:
-- '1.13'
+- '1.14'
 python:
 - 3.10.* *_cpython
-- 3.11.* *_cpython
-- 3.8.* *_cpython
-- 3.9.* *_cpython
 snappy:
-- '1'
+- '1.2'
 target_platform:
 - win-64
 tbb_devel:
 - '2021'
-zlib:
-- '1.2'

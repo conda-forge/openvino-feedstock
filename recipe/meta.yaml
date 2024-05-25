@@ -1,38 +1,36 @@
 {% set name = "openvino" %}
-{% set version_postfix = "2023.2.0" %}
-{% set version = "2023.2.0.dev20230922" %}
+{% set version_postfix = "2024.2.0" %}
+{% set version = "2024.2.0.dev20240513" %}
 
 package:
   name: {{ name|lower }}-split
   version: {{ version }}
 
 source:
-  - url: https://github.com/openvinotoolkit/openvino/archive/e7c1344d3c390ae3dd1e827de18a0b76be15e3a5.tar.gz
-    sha256: 620f618403bbc7d7289e1e2e09deca83b91de1f7da27583ea2bf95f94873c421
+  - url: https://github.com/openvinotoolkit/openvino/archive/refs/tags/{{ version }}.tar.gz
+    sha256: a972ed6525889f63e0de1f2484dd8e4c5ed649a64da454caf36986bc40c80a44
     patches:
-    - patches/002-win32-python-search.patch
     - patches/003-lin-arm64-compute-lib.patch  # [aarch64]
-    - patches/004-gflags-samples.patch
-  - url: https://github.com/ARM-software/ComputeLibrary/archive/refs/tags/v23.08.tar.gz  # [aarch64 or arm64]
-    sha256: 62f514a555409d4401e5250b290cdf8cf1676e4eb775e5bd61ea6a740a8ce24f  # [aarch64 or arm64]
+  - url: https://github.com/ARM-software/ComputeLibrary/archive/refs/tags/v24.04.tar.gz  # [aarch64 or arm64]
+    sha256: 6d7aebfa9be74d29ecd2dbeb17f69e00c667c36292401f210121bf26a30b38a5  # [aarch64 or arm64]
     folder: src/plugins/intel_cpu/thirdparty/ComputeLibrary  # [aarch64 or arm64]
-  - url: https://github.com/openvinotoolkit/oneDNN/archive/3767662f257270921b64ec9a40e45a46b4ef048c.tar.gz
-    sha256: 477e3156b77a88f9e77bbbaaf071e19ed19f631972edf902dbefdf8f63062dfd
+  - url: https://github.com/openvinotoolkit/oneDNN/archive/373e65b660c0ba274631cf30c422f10606de1618.tar.gz
+    sha256: c205b81f9024952c742e765090556a18c9463fff245753a2afa42c344bd6379d
     folder: src/plugins/intel_cpu/thirdparty/onednn
-  - url: https://github.com/openvinotoolkit/mlas/archive/c7c8a631315000f17c650af34431009d2f22129c.tar.gz
-    sha256: 7b790dfeef8e1dd612f920c85186c52ad3a3e2245e2a2afd6cc91ce4b1dc64a9
+  - url: https://github.com/openvinotoolkit/mlas/archive/d1bc25ec4660cddd87804fcf03b2411b5dfb2e94.tar.gz
+    sha256: 0a44fbfd4b13e8609d66ddac4b11a27c90c1074cde5244c91ad197901666004c
     folder: src/plugins/intel_cpu/thirdparty/mlas
-  - url: https://github.com/openvinotoolkit/mlas/archive/219f114e988527bb0ecaf2636622562859afa6e1.tar.gz
-    sha256: c97dcca992a4bb24f2936558304bd8ac0ce10d2cb9b8f2f3eadf4d0b14995e93
-    folder: src/plugins/intel_cpu/thirdparty/mlas
-  - url: https://github.com/oneapi-src/oneDNN/archive/4b82a66ed38ecaa993352e5cc6ed7753656b8a26.tar.gz  # [win64 or linux64]
-    sha256: cb17c003fe51bc9b4e20189573956b4446468162adf0fc4cea2ee0820cff0cd0  # [win64 or linux64]
+  - url: https://github.com/oneapi-src/oneDNN/archive/bab7bf42914073e443276e9efb0ddc5c93d6f52c.tar.gz  # [win64 or linux64]
+    sha256: 8af90c7c023c5adc4da93294ec5221d8e1eb69b15dfc7c4333acb192d0f7e31f  # [win64 or linux64]
     folder: src/plugins/intel_gpu/thirdparty/onednn_gpu  # [win64 or linux64]
-  - url: https://github.com/opencv/ade/archive/refs/tags/v0.1.2c.tar.gz
-    sha256: 1387891c707c6e5c76448ea09e2df2e8bce1645c11f262c10b3f3ebec88749c2
-    folder: thirdparty/ade
-  - url: https://github.com/onnx/onnx/archive/refs/tags/v1.14.1.tar.gz
-    sha256: e296f8867951fa6e71417a18f2e550a730550f8829bd35e947b4df5e3e777aa1
+  - url: https://github.com/oneapi-src/level-zero/archive/4ed13f327d3389285592edcf7598ec3cb2bc712e.tar.gz  # [linux64]
+    sha256: e9fe67f792c7d8f0243eef6ad4e3bb0bb484cc5dfa6790c4fe13289d4fc4df2c  # [linux64]
+    folder: src/plugins/intel_npu/thirdparty/level-zero  # [linux64]
+  - url: https://github.com/intel/level-zero-npu-extensions/archive/d490a130fbb80e600b3aed3886c305abcb60d77c.tar.gz  # [linux64]
+    sha256: 05c6927fdb338efa4cd17a2f5fe3fb0785a5f5c2ef3be02c51dc9e1e9163cd12  # [linux64]
+    folder: src/plugins/intel_npu/thirdparty/level-zero-ext  # [linux64]
+  - url: https://github.com/onnx/onnx/archive/refs/tags/v1.15.0.tar.gz
+    sha256: c757132e018dd0dd171499ef74fca88b74c5430a20781ec53da19eb7f937ef68
     folder: thirdparty/onnx/onnx
 
 build:
@@ -41,27 +39,28 @@ build:
 requirements:
   build:
     - {{ compiler('c') }}
+    - {{ stdlib("c") }}
     - {{ compiler('cxx') }}
     - ninja
-    - pkg-config # to generate openvino.pc on macOS
+    - pkg-config
     - scons  # [aarch64 or arm64]
-    - cmake >=3.15 # to have new cmake cmd interface (-S, --install and other options)
-    - python >=3.7
+    - cmake
+    # Pin python here to a modern version in May 2023
+    # So that most packages get "shared"
+    - python  3.11                          # [megabuild]
+    - python                                # [not megabuild]
     - ccache
-    - libprotobuf =3.20.3 # for protoc compiler, libraries are used from libprotobuf-static
-    - flatbuffers =23.3.3
-    - sysroot_linux-64 =2.17  # [linux64]
+    - libprotobuf
+    - flatbuffers
   host:
-    - tbb-devel =2021.5 # starting from this version TBB uses hwloc in conda
+    - tbb-devel
     - snappy
     - ocl-icd  # [linux64]
     - clhpp  # [linux64 or win64]
     - khronos-opencl-icd-loader  # [win64]
-    - rapidjson  # [linux64 or win64]
-    - pugixml >=1.12.1 # starting from this version shared libraries are provided
-    - xbyak >=6.69.1  # [x86_64]
-    - libprotobuf-static =3.20.3  # [not win64]
-    - libprotobuf-static  # [win64]
+    - pugixml
+    - xbyak  # [x86_64]
+    - libprotobuf
 
 outputs:
   - name: libopenvino
@@ -81,10 +80,11 @@ outputs:
       build:
         - {{ compiler('cxx') }}
         - {{ compiler('c') }}
-        - cmake >=3.15 # to have new cmake cmd interface (-S, --install and other options)
+        - {{ stdlib("c") }}
+        - cmake
       host:
-        - pugixml >=1.12.1 # starting from this version shared libraries are provided
-        - tbb-devel =2021.5  # starting from this version TBB uses hwloc in conda
+        - pugixml
+        - tbb-devel
     test:
       commands:
         {% set openvino_libs = [] %}
@@ -95,8 +95,6 @@ outputs:
         - test -f $PREFIX/lib/libopenvino{{ openvino_lib }}.{{ version_postfix }}${SHLIB_EXT}  # [osx]
         - if not exist %LIBRARY_BIN%\\openvino{{ openvino_lib }}%SHLIB_EXT% exit 1  # [win]
         {% endfor %}
-        - test -f $PREFIX/lib/openvino-{{ version_postfix }}/libopenvino_gapi_preproc.so  # [unix]
-        - if not exist %LIBRARY_BIN%\\openvino-{{ version_postfix }}\\openvino_gapi_preproc%SHLIB_EXT% exit 1  # [win]
 
   - name: libopenvino-ir-frontend
     version: {{ version }}
@@ -115,9 +113,10 @@ outputs:
       build:
         - {{ compiler('cxx') }}
         - {{ compiler('c') }}
-        - cmake >=3.15 # to have new cmake cmd interface (-S, --install and other options)
+        - {{ stdlib("c") }}
+        - cmake
       host:
-        - pugixml >=1.12.1 # starting from this version shared libraries are provided
+        - pugixml
         - {{ pin_subpackage('libopenvino', exact=True) }}
       run:
         - {{ pin_subpackage('libopenvino', exact=True) }}
@@ -144,8 +143,10 @@ outputs:
       build:
         - {{ compiler('cxx') }}
         - {{ compiler('c') }}
-        - cmake >=3.15 # to have new cmake cmd interface (-S, --install and other options)
+        - {{ stdlib("c") }}
+        - cmake
       host:
+        - libprotobuf
         - {{ pin_subpackage('libopenvino', exact=True) }}
       run:
         - {{ pin_subpackage('libopenvino', exact=True) }}
@@ -172,8 +173,10 @@ outputs:
       build:
         - {{ compiler('cxx') }}
         - {{ compiler('c') }}
-        - cmake >=3.15 # to have new cmake cmd interface (-S, --install and other options)
+        - {{ stdlib("c") }}
+        - cmake
       host:
+        - libprotobuf
         - {{ pin_subpackage('libopenvino', exact=True) }}
       run:
         - {{ pin_subpackage('libopenvino', exact=True) }}
@@ -200,7 +203,8 @@ outputs:
       build:
         - {{ compiler('cxx') }}
         - {{ compiler('c') }}
-        - cmake >=3.15 # to have new cmake cmd interface (-S, --install and other options)
+        - {{ stdlib("c") }}
+        - cmake
       host:
         - {{ pin_subpackage('libopenvino', exact=True) }}
       run:
@@ -228,9 +232,12 @@ outputs:
       build:
         - {{ compiler('cxx') }}
         - {{ compiler('c') }}
-        - cmake >=3.15 # to have new cmake cmd interface (-S, --install and other options)
+        - {{ stdlib("c") }}
+        - cmake
       host:
-        - snappy =1.1.10
+        - snappy
+        - libabseil
+        - libprotobuf
         - {{ pin_subpackage('libopenvino', exact=True) }}
       run:
         - {{ pin_subpackage('libopenvino', exact=True) }}
@@ -257,7 +264,8 @@ outputs:
       build:
         - {{ compiler('cxx') }}
         - {{ compiler('c') }}
-        - cmake >=3.15 # to have new cmake cmd interface (-S, --install and other options)
+        - {{ stdlib("c") }}
+        - cmake
       host:
         - {{ pin_subpackage('libopenvino', exact=True) }}
       run:
@@ -284,10 +292,11 @@ outputs:
       build:
         - {{ compiler('cxx') }}
         - {{ compiler('c') }}
-        - cmake >=3.15 # to have new cmake cmd interface (-S, --install and other options)
+        - {{ stdlib("c") }}
+        - cmake
       host:
-        - pugixml >=1.12.1 # starting from this version shared libraries are provided
-        - tbb-devel =2021.5 # starting from this version TBB uses hwloc in conda
+        - pugixml
+        - tbb-devel
         - {{ pin_subpackage('libopenvino', exact=True) }}
       run:
         - {{ pin_subpackage('libopenvino', exact=True) }}
@@ -312,10 +321,11 @@ outputs:
       build:
         - {{ compiler('cxx') }}
         - {{ compiler('c') }}
-        - cmake >=3.15 # to have new cmake cmd interface (-S, --install and other options)
+        - {{ stdlib("c") }}
+        - cmake
       host:
-        - pugixml >=1.12.1 # starting from this version shared libraries are provided
-        - tbb-devel =2021.5 # starting from this version TBB uses hwloc in conda
+        - pugixml
+        - tbb-devel
         - {{ pin_subpackage('libopenvino', exact=True) }}
       run:
         - {{ pin_subpackage('libopenvino', exact=True) }}
@@ -339,21 +349,50 @@ outputs:
       build:
         - {{ compiler('cxx') }}
         - {{ compiler('c') }}
-        - cmake >=3.15 # to have new cmake cmd interface (-S, --install and other options)
+        - {{ stdlib("c") }}
+        - cmake
       host:
-        - tbb-devel =2021.5 # starting from this version TBB uses hwloc in conda
+        - tbb-devel
         - ocl-icd  # [linux64]
         - clhpp
         - khronos-opencl-icd-loader  # [win64]
-        - pugixml >=1.12.1 # starting from this version shared libraries are provided
+        - pugixml
         - {{ pin_subpackage('libopenvino', exact=True) }}
       run:
         - {{ pin_subpackage('libopenvino', exact=True) }}
-        - ocl-icd-system  # [linux64]
     test:
       commands:
         - test -f $PREFIX/lib/openvino-{{ version_postfix }}/libopenvino_intel_gpu_plugin.so  # [unix]
         - if not exist %LIBRARY_BIN%\\openvino-{{ version_postfix }}\\openvino_intel_gpu_plugin%SHLIB_EXT% exit 1  # [win]
+
+  - name: libopenvino-intel-npu-plugin
+    version: {{ version }}
+    script: install/install_npu.sh
+    about:
+      summary: OpenVINO Intel® NPU plugin
+      license_file:
+        - LICENSE
+        - third-party-programs.txt
+        - onednn_third-party-programs.txt
+        - runtime-third-party-programs.txt
+    build:
+        skip: True  # [not linux64]
+        missing_dso_whitelist:
+          - "*/libze_loader.so*"   # [linux64]
+    requirements:
+      build:
+        - {{ compiler('cxx') }}
+        - {{ compiler('c') }}
+        - {{ stdlib("c") }}
+        - cmake
+      host:
+        - {{ pin_subpackage('libopenvino', exact=True) }}
+      run:
+        - {{ pin_subpackage('libopenvino', exact=True) }}
+    test:
+      commands:
+        - test -f $PREFIX/lib/openvino-{{ version_postfix }}/libopenvino_intel_npu_plugin.so  # [linux64]
+        - if not exist %LIBRARY_BIN%\\openvino-{{ version_postfix }}\\openvino_intel_npu_plugin%SHLIB_EXT% exit 1  # [win]
 
   - name: libopenvino-auto-plugin
     version: {{ version }}
@@ -369,9 +408,10 @@ outputs:
       build:
         - {{ compiler('cxx') }}
         - {{ compiler('c') }}
-        - cmake >=3.15 # to have new cmake cmd interface (-S, --install and other options)
+        - {{ stdlib("c") }}
+        - cmake
       host:
-        - tbb-devel =2021.5 # starting from this version TBB uses hwloc in conda
+        - tbb-devel
         - {{ pin_subpackage('libopenvino', exact=True) }}
       run:
         - {{ pin_subpackage('libopenvino', exact=True) }}
@@ -394,9 +434,10 @@ outputs:
       build:
         - {{ compiler('cxx') }}
         - {{ compiler('c') }}
-        - cmake >=3.15 # to have new cmake cmd interface (-S, --install and other options)
+        - {{ stdlib("c") }}
+        - cmake
       host:
-        - tbb-devel =2021.5 # starting from this version TBB uses hwloc in conda
+        - tbb-devel
         - {{ pin_subpackage('libopenvino', exact=True) }}
       run:
         - {{ pin_subpackage('libopenvino', exact=True) }}
@@ -419,9 +460,10 @@ outputs:
       build:
         - {{ compiler('cxx') }}
         - {{ compiler('c') }}
-        - cmake >=3.15 # to have new cmake cmd interface (-S, --install and other options)
+        - {{ stdlib("c") }}
+        - cmake
       host:
-        - pugixml >=1.12.1 # starting from this version shared libraries are provided
+        - pugixml
         - {{ pin_subpackage('libopenvino', exact=True) }}
       run:
         - {{ pin_subpackage('libopenvino', exact=True) }}
@@ -445,24 +487,24 @@ outputs:
         - ovc = openvino.tools.ovc.main:main
         - benchmark_app = openvino.tools.benchmark.main:main
       ignore_run_exports_from:
-        - tbb-devel  # because required just for developer package
-        - pugixml  # because required just for developer package
+        - tbb-devel  # because required just for OpenVINO Developer package
+        - pugixml  # because required just for OpenVINO Developer package
     requirements:
       build:
         - {{ compiler('cxx') }}
         - {{ compiler('c') }}
+        - {{ stdlib("c") }}
         - python                              # [build_platform != target_platform]
         - cross-python_{{ target_platform }}  # [build_platform != target_platform]
-        - sysroot_linux-64 =2.17  # [linux64]
         - make  # [unix]
-        - cython =>3.0.2
+        - cython =0.29.36
         - ccache
-        - cmake >=3.15  # to have new cmake cmd interface (-S, --install and other options)
-        - pybind11 >=2.10.1  # this versions works well for cross-compilation
+        - cmake
+        - pybind11
         - wheel
       host:
-        - tbb-devel =2021.5  # for developer package only
-        - pugixml >=1.12.1  # for developer package only
+        - tbb-devel  # for OpenVINO Developer package only
+        - pugixml  # for OpenVINO Developer package only
         - python
         - pip
         - {{ pin_subpackage('libopenvino', exact=True) }}
@@ -481,23 +523,10 @@ outputs:
         - numpy >=1.16.6
         - openvino-telemetry >=2023.1.1
         - singledispatchmethod  # [py <= 37]
+        - packaging
         - python
     test:
       imports:
-        - ngraph
-        - ngraph.opset1
-        - ngraph.opset2
-        - ngraph.opset3
-        - ngraph.opset4
-        - ngraph.opset5
-        - ngraph.opset6
-        - ngraph.opset7
-        - ngraph.opset8
-        - ngraph.opset9
-        - ngraph.opset10
-        - ngraph.opset11
-        - ngraph.utils
-        - openvino.inference_engine
         - openvino.runtime
         - openvino.runtime.op
         - openvino.runtime.passes
@@ -513,6 +542,8 @@ outputs:
         - openvino.runtime.opset9
         - openvino.runtime.opset10
         - openvino.runtime.opset11
+        - openvino.runtime.opset12
+        - openvino.runtime.opset13
         - openvino.frontend
         - openvino.frontend.onnx
         - openvino.frontend.paddle
@@ -541,9 +572,11 @@ outputs:
         - runtime-third-party-programs.txt
     build:
       run_exports:
+        - {{ pin_subpackage('libopenvino', max_pin='x.x.x') }}
         - {{ pin_subpackage('libopenvino-intel-cpu-plugin', max_pin='x.x.x') }}  # [x86_64]
         - {{ pin_subpackage('libopenvino-arm-cpu-plugin', max_pin='x.x.x') }}  # [aarch64 or arm64]
         - {{ pin_subpackage('libopenvino-intel-gpu-plugin', max_pin='x.x.x') }}  # [win64 or linux64]
+        - {{ pin_subpackage('libopenvino-intel-npu-plugin', max_pin='x.x.x') }}  # [linux64]
         - {{ pin_subpackage('libopenvino-auto-plugin', max_pin='x.x.x') }}
         - {{ pin_subpackage('libopenvino-hetero-plugin', max_pin='x.x.x') }}
         - {{ pin_subpackage('libopenvino-auto-batch-plugin', max_pin='x.x.x') }}
@@ -555,7 +588,12 @@ outputs:
         - {{ pin_subpackage('libopenvino-tensorflow-lite-frontend', max_pin='x.x.x') }}
     requirements:
       build:
-        - cmake >=3.15  # to have new cmake cmd interface (-S, --install and other options)
+        - cmake
+      host:
+        # hmaarrfk: 2024/01
+        # without the tbb-devel package in the host section, we won't be able to drag on
+        # the comaptible dependency below
+        - tbb-devel
       run:
         # the subpackages below can be linked with
         - {{ pin_subpackage('libopenvino-onnx-frontend', exact=True) }}
@@ -568,24 +606,19 @@ outputs:
         - {{ pin_subpackage('libopenvino-intel-cpu-plugin', exact=True) }}  # [x86_64]
         - {{ pin_subpackage('libopenvino-arm-cpu-plugin', exact=True) }}  # [aarch64 or arm64]
         - {{ pin_subpackage('libopenvino-intel-gpu-plugin', exact=True) }}  # [win64 or linux64]
+        - {{ pin_subpackage('libopenvino-intel-npu-plugin', exact=True) }}  # [linux64]
         - {{ pin_subpackage('libopenvino-auto-plugin', exact=True) }}
         - {{ pin_subpackage('libopenvino-hetero-plugin', exact=True) }}
         - {{ pin_subpackage('libopenvino-auto-batch-plugin', exact=True) }}
+        - {{ pin_compatible('tbb-devel', max_pin='x') }}  # to property find libs via openvino.pc
     test:
       requires:
         - {{ compiler('cxx') }}
         - {{ compiler('c') }}
         - ninja
-        - cmake >=3.15 # to have new cmake cmd interface (-S, --install and other options)
+        - cmake
         - pkg-config
-        - zlib
-        - nlohmann_json
-        - sysroot_linux-64 =2.17  # [linux64]
-        - tbb-devel =2021.5 # starting from this version TBB uses hwloc in conda
-        - gflags
-      source_files:
-        - samples
-        - thirdparty/cnpy
+        - {{ stdlib("c") }}
       files:
         - snippets/
       commands:
@@ -606,38 +639,15 @@ outputs:
         - if not exist %LIBRARY_BIN%\\openvino{{ openvino_lib }}%SHLIB_EXT% exit 1  # [win]
         {% endfor %}
 
-        # C++ samples on Unix
-        - mkdir -p samples/cpp/thirdparty  # [unix]
-        - cp -R thirdparty/cnpy samples/cpp/thirdparty/cnpy  # [unix]
-        - cmake -S samples/cpp -B samples_cpp_build -DBIN_FOLDER=bin  # [unix]
-        - cmake --build samples_cpp_build --config Release --verbose  # [unix]
-        - ./samples_cpp_build/bin/hello_query_device  # [unix]
-
-        # C samples on Unix
-        - cp samples/cpp/CMakeLists.txt samples/c/CMakeLists.txt  # [unix]
-        - cmake -S samples/c -B samples_c_build -DBIN_FOLDER=bin  # [unix]
-        - cmake --build samples_c_build --config Release --verbose  # [unix]
-
-        # C++ samples on Windows
-        - mkdir -p samples\\cpp\\thirdparty  # [win]
-        - cp -R thirdparty\\cnpy samples\\cpp\\thirdparty\\cnpy  # [win]
-        - cmake -S samples\\cpp -B samples_cpp_build -DBIN_FOLDER=bin  # [win]
-        - cmake --build samples_cpp_build --config Release --verbose  # [win]
-        - .\\samples_cpp_build\\bin\\Release\\hello_query_device.exe  # [win]
-
-        # C samples on Windows
-        - cp samples\\cpp\\CMakeLists.txt samples\\c\\CMakeLists.txt  # [win]
-        - cmake -S samples\\c -B samples_c_build -DBIN_FOLDER=bin  # [win]
-        - cmake --build samples_c_build --config Release --verbose  # [win]
-
         # check that devices are found using OpenVINO C API
-        - $CC snippets/openvino_available_devices.c $(pkg-config --cflags --libs pugixml tbb openvino) -Wl,-rpath,$PREFIX/lib -o openvino_devices_test  # [unix]
-        - if [[ $(./openvino_devices_test) != "passed" ]]; then exit 1 ; fi  # [unix]
+        - $CC snippets/openvino_available_devices.c $(pkg-config --cflags --libs openvino) -Wl,-rpath,$PREFIX/lib -o openvino_devices_test  # [unix]
+        - ./openvino_devices_test  # [unix]
 
         # check that frontends are found using OpenVINO C++ API
-        - cmake -S snippets -B snippets_build
-        - cmake --build snippets_build --config Release --verbose
-        - if [[ $(./snippets_build/openvino_frontends_test) != 6 ]]; then exit 1 ; fi  # [unix]
+        - cmake -G "Ninja Multi-Config" -S snippets -B snippets_openvino_dev_build
+        - cmake --build snippets_openvino_dev_build --config Release --verbose
+        - ./snippets_openvino_dev_build/Release/openvino_frontends_test  # [unix]
+        - .\\snippets_openvino_dev_build\\Release\\openvino_frontends_test.exe  # [win]
 
   - name: openvino
     version: {{ version }}
@@ -649,12 +659,12 @@ outputs:
         - onednn_third-party-programs.txt
         - runtime-third-party-programs.txt
     build:
-      string: py{{ CONDA_PY }}h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}
       run_exports:
         - {{ pin_subpackage('libopenvino-python', max_pin='x.x.x') }}
         - {{ pin_subpackage('libopenvino-intel-cpu-plugin', max_pin='x.x.x') }}  # [x86_64]
         - {{ pin_subpackage('libopenvino-arm-cpu-plugin', max_pin='x.x.x') }}  # [aarch64 or arm64]
         - {{ pin_subpackage('libopenvino-intel-gpu-plugin', max_pin='x.x.x') }}  # [win64 or linux64]
+        - {{ pin_subpackage('libopenvino-intel-npu-plugin', exact=True) }}  # [linux64]
         - {{ pin_subpackage('libopenvino-auto-plugin', max_pin='x.x.x') }}
         - {{ pin_subpackage('libopenvino-hetero-plugin', max_pin='x.x.x') }}
         - {{ pin_subpackage('libopenvino-auto-batch-plugin', max_pin='x.x.x') }}
@@ -665,35 +675,36 @@ outputs:
         - {{ pin_subpackage('libopenvino-tensorflow-frontend', max_pin='x.x.x') }}
         - {{ pin_subpackage('libopenvino-tensorflow-lite-frontend', max_pin='x.x.x') }}
     requirements:
-      host:
-        - python # dummy dependency to create python-version dependent package
       run:
-        - python # dummy dependency to create python-version dependent package
         - {{ pin_subpackage('libopenvino-dev', exact=True) }}
-        - {{ pin_subpackage('libopenvino-python', exact=True) }}
+        # Do not use the exact pin here since we are generating multiple different
+        # python packages in 1 go. Instead let the common python constraints
+        # choose the same variant of the package
+        # - {{ pin_subpackage('libopenvino-python', exact=True) }}
+        - {{ pin_subpackage('libopenvino-python', max_pin='x.x.x') }}
     test:
       requires:
         - {{ compiler('cxx') }}
         - {{ compiler('c') }}
         - ninja
         - pkg-config
-        - cmake >=3.15 # to have new cmake cmd interface (-S, --install and other options)
-        - sysroot_linux-64 =2.17  # [linux64]
-        - tbb-devel =2021.5 # starting from this version TBB uses hwloc in conda
+        - cmake
+        - {{ stdlib("c") }}
       files:
         - snippets/
       commands:
         # check that devices and frontends are found using Python API
-        - $PYTHON snippets/openvino_available_components.py  # [unix]
+        - python snippets/openvino_available_components.py  # [unix]
 
         # check that devices are found using OpenVINO C API
-        - $CC snippets/openvino_available_devices.c $(pkg-config --cflags --libs pugixml tbb openvino) -Wl,-rpath,$PREFIX/lib -o openvino_devices_test  # [unix]
-        - if [[ $(./openvino_devices_test) != "passed" ]]; then exit 1 ; fi  # [unix]
+        - $CC snippets/openvino_available_devices.c $(pkg-config --cflags --libs openvino) -Wl,-rpath,$PREFIX/lib -o openvino_devices_test  # [unix]
+        - ./openvino_devices_test  # [unix]
 
         # check that frontends are found using OpenVINO C++ API
-        - cmake -S snippets -B snippets_build -G Ninja
-        - cmake --build snippets_build --config Release --verbose
-        - if [[ $(./snippets_build/openvino_frontends_test) != 6 ]]; then exit 1 ; fi  # [unix]
+        - cmake -G "Ninja Multi-Config" -S snippets -B snippets_openvino_{{ CONDA_PY }}_build
+        - cmake --build snippets_openvino_{{ CONDA_PY }}_build --config Release --verbose
+        - ./snippets_openvino_{{ CONDA_PY }}_build/Release/openvino_frontends_test  # [unix]
+        - .\\snippets_openvino_{{ CONDA_PY }}_build\\Release\\openvino_frontends_test.exe  # [win]
 
 about:
   home: https://github.com/openvinotoolkit/openvino
