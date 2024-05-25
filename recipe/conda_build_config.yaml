@@ -1,2 +1,18 @@
+# abseil now only support MacOS >=10.13, see
+# https://github.com/abseil/abseil-cpp#support and
+# https://github.com/abseil/abseil-cpp/issues/1513
+MACOSX_SDK_VERSION:        # [osx and x86_64]
+  - "10.13"                # [osx and x86_64]
+c_stdlib_version:          # [osx and x86_64]
+  - "10.13"                # [osx and x86_64]
+
+# windows has a hard time completing in under 6 hours on our CIs
+megabuild:
+- true      # [unix]
+- false     # [not unix]
+
+c_stdlib_version:   # [linux]
+  - "2.17"          # [linux]
+
 channel_targets:
   - conda-forge openvino_dev
