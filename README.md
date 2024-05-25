@@ -292,14 +292,14 @@ Current release info
 Installing openvino
 ===================
 
-Installing `openvino` from the `conda-forge` channel can be achieved by adding `conda-forge` to your channels with:
+Installing `openvino` from the `conda-forge/label/openvino_dev` channel can be achieved by adding `conda-forge/label/openvino_dev` to your channels with:
 
 ```
-conda config --add channels conda-forge
+conda config --add channels conda-forge/label/openvino_dev
 conda config --set channel_priority strict
 ```
 
-Once the `conda-forge` channel has been enabled, `libopenvino, libopenvino-arm-cpu-plugin, libopenvino-auto-batch-plugin, libopenvino-auto-plugin, libopenvino-dev, libopenvino-hetero-plugin, libopenvino-intel-cpu-plugin, libopenvino-intel-gpu-plugin, libopenvino-intel-npu-plugin, libopenvino-ir-frontend, libopenvino-onnx-frontend, libopenvino-paddle-frontend, libopenvino-python, libopenvino-pytorch-frontend, libopenvino-tensorflow-frontend, libopenvino-tensorflow-lite-frontend, openvino` can be installed with `conda`:
+Once the `conda-forge/label/openvino_dev` channel has been enabled, `libopenvino, libopenvino-arm-cpu-plugin, libopenvino-auto-batch-plugin, libopenvino-auto-plugin, libopenvino-dev, libopenvino-hetero-plugin, libopenvino-intel-cpu-plugin, libopenvino-intel-gpu-plugin, libopenvino-intel-npu-plugin, libopenvino-ir-frontend, libopenvino-onnx-frontend, libopenvino-paddle-frontend, libopenvino-python, libopenvino-pytorch-frontend, libopenvino-tensorflow-frontend, libopenvino-tensorflow-lite-frontend, openvino` can be installed with `conda`:
 
 ```
 conda install libopenvino libopenvino-arm-cpu-plugin libopenvino-auto-batch-plugin libopenvino-auto-plugin libopenvino-dev libopenvino-hetero-plugin libopenvino-intel-cpu-plugin libopenvino-intel-gpu-plugin libopenvino-intel-npu-plugin libopenvino-ir-frontend libopenvino-onnx-frontend libopenvino-paddle-frontend libopenvino-python libopenvino-pytorch-frontend libopenvino-tensorflow-frontend libopenvino-tensorflow-lite-frontend openvino
@@ -314,26 +314,26 @@ mamba install libopenvino libopenvino-arm-cpu-plugin libopenvino-auto-batch-plug
 It is possible to list all of the versions of `libopenvino` available on your platform with `conda`:
 
 ```
-conda search libopenvino --channel conda-forge
+conda search libopenvino --channel conda-forge/label/openvino_dev
 ```
 
 or with `mamba`:
 
 ```
-mamba search libopenvino --channel conda-forge
+mamba search libopenvino --channel conda-forge/label/openvino_dev
 ```
 
 Alternatively, `mamba repoquery` may provide more information:
 
 ```
 # Search all versions available on your platform:
-mamba repoquery search libopenvino --channel conda-forge
+mamba repoquery search libopenvino --channel conda-forge/label/openvino_dev
 
 # List packages depending on `libopenvino`:
-mamba repoquery whoneeds libopenvino --channel conda-forge
+mamba repoquery whoneeds libopenvino --channel conda-forge/label/openvino_dev
 
 # List dependencies of `libopenvino`:
-mamba repoquery depends libopenvino --channel conda-forge
+mamba repoquery depends libopenvino --channel conda-forge/label/openvino_dev
 ```
 
 
