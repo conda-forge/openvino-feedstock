@@ -34,7 +34,7 @@ source:
     folder: thirdparty/onnx/onnx
 
 build:
-  number: 0
+  number: 1
 
 requirements:
   build:
@@ -520,7 +520,7 @@ outputs:
         - {{ pin_subpackage('libopenvino-paddle-frontend', exact=True) }}
         - {{ pin_subpackage('libopenvino-pytorch-frontend', exact=True) }}
         - {{ pin_subpackage('libopenvino-tensorflow-frontend', exact=True) }}
-        - numpy >=1.16.6
+        - numpy <2.0.0
         - openvino-telemetry >=2023.1.1
         - singledispatchmethod  # [py <= 37]
         - packaging
