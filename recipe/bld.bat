@@ -19,10 +19,12 @@ cmake                                                                        ^
     -DENABLE_INTEL_NPU=OFF                                                   ^
     -DENABLE_TEMPLATE=OFF                                                    ^
     -DENABLE_SAMPLES=OFF                                                     ^
+    -DENABLE_JS=OFF                                                          ^
     -DCMAKE_CXX_FLAGS="/wd4996"                                              ^
     -DCMAKE_C_FLAGS="/wd4996"                                                ^
     -DCPACK_GENERATOR=CONDA-FORGE                                            ^
-    -G "Visual Studio 16 2019"                                               ^
+    -DCMAKE_VS_WINDOWS_TARGET_PLATFORM_VERSION="10.0.22621.0"                ^
+    -G "Visual Studio 17 2022"                                               ^
     -S "%SRC_DIR%"                                                           ^
     -B "%SRC_DIR%\build"
 if errorlevel 1 exit 1

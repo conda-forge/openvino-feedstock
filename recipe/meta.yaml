@@ -10,6 +10,7 @@ source:
   - url: https://github.com/openvinotoolkit/openvino/archive/refs/tags/{{ version }}.tar.gz
     sha256: b624481efb7814cf2d98a29163c3b914fa2f23c1417289b13561d0b5e32fc67c
     patches:
+    - patches/001-win-disable-api-validator.patch  # [win64]
     - patches/003-lin-arm64-compute-lib.patch  # [aarch64]
   - url: https://github.com/ARM-software/ComputeLibrary/archive/refs/tags/v24.04.tar.gz  # [aarch64 or arm64]
     sha256: 6d7aebfa9be74d29ecd2dbeb17f69e00c667c36292401f210121bf26a30b38a5  # [aarch64 or arm64]
@@ -376,7 +377,7 @@ outputs:
         - onednn_third-party-programs.txt
         - runtime-third-party-programs.txt
     build:
-        skip: True  # [not linux64]
+        skip: True  # [not linux64 and not win64]
         missing_dso_whitelist:
           - "*/libze_loader.so*"   # [linux64]
     requirements:
@@ -576,7 +577,7 @@ outputs:
         - {{ pin_subpackage('libopenvino-intel-cpu-plugin', max_pin='x.x.x') }}  # [x86_64]
         - {{ pin_subpackage('libopenvino-arm-cpu-plugin', max_pin='x.x.x') }}  # [aarch64 or arm64]
         - {{ pin_subpackage('libopenvino-intel-gpu-plugin', max_pin='x.x.x') }}  # [win64 or linux64]
-        - {{ pin_subpackage('libopenvino-intel-npu-plugin', max_pin='x.x.x') }}  # [linux64]
+        - {{ pin_subpackage('libopenvino-intel-npu-plugin', max_pin='x.x.x') }}  # [win64 or linux64]
         - {{ pin_subpackage('libopenvino-auto-plugin', max_pin='x.x.x') }}
         - {{ pin_subpackage('libopenvino-hetero-plugin', max_pin='x.x.x') }}
         - {{ pin_subpackage('libopenvino-auto-batch-plugin', max_pin='x.x.x') }}
@@ -606,7 +607,7 @@ outputs:
         - {{ pin_subpackage('libopenvino-intel-cpu-plugin', exact=True) }}  # [x86_64]
         - {{ pin_subpackage('libopenvino-arm-cpu-plugin', exact=True) }}  # [aarch64 or arm64]
         - {{ pin_subpackage('libopenvino-intel-gpu-plugin', exact=True) }}  # [win64 or linux64]
-        - {{ pin_subpackage('libopenvino-intel-npu-plugin', exact=True) }}  # [linux64]
+        - {{ pin_subpackage('libopenvino-intel-npu-plugin', exact=True) }}  # [win64 or linux64]
         - {{ pin_subpackage('libopenvino-auto-plugin', exact=True) }}
         - {{ pin_subpackage('libopenvino-hetero-plugin', exact=True) }}
         - {{ pin_subpackage('libopenvino-auto-batch-plugin', exact=True) }}
@@ -664,7 +665,7 @@ outputs:
         - {{ pin_subpackage('libopenvino-intel-cpu-plugin', max_pin='x.x.x') }}  # [x86_64]
         - {{ pin_subpackage('libopenvino-arm-cpu-plugin', max_pin='x.x.x') }}  # [aarch64 or arm64]
         - {{ pin_subpackage('libopenvino-intel-gpu-plugin', max_pin='x.x.x') }}  # [win64 or linux64]
-        - {{ pin_subpackage('libopenvino-intel-npu-plugin', exact=True) }}  # [linux64]
+        - {{ pin_subpackage('libopenvino-intel-npu-plugin', exact=True) }}  # [win64 or linux64]
         - {{ pin_subpackage('libopenvino-auto-plugin', max_pin='x.x.x') }}
         - {{ pin_subpackage('libopenvino-hetero-plugin', max_pin='x.x.x') }}
         - {{ pin_subpackage('libopenvino-auto-batch-plugin', max_pin='x.x.x') }}
