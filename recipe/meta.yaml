@@ -7,7 +7,7 @@ package:
   version: {{ version }}
 
 source:
-  - url: https://github.com/openvinotoolkit/openvino/tree/dd43b82c05886a42a7df202e968cd142c3bdd28c.tar.gz
+  - url: https://github.com/openvinotoolkit/openvino/archive/dd43b82c05886a42a7df202e968cd142c3bdd28c.tar.gz
     sha256: 1e9abcc079b49a4a4b4cea5129987f8543ea8ff63ebd361c64fdcf056ced7aab
     patches:
     - patches/003-lin-arm64-compute-lib.patch  # [aarch64]
