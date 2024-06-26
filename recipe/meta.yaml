@@ -1,14 +1,14 @@
 {% set name = "openvino" %}
-{% set version_postfix = "2024.2.0" %}
-{% set version = "2024.2.0.dev20240513" %}
+{% set version_postfix = "2024.3.0" %}
+{% set version = "2024.3.0.dev20240614" %}
 
 package:
   name: {{ name|lower }}-split
   version: {{ version }}
 
 source:
-  - url: https://github.com/openvinotoolkit/openvino/archive/refs/tags/{{ version }}.tar.gz
-    sha256: a972ed6525889f63e0de1f2484dd8e4c5ed649a64da454caf36986bc40c80a44
+  - url: https://github.com/openvinotoolkit/openvino/archive/209e31fceb7893e8be7f9a5ae355745ff86acc18.tar.gz
+    sha256: 7d0e3a190afc51f69a11b35a63b2fa7761b5e8e4422ef5b7d9670277797a444b
     patches:
     - patches/003-lin-arm64-compute-lib.patch  # [aarch64]
   - url: https://github.com/ARM-software/ComputeLibrary/archive/refs/tags/v24.04.tar.gz  # [aarch64 or arm64]
@@ -20,8 +20,8 @@ source:
   - url: https://github.com/openvinotoolkit/mlas/archive/d1bc25ec4660cddd87804fcf03b2411b5dfb2e94.tar.gz
     sha256: 0a44fbfd4b13e8609d66ddac4b11a27c90c1074cde5244c91ad197901666004c
     folder: src/plugins/intel_cpu/thirdparty/mlas
-  - url: https://github.com/oneapi-src/oneDNN/archive/bab7bf42914073e443276e9efb0ddc5c93d6f52c.tar.gz  # [win64 or linux64]
-    sha256: 8af90c7c023c5adc4da93294ec5221d8e1eb69b15dfc7c4333acb192d0f7e31f  # [win64 or linux64]
+  - url: https://github.com/oneapi-src/oneDNN/archive/37f48519b87cf8b5e5ef2209340a1948c3e87d72.tar.gz  # [win64 or linux64]
+    sha256: 58131e094408460f88bf941977b5206232dc2bc8dbf227250d1e2236b43153a5  # [win64 or linux64]
     folder: src/plugins/intel_gpu/thirdparty/onednn_gpu  # [win64 or linux64]
   - url: https://github.com/oneapi-src/level-zero/archive/4ed13f327d3389285592edcf7598ec3cb2bc712e.tar.gz  # [linux64]
     sha256: e9fe67f792c7d8f0243eef6ad4e3bb0bb484cc5dfa6790c4fe13289d4fc4df2c  # [linux64]
@@ -520,7 +520,7 @@ outputs:
         - {{ pin_subpackage('libopenvino-paddle-frontend', exact=True) }}
         - {{ pin_subpackage('libopenvino-pytorch-frontend', exact=True) }}
         - {{ pin_subpackage('libopenvino-tensorflow-frontend', exact=True) }}
-        - numpy >=1.16.6
+        - numpy <2.0.0
         - openvino-telemetry >=2023.1.1
         - singledispatchmethod  # [py <= 37]
         - packaging
