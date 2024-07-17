@@ -1,14 +1,14 @@
 {% set name = "openvino" %}
-{% set version_postfix = "2023.1.0" %}
-{% set version = "2023.1.0.dev20230623" %}
+{% set version_postfix = "2024.4.0.dev20240717" %}
+{% set version = "2024.4.0.dev20240717" %}
 
 package:
   name: {{ name|lower }}-split
   version: {{ version }}
 
 source:
-  - url: https://github.com/openvinotoolkit/openvino/archive/f96f021920f91a536831118a64b216887e109c0f.tar.gz
-    sha256: 13150550456a39c1ae26109578a2721b429d57668ed988d5c14717323a2c9220
+  - url: https://github.com/openvinotoolkit/openvino/archive/b8ba9038d63cb933f81655326d23ba7a30421c4a.tar.gz
+    sha256: 9655cdbc2995fc97b3986895f04bf337469009827d331df625e57403be4d469c
     patches:
     - patches/001-aarch64-linux.patch  # [aarch64]
     - patches/002-win32-python-search.patch
