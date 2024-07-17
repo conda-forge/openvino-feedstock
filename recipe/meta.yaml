@@ -1,14 +1,14 @@
 {% set name = "openvino" %}
-{% set version_postfix = "2024.3.0" %}
-{% set version = "2024.3.0.dev20240614" %}
+{% set version_postfix = "2024.4.0.dev20240717" %}
+{% set version = "2024.4.0.dev20240717" %}
 
 package:
   name: {{ name|lower }}-split
   version: {{ version }}
 
 source:
-  - url: https://github.com/openvinotoolkit/openvino/archive/209e31fceb7893e8be7f9a5ae355745ff86acc18.tar.gz
-    sha256: 7d0e3a190afc51f69a11b35a63b2fa7761b5e8e4422ef5b7d9670277797a444b
+  - url: https://github.com/openvinotoolkit/openvino/archive/b8ba9038d63cb933f81655326d23ba7a30421c4a.tar.gz
+    sha256: 9655cdbc2995fc97b3986895f04bf337469009827d331df625e57403be4d469c
     patches:
     - patches/003-lin-arm64-compute-lib.patch  # [aarch64]
   - url: https://github.com/ARM-software/ComputeLibrary/archive/refs/tags/v24.04.tar.gz  # [aarch64 or arm64]
