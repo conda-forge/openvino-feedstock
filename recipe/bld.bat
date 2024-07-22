@@ -19,6 +19,7 @@ cmake                                                                        ^
     -DENABLE_INTEL_NPU=OFF                                                   ^
     -DENABLE_TEMPLATE=OFF                                                    ^
     -DENABLE_SAMPLES=OFF                                                     ^
+    -DENABLE_INTEL_NPU=OFF                                                   ^
     -DCMAKE_CXX_FLAGS="/wd4996"                                              ^
     -DCMAKE_C_FLAGS="/wd4996"                                                ^
     -DCPACK_GENERATOR=CONDA-FORGE                                            ^

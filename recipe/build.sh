@@ -20,6 +20,7 @@ cmake ${CMAKE_ARGS}                                                          \
     -DENABLE_CLANG_FORMAT=OFF                                                \
     -DENABLE_NCC_STYLE=OFF                                                   \
     -DENABLE_TEMPLATE=OFF                                                    \
+    -DENABLE_INTEL_NPU=OFF                                                   \
     -DENABLE_SAMPLES=OFF                                                     \
     -DCMAKE_CXX_FLAGS="-Wno-deprecated-declarations"                         \
     -DCMAKE_C_FLAGS="-Wno-deprecated-declarations"                           \
