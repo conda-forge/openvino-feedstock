@@ -42,8 +42,6 @@ python:
 - 3.12.* *_cpython
 - 3.8.* *_cpython
 - 3.9.* *_cpython
-setuptools:
-- '71'
 snappy:
 - '1.2'
 target_platform:
