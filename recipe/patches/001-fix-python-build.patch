@@ -1,18 +1,5 @@
-diff --git a/src/bindings/python/CMakeLists.txt b/src/bindings/python/CMakeLists.txt
-index e9250fbba6..8fccbd43ad 100644
---- a/src/bindings/python/CMakeLists.txt
-+++ b/src/bindings/python/CMakeLists.txt
-@@ -115,7 +115,7 @@ set(INIT_FILES_RUNTIME "${OpenVINOPython_SOURCE_DIR}/src/openvino/__init__.py"
- ov_check_init_files_alignment("${INIT_FILES_RUNTIME}")
- 
- ov_option(ENABLE_PYTHON "Enables OpenVINO Python API build" ${ENABLE_PYTHON_DEFAULT})
--
-+unset(ENABLE_PYTHON CACHE)
- #
- # Check for wheel package
- #
 diff --git a/src/bindings/python/wheel/setup.py b/src/bindings/python/wheel/setup.py
-index 610c4e744e..94c4fb384f 100644
+index 610c4e744e..25a51027a9 100644
 --- a/src/bindings/python/wheel/setup.py
 +++ b/src/bindings/python/wheel/setup.py
 @@ -266,7 +266,7 @@ class CustomBuild(build):
@@ -24,3 +11,11 @@ index 610c4e744e..94c4fb384f 100644
  
      def cmake_build_and_install(self, install_cfg):
          """Runs cmake (configure, build and install) if artfiacts are not already built / installed."""
+@@ -297,6 +297,7 @@ class CustomBuild(build):
+                                 f"-DPython3_EXECUTABLE={sys.executable}",
+                                 f"-DCMAKE_BUILD_TYPE={CONFIG}",
+                                 f"-DCPACK_GENERATOR={CPACK_GENERATOR}",
++                                "-DENABLE_PYTHON=ON",
+                                 "-DENABLE_WHEEL=OFF",
+                                 self.cmake_args,
+                                 "-S", source_dir,
