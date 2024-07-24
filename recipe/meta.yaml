@@ -501,7 +501,6 @@ outputs:
         - ccache
         - cmake
         - pybind11
-        - setuptools
         - wheel
       host:
         - tbb-devel  # for OpenVINO Developer package only
