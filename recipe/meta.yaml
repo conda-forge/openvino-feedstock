@@ -1,5 +1,5 @@
 {% set name = "openvino" %}
-{% set version_postfix = "2024.4.0.dev20240719" %}
+{% set version_postfix = "2024.4.0" %}
 {% set version = "2024.4.0.dev20240719" %}
 
 package:
