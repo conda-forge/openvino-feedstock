@@ -53,6 +53,7 @@ requirements:
     - ccache
     - libprotobuf
     - flatbuffers
+    - gflags  # [linux64]
   host:
     - tbb-devel
     - snappy
