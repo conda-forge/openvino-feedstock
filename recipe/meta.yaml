@@ -54,7 +54,6 @@ requirements:
     - ccache
     - libprotobuf
     - flatbuffers
-    - gflags  # [linux64]
   host:
     - tbb-devel
     - snappy
@@ -388,7 +387,6 @@ outputs:
         - {{ compiler('c') }}
         - {{ stdlib("c") }}
         - cmake
-        - gflags
       host:
         - {{ pin_subpackage('libopenvino', exact=True) }}
       run:
