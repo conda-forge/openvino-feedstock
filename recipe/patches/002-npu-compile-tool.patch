@@ -1,0 +1,25 @@
+diff --git a/src/plugins/intel_npu/CMakeLists.txt b/src/plugins/intel_npu/CMakeLists.txt
+index ce06b2542a..e14d6b25ca 100644
+--- a/src/plugins/intel_npu/CMakeLists.txt
++++ b/src/plugins/intel_npu/CMakeLists.txt
+@@ -32,6 +32,5 @@ if(ENABLE_TESTS)
+     add_subdirectory(tests)
+ endif()
+ 
+-add_subdirectory(tools)
+ 
+ ov_cpack_add_component(${NPU_INTERNAL_COMPONENT} HIDDEN)
+diff --git a/src/plugins/intel_npu/CMakeLists.txt b/src/plugins/intel_npu/CMakeLists.txt
+index ce06b2542a..b7654dc1c9 100644
+--- a/src/plugins/intel_npu/CMakeLists.txt
++++ b/src/plugins/intel_npu/CMakeLists.txt
+@@ -30,8 +30,7 @@ add_subdirectory(src)
+ 
+ if(ENABLE_TESTS)
+     add_subdirectory(tests)
++    add_subdirectory(tools)
+ endif()
+ 
+-add_subdirectory(tools)
+-
+ ov_cpack_add_component(${NPU_INTERNAL_COMPONENT} HIDDEN)

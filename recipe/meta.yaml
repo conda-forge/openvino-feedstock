@@ -11,6 +11,7 @@ source:
     sha256: 598b4f7d0ccd72719005f21ada0efce2f2a2c2b96df05eb000607d291e1d548b
     patches:
     - patches/001-fix-python-build.patch
+    - patches/002-npu-compile-tool.patch  # [linux64]
     - patches/003-lin-arm64-compute-lib.patch  # [aarch64]
   - url: https://github.com/ARM-software/ComputeLibrary/archive/refs/tags/v24.06.tar.gz  # [aarch64 or arm64]
     sha256: 68e24589905638e406a98ad48236097ab30112f2849b35e196b7b1efb0ce74e6  # [aarch64 or arm64]
