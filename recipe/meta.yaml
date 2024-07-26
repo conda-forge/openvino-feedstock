@@ -389,6 +389,8 @@ outputs:
         - cmake
       host:
         - {{ pin_subpackage('libopenvino', exact=True) }}
+        - pugixml
+        - tbb-devel
       run:
         - {{ pin_subpackage('libopenvino', exact=True) }}
     test:
