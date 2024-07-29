@@ -386,6 +386,7 @@ outputs:
         - {{ stdlib("c") }}
         - cmake
       host:
+        - pugixml
         - {{ pin_subpackage('libopenvino', exact=True) }}
       run:
         - {{ pin_subpackage('libopenvino', exact=True) }}
