@@ -387,7 +387,6 @@ outputs:
         - cmake
       host:
         - {{ pin_subpackage('libopenvino', exact=True) }}
-        - gflags
       run:
         - {{ pin_subpackage('libopenvino', exact=True) }}
     test:
