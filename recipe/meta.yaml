@@ -7,8 +7,8 @@ package:
   version: {{ version }}
 
 source:
-  - url: https://github.com/openvinotoolkit/openvino/archive/1e3b88e4e3f89774923e04e845428579f8ffa0fe.tar.gz
-    sha256: 598b4f7d0ccd72719005f21ada0efce2f2a2c2b96df05eb000607d291e1d548b
+  - url: https://github.com/openvinotoolkit/openvino/archive/refs/tags/{{ version }}.tar.gz
+    sha256: 53fccad05279d0975eca84ec75517a7c360be9b0f7bcd822da29a7949c12ce70
     patches:
     - patches/001-fix-python-build.patch
     - patches/002-npu-compile-tool.patch  # [linux64]
