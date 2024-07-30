@@ -6,5 +6,6 @@ export WHEEL_VERSION="$PKG_VERSION"
 export PYTHON_EXTENSIONS_ONLY="1"
 export SKIP_RPATH="1"
 export CPACK_GENERATOR="CONDA-FORGE"
+export CMAKE_ARGS="-DENABLE_PYTHON=ON"
 
 $PYTHON -m pip install --no-deps --ignore-installed -v "$SRC_DIR/src/bindings/python/wheel"
