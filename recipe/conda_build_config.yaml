@@ -1,10 +1,11 @@
 # abseil now only support MacOS >=10.13, see
 # https://github.com/abseil/abseil-cpp#support and
 # https://github.com/abseil/abseil-cpp/issues/1513
+# Updated OV 2024.4: ONNX requires 10.15
 MACOSX_SDK_VERSION:        # [osx and x86_64]
-  - "10.13"                # [osx and x86_64]
+  - "10.15"                # [osx and x86_64]
 c_stdlib_version:          # [osx and x86_64]
-  - "10.13"                # [osx and x86_64]
+  - "10.15"                # [osx and x86_64]
 
 # windows has a hard time completing in under 6 hours on our CIs
 megabuild:
