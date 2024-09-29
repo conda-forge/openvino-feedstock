@@ -510,6 +510,7 @@ outputs:
         - pugixml  # for OpenVINO Developer package only
         - python
         - pip
+        - setuptools
         - {{ pin_subpackage('libopenvino', exact=True) }}
         # subpackages below have explicit python bindings
         - {{ pin_subpackage('libopenvino-onnx-frontend', exact=True) }}
