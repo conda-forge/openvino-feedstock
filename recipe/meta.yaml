@@ -148,6 +148,7 @@ outputs:
         - cmake
       host:
         - libprotobuf
+        - libabseil
         - {{ pin_subpackage('libopenvino', exact=True) }}
       run:
         - {{ pin_subpackage('libopenvino', exact=True) }}
@@ -178,6 +179,7 @@ outputs:
         - cmake
       host:
         - libprotobuf
+        - libabseil
         - {{ pin_subpackage('libopenvino', exact=True) }}
       run:
         - {{ pin_subpackage('libopenvino', exact=True) }}
