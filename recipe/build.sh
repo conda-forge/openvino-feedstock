@@ -1,8 +1,8 @@
 # !/usr/bin/env bash
 
-set +ex
+set -exuo pipefail
 
-if [[ "$CONDA_BUILD_CROSS_COMPILATION" == 1 ]]; then
+if [[ "${CONDA_BUILD_CROSS_COMPILATION:-0}" == 1 ]]; then
     CMAKE_ARGS="${CMAKE_ARGS} -DProtobuf_PROTOC_EXECUTABLE=$BUILD_PREFIX/bin/protoc"
 fi
 

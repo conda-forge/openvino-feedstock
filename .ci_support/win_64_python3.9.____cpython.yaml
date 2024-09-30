@@ -11,9 +11,9 @@ cxx_compiler:
 flatbuffers:
 - 24.3.25
 libabseil:
-- '20240116'
+- '20240722'
 libprotobuf:
-- 4.25.3
+- 5.27.5
 megabuild:
 - 'false'
 pin_run_as_build:

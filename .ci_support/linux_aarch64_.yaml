@@ -25,9 +25,9 @@ docker_image:
 flatbuffers:
 - 24.3.25
 libabseil:
-- '20240116'
+- '20240722'
 libprotobuf:
-- 4.25.3
+- 5.27.5
 megabuild:
 - 'true'
 pin_run_as_build:
