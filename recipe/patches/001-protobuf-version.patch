@@ -1,3 +1,75 @@
+diff --git a/src/frontends/onnx/frontend/src/frontend.cpp b/src/frontends/onnx/frontend/src/frontend.cpp
+index d4b83fee20..f352c07894 100644
+--- a/src/frontends/onnx/frontend/src/frontend.cpp
++++ b/src/frontends/onnx/frontend/src/frontend.cpp
+@@ -2,14 +2,16 @@
+ // SPDX-License-Identifier: Apache-2.0
+ //
+ 
+-#include <google/protobuf/port_def.inc>
++#include <google/protobuf/runtime_version.h>
++
+ #if PROTOBUF_VERSION >= 4022000  // protobuf 4.22
+ #    define OV_PROTOBUF_ABSL_IS_USED
+ #endif
+-#include <google/protobuf/port_undef.inc>
+ 
+-#ifndef OV_PROTOBUF_ABSL_IS_USED
+-#    include <google/protobuf/stubs/logging.h>
++#ifdef OV_PROTOBUF_ABSL_IS_USED
++#   include <absl/log/globals.h>
++#else
++#   include <google/protobuf/stubs/logging.h>
+ #endif
+ 
+ #include <fstream>
+@@ -45,7 +47,9 @@ ONNX_FRONTEND_C_API void* get_front_end_data() {
+     };
+ #ifndef OPENVINO_DEBUG_ENABLE
+     // disable protobuf logging
+-#    ifndef OV_PROTOBUF_ABSL_IS_USED
++#    ifdef OV_PROTOBUF_ABSL_IS_USED
++    absl::SetGlobalVLogLevel(0);
++#    else
+     google::protobuf::SetLogHandler(nullptr);
+ #    endif
+ #endif
+diff --git a/src/frontends/paddle/src/frontend.cpp b/src/frontends/paddle/src/frontend.cpp
+index c6febe0843..6b8be8c5c8 100644
+--- a/src/frontends/paddle/src/frontend.cpp
++++ b/src/frontends/paddle/src/frontend.cpp
+@@ -4,14 +4,16 @@
+ 
+ #include "openvino/frontend/paddle/frontend.hpp"
+ 
+-#include <google/protobuf/port_def.inc>
++#include <google/protobuf/runtime_version.h>
++
+ #if PROTOBUF_VERSION >= 4022000  // protobuf 4.22
+ #    define OV_PROTOBUF_ABSL_IS_USED
+ #endif
+-#include <google/protobuf/port_undef.inc>
+ 
+-#ifndef OV_PROTOBUF_ABSL_IS_USED
+-#    include <google/protobuf/stubs/logging.h>
++#ifdef OV_PROTOBUF_ABSL_IS_USED
++#   include <absl/log/globals.h>
++#else
++#   include <google/protobuf/stubs/logging.h>
+ #endif
+ 
+ #include <fstream>
+@@ -594,7 +596,9 @@ PADDLE_C_API void* get_front_end_data() {
+ 
+ #ifndef OPENVINO_DEBUG_ENABLE
+     // disable protobuf logging
+-#    ifndef OV_PROTOBUF_ABSL_IS_USED
++#    ifdef OV_PROTOBUF_ABSL_IS_USED
++    absl::SetGlobalVLogLevel(0);
++#    else
+     google::protobuf::SetLogHandler(nullptr);
+ #    endif
+ #endif
 diff --git a/thirdparty/dependencies.cmake b/thirdparty/dependencies.cmake
 index 9d7b16aeb8..40af5fff2d 100644
 --- a/thirdparty/dependencies.cmake
