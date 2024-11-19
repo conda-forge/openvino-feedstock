@@ -10,7 +10,6 @@ source:
   - url: https://github.com/openvinotoolkit/openvino/archive/refs/tags/{{ version }}.tar.gz
     sha256: 3d5b89760e1c946aca7b219dff4bf4cf5eb511932863c90cafc47d3c01c85744
     patches:
-    - patches/001-protobuf-version.patch
     - patches/003-lin-arm64-compute-lib.patch  # [aarch64]
   - url: https://github.com/ARM-software/ComputeLibrary/archive/refs/tags/v24.09.tar.gz  # [aarch64 or arm64]
     sha256: 49b8620f21cbbe49e825a131d9eacd548532646289b50e070b83860bd88087fe  # [aarch64 or arm64]
