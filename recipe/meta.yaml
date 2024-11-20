@@ -10,6 +10,7 @@ source:
   - url: https://github.com/openvinotoolkit/openvino/archive/refs/tags/{{ version }}.tar.gz
     sha256: 3d5b89760e1c946aca7b219dff4bf4cf5eb511932863c90cafc47d3c01c85744
     patches:
+    - patches/001-protobuf.patch
     - patches/003-lin-arm64-compute-lib.patch  # [aarch64]
   - url: https://github.com/ARM-software/ComputeLibrary/archive/refs/tags/v24.09.tar.gz  # [aarch64 or arm64]
     sha256: 49b8620f21cbbe49e825a131d9eacd548532646289b50e070b83860bd88087fe  # [aarch64 or arm64]
@@ -31,7 +32,7 @@ source:
     folder: thirdparty/onnx/onnx
   - url: https://github.com/oneapi-src/level-zero/archive/fd459f28041c176df23a0b7b791ff20a7689d237.tar.gz  # [linux64]
     sha256: e078cae698e368c4e8e57d268f4ef0b766ed8f5548ac8e4fc0a07f4c406bb50d  # [linux64]
-    folder: thirdparty/level-zero/level-zero  # [linux64]
+    folder: thirdparty/level_zero/level-zero  # [linux64]
 
 build:
   number: 2
@@ -58,7 +59,6 @@ requirements:
     - ocl-icd  # [linux64]
     - clhpp  # [linux64 or win64]
     - khronos-opencl-icd-loader  # [win64]
-    - yaml-cpp  # [linux64]
     - pugixml
     - xbyak  # [x86_64]
     - libprotobuf
@@ -392,7 +392,6 @@ outputs:
         - {{ pin_subpackage('libopenvino', exact=True) }}
         - pugixml
         - tbb-devel
-        - yaml-cpp
       run:
         - {{ pin_subpackage('libopenvino', exact=True) }}
     test:
