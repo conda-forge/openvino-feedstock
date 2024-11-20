@@ -35,7 +35,7 @@ source:
     folder: thirdparty/level_zero/level-zero  # [linux64]
 
 build:
-  number: 2
+  number: 0
 
 requirements:
   build:
@@ -509,7 +509,7 @@ outputs:
         - wheel
       host:
         - tbb-devel  # for OpenVINO Developer package only
-        - pugixml  # for OpenVINO Developer package only
+        - pugixml    # for OpenVINO Developer package only
         - python
         - pip
         - setuptools
