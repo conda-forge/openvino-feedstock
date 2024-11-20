@@ -13,6 +13,7 @@ cmake ${CMAKE_ARGS}                                                          \
     -DENABLE_SYSTEM_TBB=ON                                                   \
     -DENABLE_SYSTEM_PUGIXML=ON                                               \
     -DENABLE_INTEL_NPU_INTERNAL=OFF                                          \
+    -DENABLE_OV_JAX_FRONTEND=OFF                                             \
     -DENABLE_SYSTEM_PROTOBUF=ON                                              \
     -DENABLE_SYSTEM_SNAPPY=ON                                                \
     -DENABLE_JS=OFF                                                          \
