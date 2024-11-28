@@ -88,7 +88,6 @@ outputs:
         - tbb-devel
     test:
       commands:
-        cmake --build "$SRC_DIR/build" --target clean
         {% set openvino_libs = [] %}
         {{ openvino_libs.append("") or "" }}
         {{ openvino_libs.append("_c") or "" }}
@@ -97,8 +96,6 @@ outputs:
         - test -f $PREFIX/lib/libopenvino{{ openvino_lib }}.{{ version_postfix }}${SHLIB_EXT}  # [osx]
         - if not exist %LIBRARY_BIN%\\openvino{{ openvino_lib }}%SHLIB_EXT% exit 1  # [win]
         {% endfor %}
-      requires:
-        - cmake
 
   - name: libopenvino-ir-frontend
     version: {{ version }}

@@ -1,5 +1,8 @@
 azure:
   settings_win:
+    variables:
+        CONDA_BLD_PATH: "C:\bld"
+        MINIFORGE_HOME: "C:\Miniforge"
     pool:
       vmImage: windows-2019
   store_build_artifacts: true
