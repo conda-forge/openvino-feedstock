@@ -28,5 +28,7 @@ snappy:
 - '1.2'
 target_platform:
 - win-64
+tbb:
+- '2021'
 tbb_devel:
 - '2021'

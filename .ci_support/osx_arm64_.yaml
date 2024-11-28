@@ -43,6 +43,8 @@ snappy:
 - '1.2'
 target_platform:
 - osx-arm64
+tbb:
+- '2021'
 tbb_devel:
 - '2021'
 zip_keys:
