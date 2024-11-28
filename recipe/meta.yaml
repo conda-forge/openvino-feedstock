@@ -88,14 +88,12 @@ outputs:
         - tbb-devel
     test:
       commands:
-        {% set openvino_libs = [] %}
-        {{ openvino_libs.append("") or "" }}
-        {{ openvino_libs.append("_c") or "" }}
-        {% for openvino_lib in openvino_libs %}
-        - test -f $PREFIX/lib/libopenvino{{ openvino_lib }}${SHLIB_EXT}.{{ version_postfix }}  # [linux]
-        - test -f $PREFIX/lib/libopenvino{{ openvino_lib }}.{{ version_postfix }}${SHLIB_EXT}  # [osx]
-        - if not exist %LIBRARY_BIN%\\openvino{{ openvino_lib }}%SHLIB_EXT% exit 1  # [win]
-        {% endfor %}
+        - test -f $PREFIX/lib/libopenvino${SHLIB_EXT}.{{ version_postfix }}  # [linux]
+        - test -f $PREFIX/lib/libopenvino_c${SHLIB_EXT}.{{ version_postfix }}  # [linux]
+        - test -f $PREFIX/lib/libopenvino.{{ version_postfix }}${SHLIB_EXT}  # [osx]
+        - test -f $PREFIX/lib/libopenvino_c.{{ version_postfix }}${SHLIB_EXT}  # [osx]
+        - if not exist %LIBRARY_BIN%\\openvino%SHLIB_EXT% exit 1  # [win]
+        - if not exist %LIBRARY_BIN%\\openvino_c%SHLIB_EXT% exit 1  # [win]
 
   - name: libopenvino-ir-frontend
     version: {{ version }}
@@ -632,18 +630,21 @@ outputs:
         - export CMAKE_GENERATOR=Ninja  # [unix]
 
         # check libraries (symlinks)
-        {% set openvino_libs = [] %}
-        {{ openvino_libs.append("") or "" }}
-        {{ openvino_libs.append("_c") or "" }}
-        {{ openvino_libs.append("_paddle_frontend") or "" }}
-        {{ openvino_libs.append("_pytorch_frontend") or "" }}
-        {{ openvino_libs.append("_onnx_frontend") or "" }}
-        {{ openvino_libs.append("_tensorflow_frontend") or "" }}
-        {{ openvino_libs.append("_tensorflow_lite_frontend") or "" }}
-        {% for openvino_lib in openvino_libs %}
-        - test -f $PREFIX/lib/libopenvino{{ openvino_lib }}${SHLIB_EXT}  # [unix]
-        - if not exist %LIBRARY_BIN%\\openvino{{ openvino_lib }}%SHLIB_EXT% exit 1  # [win]
-        {% endfor %}
+        - test -f $PREFIX/lib/libopenvino${SHLIB_EXT}  # [unix]
+        - test -f $PREFIX/lib/libopenvino_c${SHLIB_EXT}  # [unix]
+        - test -f $PREFIX/lib/libopenvino_paddle_frontend${SHLIB_EXT}  # [unix]
+        - test -f $PREFIX/lib/libopenvino_pytorch_frontend${SHLIB_EXT}  # [unix]
+        - test -f $PREFIX/lib/libopenvino_onnx_frontend${SHLIB_EXT}  # [unix]
+        - test -f $PREFIX/lib/libopenvino_tensorflow_frontend${SHLIB_EXT}  # [unix]
+        - test -f $PREFIX/lib/libopenvino_tensorflow_lite_frontend${SHLIB_EXT}  # [unix]
+        
+        - if not exist %LIBRARY_BIN%\openvino%SHLIB_EXT% exit 1  # [win]
+        - if not exist %LIBRARY_BIN%\openvino_c%SHLIB_EXT% exit 1  # [win]
+        - if not exist %LIBRARY_BIN%\openvino_paddle_frontend%SHLIB_EXT% exit 1  # [win]
+        - if not exist %LIBRARY_BIN%\openvino_pytorch_frontend%SHLIB_EXT% exit 1  # [win]
+        - if not exist %LIBRARY_BIN%\openvino_onnx_frontend%SHLIB_EXT% exit 1  # [win]
+        - if not exist %LIBRARY_BIN%\openvino_tensorflow_frontend%SHLIB_EXT% exit 1  # [win]
+        - if not exist %LIBRARY_BIN%\openvino_tensorflow_lite_frontend%SHLIB_EXT% exit 1  # [win]
 
         # check that devices are found using OpenVINO C API
         - $CC snippets/openvino_available_devices.c $(pkg-config --cflags --libs openvino) -Wl,-rpath,$PREFIX/lib -o openvino_devices_test  # [unix]
