@@ -396,8 +396,7 @@ In order to produce a uniquely identifiable distribution:
 Feedstock Maintainers
 =====================
 
-* [@RaguzovaTatyana](https://github.com/RaguzovaTatyana/)
 * [@artanokhov](https://github.com/artanokhov/)
-* [@evgenytalanin-intel](https://github.com/evgenytalanin-intel/)
+* [@culhatsker](https://github.com/culhatsker/)
 * [@ilya-lavrenov](https://github.com/ilya-lavrenov/)
 
