@@ -1,6 +1,6 @@
 {% set name = "openvino" %}
-{% set version_postfix = "2024.5.0" %}
-{% set version = "2024.5.0" %}
+{% set version_postfix = "2024.6.0" %}
+{% set version = "2024.6.0" %}
 
 package:
   name: {{ name|lower }}-split
@@ -8,7 +8,7 @@ package:
 
 source:
   - url: https://github.com/openvinotoolkit/openvino/archive/refs/tags/{{ version }}.tar.gz
-    sha256: 3d5b89760e1c946aca7b219dff4bf4cf5eb511932863c90cafc47d3c01c85744
+    sha256: 93f417409f3bf12445cb0d72b2af13d849d2b5125d5330d832f1bae55283e5b7
     patches:
     - patches/001-protobuf.patch
     - patches/003-lin-arm64-compute-lib.patch  # [aarch64]
@@ -21,8 +21,8 @@ source:
   - url: https://github.com/openvinotoolkit/mlas/archive/d1bc25ec4660cddd87804fcf03b2411b5dfb2e94.tar.gz
     sha256: 0a44fbfd4b13e8609d66ddac4b11a27c90c1074cde5244c91ad197901666004c
     folder: src/plugins/intel_cpu/thirdparty/mlas
-  - url: https://github.com/oneapi-src/oneDNN/archive/1722066ad4c0f15495f2d0fcbe9deb2bfd188c36.tar.gz  # [win64 or linux64]
-    sha256: 8955f19800066d8a705df2eb8b462085d6142b4f771ff88ae196e59a0d4ab1bb  # [win64 or linux64]
+  - url: https://github.com/oneapi-src/oneDNN/archive/0f269193c7466313888d3338209d0d06a22cc6fa.tar.gz  # [win64 or linux64]
+    sha256: abad1ff4ac138c593b7a927ef2099b01447af1f7364848392a950ba17b32bcd8  # [win64 or linux64]
     folder: src/plugins/intel_gpu/thirdparty/onednn_gpu  # [win64 or linux64]
   - url: https://github.com/intel/level-zero-npu-extensions/archive/a6487cc2c5da9aa13db9e005a320a1b6a0ee5919.tar.gz  # [linux64]
     sha256: 1e7b4140eed15aec2be36075a322e352013292b28e842608476e9d1ce3b77959  # [linux64]
