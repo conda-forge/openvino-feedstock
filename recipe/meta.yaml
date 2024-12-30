@@ -11,7 +11,9 @@ source:
     sha256: 93f417409f3bf12445cb0d72b2af13d849d2b5125d5330d832f1bae55283e5b7
     patches:
     - patches/001-protobuf.patch
+    - patches/002-level-zero.patch  # [linux64]
     - patches/003-lin-arm64-compute-lib.patch  # [aarch64]
+    - patches/004-level-zero-runtime.patch  # [linux64]
   - url: https://github.com/ARM-software/ComputeLibrary/archive/refs/tags/v24.09.tar.gz  # [aarch64 or arm64]
     sha256: 49b8620f21cbbe49e825a131d9eacd548532646289b50e070b83860bd88087fe  # [aarch64 or arm64]
     folder: src/plugins/intel_cpu/thirdparty/ComputeLibrary  # [aarch64 or arm64]
@@ -62,6 +64,7 @@ requirements:
     - pugixml
     - xbyak  # [x86_64]
     - libprotobuf
+    - level-zero-devel  # [linux64]
 
 outputs:
   - name: libopenvino
@@ -378,8 +381,6 @@ outputs:
         - runtime-third-party-programs.txt
     build:
         skip: True  # [not linux64]
-        missing_dso_whitelist:
-          - "*/libze_loader.so*"   # [linux64]
     requirements:
       build:
         - {{ compiler('cxx') }}
@@ -390,6 +391,7 @@ outputs:
         - {{ pin_subpackage('libopenvino', exact=True) }}
         - pugixml
         - tbb-devel
+        - level-zero-devel
       run:
         - {{ pin_subpackage('libopenvino', exact=True) }}
     test:
