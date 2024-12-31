@@ -32,9 +32,6 @@ source:
   - url: https://github.com/onnx/onnx/archive/refs/tags/v1.17.0.tar.gz
     sha256: 8d5e983c36037003615e5a02d36b18fc286541bf52de1a78f6cf9f32005a820e
     folder: thirdparty/onnx/onnx
-  - url: https://github.com/oneapi-src/level-zero/archive/fd459f28041c176df23a0b7b791ff20a7689d237.tar.gz  # [linux64]
-    sha256: e078cae698e368c4e8e57d268f4ef0b766ed8f5548ac8e4fc0a07f4c406bb50d  # [linux64]
-    folder: thirdparty/level_zero/level-zero  # [linux64]
 
 build:
   number: 1
@@ -502,7 +499,6 @@ outputs:
         - python                              # [build_platform != target_platform]
         - cross-python_{{ target_platform }}  # [build_platform != target_platform]
         - make  # [unix]
-        - cython =0.29.36
         - ccache
         - cmake
         - pybind11
