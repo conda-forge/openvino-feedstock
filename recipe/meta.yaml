@@ -35,7 +35,7 @@ source:
     folder: thirdparty/level_zero/level-zero  # [linux64]
 
 build:
-  number: 1
+  number: 2
 
 requirements:
   build:
