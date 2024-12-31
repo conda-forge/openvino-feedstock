@@ -74,7 +74,7 @@ index 8eb9cb31db..7651218954 100644
  set_target_properties(${TARGET_NAME} PROPERTIES EXPORT_NAME npu_zero_utils)
  
 +add_library(level-zero-headers INTERFACE)
-+set_property(TARGET level-zero-headers APPEND PROPERTY INTERFACE_INCLUDE_DIRECTORIES $<BUILD_INTERFACE:${OpenVINO_SOURCE_DIR}/thirdparty/level_zero/level-zero/include>)
++set_property(TARGET level-zero-headers APPEND PROPERTY INTERFACE_INCLUDE_DIRECTORIES $<TARGET_PROPERTY:LevelZero::LevelZero,INTERFACE_INCLUDE_DIRECTORIES>)
 +add_library(LevelZero::Headers ALIAS level-zero-headers)
 +
  target_include_directories(${TARGET_NAME}
