@@ -26,15 +26,15 @@ source:
   - url: https://github.com/oneapi-src/oneDNN/archive/0f269193c7466313888d3338209d0d06a22cc6fa.tar.gz  # [win64 or linux64]
     sha256: abad1ff4ac138c593b7a927ef2099b01447af1f7364848392a950ba17b32bcd8  # [win64 or linux64]
     folder: src/plugins/intel_gpu/thirdparty/onednn_gpu  # [win64 or linux64]
-  - url: https://github.com/intel/level-zero-npu-extensions/archive/a6487cc2c5da9aa13db9e005a320a1b6a0ee5919.tar.gz  # [linux64]
-    sha256: 1e7b4140eed15aec2be36075a322e352013292b28e842608476e9d1ce3b77959  # [linux64]
+  - url: https://github.com/intel/level-zero-npu-extensions/archive/110f48ee8eda22d8b40daeeecdbbed0fc3b08f8b.tar.gz  # [linux64]
+    sha256: 2af2d960ec0b84652650c6a97a19ffae5d5c9b2fa6a12a75497899d633ea0520  # [linux64]
     folder: src/plugins/intel_npu/thirdparty/level-zero-ext  # [linux64]
   - url: https://github.com/onnx/onnx/archive/refs/tags/v1.17.0.tar.gz
     sha256: 8d5e983c36037003615e5a02d36b18fc286541bf52de1a78f6cf9f32005a820e
     folder: thirdparty/onnx/onnx
 
 build:
-  number: 2
+  number: 3
 
 requirements:
   build:
