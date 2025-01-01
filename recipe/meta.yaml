@@ -11,7 +11,9 @@ source:
     sha256: 93f417409f3bf12445cb0d72b2af13d849d2b5125d5330d832f1bae55283e5b7
     patches:
     - patches/001-protobuf.patch
+    - patches/002-level-zero.patch  # [linux64]
     - patches/003-lin-arm64-compute-lib.patch  # [aarch64]
+    - patches/004-level-zero-runtime.patch  # [linux64]
   - url: https://github.com/ARM-software/ComputeLibrary/archive/refs/tags/v24.09.tar.gz  # [aarch64 or arm64]
     sha256: 49b8620f21cbbe49e825a131d9eacd548532646289b50e070b83860bd88087fe  # [aarch64 or arm64]
     folder: src/plugins/intel_cpu/thirdparty/ComputeLibrary  # [aarch64 or arm64]
@@ -24,18 +26,15 @@ source:
   - url: https://github.com/oneapi-src/oneDNN/archive/0f269193c7466313888d3338209d0d06a22cc6fa.tar.gz  # [win64 or linux64]
     sha256: abad1ff4ac138c593b7a927ef2099b01447af1f7364848392a950ba17b32bcd8  # [win64 or linux64]
     folder: src/plugins/intel_gpu/thirdparty/onednn_gpu  # [win64 or linux64]
-  - url: https://github.com/intel/level-zero-npu-extensions/archive/a6487cc2c5da9aa13db9e005a320a1b6a0ee5919.tar.gz  # [linux64]
-    sha256: 1e7b4140eed15aec2be36075a322e352013292b28e842608476e9d1ce3b77959  # [linux64]
+  - url: https://github.com/intel/level-zero-npu-extensions/archive/110f48ee8eda22d8b40daeeecdbbed0fc3b08f8b.tar.gz  # [linux64]
+    sha256: 2af2d960ec0b84652650c6a97a19ffae5d5c9b2fa6a12a75497899d633ea0520  # [linux64]
     folder: src/plugins/intel_npu/thirdparty/level-zero-ext  # [linux64]
   - url: https://github.com/onnx/onnx/archive/refs/tags/v1.17.0.tar.gz
     sha256: 8d5e983c36037003615e5a02d36b18fc286541bf52de1a78f6cf9f32005a820e
     folder: thirdparty/onnx/onnx
-  - url: https://github.com/oneapi-src/level-zero/archive/fd459f28041c176df23a0b7b791ff20a7689d237.tar.gz  # [linux64]
-    sha256: e078cae698e368c4e8e57d268f4ef0b766ed8f5548ac8e4fc0a07f4c406bb50d  # [linux64]
-    folder: thirdparty/level_zero/level-zero  # [linux64]
 
 build:
-  number: 1
+  number: 2
 
 requirements:
   build:
@@ -62,6 +61,7 @@ requirements:
     - pugixml
     - xbyak  # [x86_64]
     - libprotobuf
+    - level-zero-devel  # [linux64]
 
 outputs:
   - name: libopenvino
@@ -378,8 +378,6 @@ outputs:
         - runtime-third-party-programs.txt
     build:
         skip: True  # [not linux64]
-        missing_dso_whitelist:
-          - "*/libze_loader.so*"   # [linux64]
     requirements:
       build:
         - {{ compiler('cxx') }}
@@ -390,6 +388,7 @@ outputs:
         - {{ pin_subpackage('libopenvino', exact=True) }}
         - pugixml
         - tbb-devel
+        - level-zero-devel
       run:
         - {{ pin_subpackage('libopenvino', exact=True) }}
     test:
@@ -500,7 +499,6 @@ outputs:
         - python                              # [build_platform != target_platform]
         - cross-python_{{ target_platform }}  # [build_platform != target_platform]
         - make  # [unix]
-        - cython =0.29.36
         - ccache
         - cmake
         - pybind11
