@@ -500,7 +500,6 @@ outputs:
         - python                              # [build_platform != target_platform]
         - cross-python_{{ target_platform }}  # [build_platform != target_platform]
         - make  # [unix]
-        - cython =0.29.36
         - ccache
         - cmake
         - pybind11
