@@ -1,6 +1,6 @@
 {% set name = "openvino" %}
-{% set version_postfix = "2024.6.0" %}
-{% set version = "2024.6.0" %}
+{% set version_postfix = "2025.0.0" %}
+{% set version = "2025.0.0" %}
 
 package:
   name: {{ name|lower }}-split
@@ -8,7 +8,7 @@ package:
 
 source:
   - url: https://github.com/openvinotoolkit/openvino/archive/refs/tags/{{ version }}.tar.gz
-    sha256: 93f417409f3bf12445cb0d72b2af13d849d2b5125d5330d832f1bae55283e5b7
+    sha256: d2cbff5a0ac1bc738c33ba103569f8daf20d3a17d3db94da11ae207ffb9e4395
     patches:
     - patches/001-protobuf.patch
     - patches/002-level-zero.patch  # [linux64]
@@ -17,14 +17,14 @@ source:
   - url: https://github.com/ARM-software/ComputeLibrary/archive/refs/tags/v24.09.tar.gz  # [aarch64 or arm64]
     sha256: 49b8620f21cbbe49e825a131d9eacd548532646289b50e070b83860bd88087fe  # [aarch64 or arm64]
     folder: src/plugins/intel_cpu/thirdparty/ComputeLibrary  # [aarch64 or arm64]
-  - url: https://github.com/openvinotoolkit/oneDNN/archive/c60a9946aa2386890e5c9f5587974facb7624227.tar.gz
-    sha256: 37cea8af9772053fd6d178817f64d59e3aa7de9fd8f1aa21873075bb0664240f
+  - url: https://github.com/openvinotoolkit/oneDNN/archive/1789b1e0ae441de15d793123003a900a35d1dc71.tar.gz
+    sha256: 551070032ce5d2ed6adc2216e9b061782da097b1ce28c403eaa16b230b09f6a7
     folder: src/plugins/intel_cpu/thirdparty/onednn
   - url: https://github.com/openvinotoolkit/mlas/archive/d1bc25ec4660cddd87804fcf03b2411b5dfb2e94.tar.gz
     sha256: 0a44fbfd4b13e8609d66ddac4b11a27c90c1074cde5244c91ad197901666004c
     folder: src/plugins/intel_cpu/thirdparty/mlas
-  - url: https://github.com/oneapi-src/oneDNN/archive/0f269193c7466313888d3338209d0d06a22cc6fa.tar.gz  # [win64 or linux64]
-    sha256: abad1ff4ac138c593b7a927ef2099b01447af1f7364848392a950ba17b32bcd8  # [win64 or linux64]
+  - url: https://github.com/oneapi-src/oneDNN/archive/706a3ce3b391cf1d8a904a8efa981c70078719eb.tar.gz  # [win64 or linux64]
+    sha256: 1a656eb32f383cef82b703c355d762b2162f5aaa7b6f54b2c1e47995a9cee1f2  # [win64 or linux64]
     folder: src/plugins/intel_gpu/thirdparty/onednn_gpu  # [win64 or linux64]
   - url: https://github.com/intel/level-zero-npu-extensions/archive/110f48ee8eda22d8b40daeeecdbbed0fc3b08f8b.tar.gz  # [linux64]
     sha256: 2af2d960ec0b84652650c6a97a19ffae5d5c9b2fa6a12a75497899d633ea0520  # [linux64]
@@ -34,7 +34,7 @@ source:
     folder: thirdparty/onnx/onnx
 
 build:
-  number: 3
+  number: 0
 
 requirements:
   build:
