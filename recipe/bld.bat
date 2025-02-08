@@ -3,7 +3,10 @@ setlocal enabledelayedexpansion
 
 mkdir -p build
 
-cmake                                                                        ^
+set CFLAGS=%CFLAGS% /wd4996
+set CXXFLAGS=%CXXFLAGS% /wd4996
+
+cmake %CMAKE_ARGS%                                                           ^
     -DCMAKE_INSTALL_PREFIX="%LIBRARY_PREFIX%"                                ^
     -DCMAKE_BUILD_TYPE=Release                                               ^
     -DENABLE_SYSTEM_TBB=ON                                                   ^
@@ -21,10 +24,8 @@ cmake                                                                        ^
     -DENABLE_INTEL_NPU=OFF                                                   ^
     -DENABLE_TEMPLATE=OFF                                                    ^
     -DENABLE_SAMPLES=OFF                                                     ^
-    -DCMAKE_CXX_FLAGS="/wd4996"                                              ^
-    -DCMAKE_C_FLAGS="/wd4996"                                                ^
     -DCPACK_GENERATOR=CONDA-FORGE                                            ^
-    -G "Visual Studio 16 2019"                                               ^
+    -G Ninja                                                                 ^
     -S "%SRC_DIR%"                                                           ^
     -B "%SRC_DIR%\build"
 if errorlevel 1 exit 1
