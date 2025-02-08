@@ -72,9 +72,9 @@ outputs:
       summary: OpenVINO Core Runtime library
       license_file:
         - LICENSE
-        - third-party-programs.txt
-        - onednn_third-party-programs.txt
-        - runtime-third-party-programs.txt
+        - licensing/third-party-programs.txt
+        - licensing/onednn_third-party-programs.txt
+        - licensing/runtime-third-party-programs.txt
     build:
       run_exports:
         - {{ pin_subpackage('libopenvino', max_pin='x.x.x') }}
@@ -103,9 +103,9 @@ outputs:
       summary: OpenVINO IR Frontend
       license_file:
         - LICENSE
-        - third-party-programs.txt
-        - onednn_third-party-programs.txt
-        - runtime-third-party-programs.txt
+        - licensing/third-party-programs.txt
+        - licensing/onednn_third-party-programs.txt
+        - licensing/runtime-third-party-programs.txt
     build:
       run_exports:
         - {{ pin_subpackage('libopenvino-ir-frontend', max_pin='x.x.x') }}
@@ -133,9 +133,9 @@ outputs:
       summary: OpenVINO ONNX Frontend
       license_file:
         - LICENSE
-        - third-party-programs.txt
-        - onednn_third-party-programs.txt
-        - runtime-third-party-programs.txt
+        - licensing/third-party-programs.txt
+        - licensing/onednn_third-party-programs.txt
+        - licensing/runtime-third-party-programs.txt
     build:
       run_exports:
         - {{ pin_subpackage('libopenvino-onnx-frontend', max_pin='x.x.x') }}
@@ -164,9 +164,9 @@ outputs:
       summary: OpenVINO Paddle Frontend
       license_file:
         - LICENSE
-        - third-party-programs.txt
-        - onednn_third-party-programs.txt
-        - runtime-third-party-programs.txt
+        - licensing/third-party-programs.txt
+        - licensing/onednn_third-party-programs.txt
+        - licensing/runtime-third-party-programs.txt
     build:
       run_exports:
         - {{ pin_subpackage('libopenvino-paddle-frontend', max_pin='x.x.x') }}
@@ -195,9 +195,9 @@ outputs:
       summary: OpenVINO Pytorch Frontend
       license_file:
         - LICENSE
-        - third-party-programs.txt
-        - onednn_third-party-programs.txt
-        - runtime-third-party-programs.txt
+        - licensing/third-party-programs.txt
+        - licensing/onednn_third-party-programs.txt
+        - licensing/runtime-third-party-programs.txt
     build:
       run_exports:
         - {{ pin_subpackage('libopenvino-pytorch-frontend', max_pin='x.x.x') }}
@@ -224,9 +224,9 @@ outputs:
       summary: OpenVINO TensorFlow Frontend
       license_file:
         - LICENSE
-        - third-party-programs.txt
-        - onednn_third-party-programs.txt
-        - runtime-third-party-programs.txt
+        - licensing/third-party-programs.txt
+        - licensing/onednn_third-party-programs.txt
+        - licensing/runtime-third-party-programs.txt
     build:
       run_exports:
         - {{ pin_subpackage('libopenvino-tensorflow-frontend', max_pin='x.x.x') }}
@@ -256,9 +256,9 @@ outputs:
       summary: OpenVINO TensorFlow Lite Frontend
       license_file:
         - LICENSE
-        - third-party-programs.txt
-        - onednn_third-party-programs.txt
-        - runtime-third-party-programs.txt
+        - licensing/third-party-programs.txt
+        - licensing/onednn_third-party-programs.txt
+        - licensing/runtime-third-party-programs.txt
     build:
       run_exports:
         - {{ pin_subpackage('libopenvino-tensorflow-lite-frontend', max_pin='x.x.x') }}
@@ -285,9 +285,9 @@ outputs:
       summary: OpenVINO Intel® CPU plugin
       license_file:
         - LICENSE
-        - third-party-programs.txt
-        - onednn_third-party-programs.txt
-        - runtime-third-party-programs.txt
+        - licensing/third-party-programs.txt
+        - licensing/onednn_third-party-programs.txt
+        - licensing/runtime-third-party-programs.txt
     build:
       skip: True  # [not x86_64]
     requirements:
@@ -314,9 +314,9 @@ outputs:
       summary: OpenVINO ARM® CPU plugin
       license_file:
         - LICENSE
-        - third-party-programs.txt
-        - onednn_third-party-programs.txt
-        - runtime-third-party-programs.txt
+        - licensing/third-party-programs.txt
+        - licensing/onednn_third-party-programs.txt
+        - licensing/runtime-third-party-programs.txt
     build:
       skip: True  # [not aarch64 and not arm64]
     requirements:
@@ -342,9 +342,9 @@ outputs:
       summary: OpenVINO Intel® GPU plugin
       license_file:
         - LICENSE
-        - third-party-programs.txt
-        - onednn_third-party-programs.txt
-        - runtime-third-party-programs.txt
+        - licensing/third-party-programs.txt
+        - licensing/onednn_third-party-programs.txt
+        - licensing/runtime-third-party-programs.txt
     build:
       skip: True  # [not linux64 and not win64]
     requirements:
@@ -374,9 +374,9 @@ outputs:
       summary: OpenVINO Intel® NPU plugin
       license_file:
         - LICENSE
-        - third-party-programs.txt
-        - onednn_third-party-programs.txt
-        - runtime-third-party-programs.txt
+        - licensing/third-party-programs.txt
+        - licensing/onednn_third-party-programs.txt
+        - licensing/runtime-third-party-programs.txt
     build:
         skip: True  # [not linux64]
     requirements:
@@ -404,9 +404,9 @@ outputs:
       summary: OpenVINO Auto plugin
       license_file:
         - LICENSE
-        - third-party-programs.txt
-        - onednn_third-party-programs.txt
-        - runtime-third-party-programs.txt
+        - licensing/third-party-programs.txt
+        - licensing/onednn_third-party-programs.txt
+        - licensing/runtime-third-party-programs.txt
     requirements:
       build:
         - {{ compiler('cxx') }}
@@ -430,9 +430,9 @@ outputs:
       summary: OpenVINO Auto Batch plugin
       license_file:
         - LICENSE
-        - third-party-programs.txt
-        - onednn_third-party-programs.txt
-        - runtime-third-party-programs.txt
+        - licensing/third-party-programs.txt
+        - licensing/onednn_third-party-programs.txt
+        - licensing/runtime-third-party-programs.txt
     requirements:
       build:
         - {{ compiler('cxx') }}
@@ -456,9 +456,9 @@ outputs:
       summary: OpenVINO Hetero plugin
       license_file:
         - LICENSE
-        - third-party-programs.txt
-        - onednn_third-party-programs.txt
-        - runtime-third-party-programs.txt
+        - licensing/third-party-programs.txt
+        - licensing/onednn_third-party-programs.txt
+        - licensing/runtime-third-party-programs.txt
     requirements:
       build:
         - {{ compiler('cxx') }}
@@ -481,9 +481,9 @@ outputs:
       summary: OpenVINO Python API
       license_file:
         - LICENSE
-        - third-party-programs.txt
-        - onednn_third-party-programs.txt
-        - runtime-third-party-programs.txt
+        - licensing/third-party-programs.txt
+        - licensing/onednn_third-party-programs.txt
+        - licensing/runtime-third-party-programs.txt
     build:
       string: py{{ CONDA_PY }}h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}
       entry_points:
@@ -570,9 +570,9 @@ outputs:
       summary: OpenVINO C++ / C Runtime & Development files
       license_file:
         - LICENSE
-        - third-party-programs.txt
-        - onednn_third-party-programs.txt
-        - runtime-third-party-programs.txt
+        - licensing/third-party-programs.txt
+        - licensing/onednn_third-party-programs.txt
+        - licensing/runtime-third-party-programs.txt
     build:
       run_exports:
         - {{ pin_subpackage('libopenvino', max_pin='x.x.x') }}
@@ -661,9 +661,9 @@ outputs:
       summary: OpenVINO C++ / C / Python Runtimes & Development files
       license_file:
         - LICENSE
-        - third-party-programs.txt
-        - onednn_third-party-programs.txt
-        - runtime-third-party-programs.txt
+        - licensing/third-party-programs.txt
+        - licensing/onednn_third-party-programs.txt
+        - licensing/runtime-third-party-programs.txt
     build:
       run_exports:
         - {{ pin_subpackage('libopenvino-python', max_pin='x.x.x') }}
@@ -726,9 +726,9 @@ about:
   license_family: Apache
   license_file:
     - LICENSE
-    - third-party-programs.txt
-    - onednn_third-party-programs.txt
-    - runtime-third-party-programs.txt
+    - licensing/third-party-programs.txt
+    - licensing/onednn_third-party-programs.txt
+    - licensing/runtime-third-party-programs.txt
   doc_url: https://docs.openvino.ai/latest/index.html
   dev_url: https://github.com/openvinotoolkit/openvino
 

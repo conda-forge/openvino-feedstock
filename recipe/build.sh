@@ -36,7 +36,3 @@ cmake ${CMAKE_ARGS}                                                          \
     -B "$SRC_DIR/build"
 
 cmake --build "$SRC_DIR/build" --config Release --parallel $CPU_COUNT
-
-cp "$SRC_DIR/licensing/third-party-programs.txt" third-party-programs.txt
-cp "$SRC_DIR/licensing/onednn_third-party-programs.txt" onednn_third-party-programs.txt
-cp "$SRC_DIR/licensing/runtime-third-party-programs.txt" runtime-third-party-programs.txt
