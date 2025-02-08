@@ -4,13 +4,8 @@
 # Updated OV 2024.4: ONNX requires 10.15
 MACOSX_SDK_VERSION:        # [osx and x86_64]
   - "10.15"                # [osx and x86_64]
-c_stdlib_version:          # [osx and x86_64]
-  - "10.15"                # [osx and x86_64]
 
 # windows has a hard time completing in under 6 hours on our CIs
 megabuild:
 - true      # [unix]
 - false     # [not unix]
-
-c_stdlib_version:   # [linux]
-  - "2.17"          # [linux]

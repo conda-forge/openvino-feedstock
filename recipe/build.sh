@@ -6,10 +6,16 @@ if [[ "${CONDA_BUILD_CROSS_COMPILATION:-0}" == 1 ]]; then
     CMAKE_ARGS="${CMAKE_ARGS} -DProtobuf_PROTOC_EXECUTABLE=$BUILD_PREFIX/bin/protoc"
 fi
 
+if [[ "${target_platform}" == osx-64 ]]; then
+    # https://conda-forge.org/docs/maintainer/knowledge_base/#newer-c-features-with-old-sdk
+    # Address: error: 'path' is unavailable: introduced in macOS 10.15
+    export CXXFLAGS="${CXXFLAGS} -D_LIBCPP_DISABLE_AVAILABILITY"
+fi
+export CXXFLAGS="${CXXFLAGS} -Wno-deprecated-declarations"
+export CFLAGS="${CFLAGS} -Wno-deprecated-declarations"
 mkdir -p build
 
 cmake ${CMAKE_ARGS}                                                          \
-    -DCMAKE_BUILD_TYPE=Release                                               \
     -DENABLE_SYSTEM_TBB=ON                                                   \
     -DENABLE_SYSTEM_PUGIXML=ON                                               \
     -DENABLE_SYSTEM_PROTOBUF=ON                                              \
@@ -24,8 +30,6 @@ cmake ${CMAKE_ARGS}                                                          \
     -DENABLE_NCC_STYLE=OFF                                                   \
     -DENABLE_TEMPLATE=OFF                                                    \
     -DENABLE_SAMPLES=OFF                                                     \
-    -DCMAKE_CXX_FLAGS="-Wno-deprecated-declarations"                         \
-    -DCMAKE_C_FLAGS="-Wno-deprecated-declarations"                           \
     -DCPACK_GENERATOR=CONDA-FORGE                                            \
     -G Ninja                                                                 \
     -S "$SRC_DIR"                                                            \

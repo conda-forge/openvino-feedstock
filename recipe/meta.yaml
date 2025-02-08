@@ -11,6 +11,9 @@ source:
     sha256: d2cbff5a0ac1bc738c33ba103569f8daf20d3a17d3db94da11ae207ffb9e4395
     patches:
     - patches/003-lin-arm64-compute-lib.patch  # [aarch64]
+    # https://conda-forge.org/docs/maintainer/knowledge_base/#newer-c-features-with-old-sdk
+    # Address: error: 'path' is unavailable: introduced in macOS 10.15
+    - patches/0001-Relax-OSX-Runtime-Requirements-for-Conda-forge.patch
   - url: https://github.com/ARM-software/ComputeLibrary/archive/refs/tags/v24.09.tar.gz  # [aarch64 or arm64]
     sha256: 49b8620f21cbbe49e825a131d9eacd548532646289b50e070b83860bd88087fe  # [aarch64 or arm64]
     folder: src/plugins/intel_cpu/thirdparty/ComputeLibrary  # [aarch64 or arm64]
@@ -31,7 +34,7 @@ source:
     folder: thirdparty/onnx/onnx
 
 build:
-  number: 1
+  number: 2
 
 requirements:
   build:
@@ -59,6 +62,7 @@ requirements:
     - xbyak  # [x86_64]
     - libprotobuf
     - level-zero-devel  # [linux64]
+    - zlib
 
 outputs:
   - name: libopenvino
