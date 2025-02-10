@@ -699,6 +699,9 @@ outputs:
       files:
         - snippets/
       commands:
+        # https://conda-forge.org/docs/maintainer/knowledge_base/#newer-c-features-with-old-sdk
+        # Address: error: 'path' is unavailable: introduced in macOS 10.15
+        - export CXXFLAGS="${CXXFLAGS} -D_LIBCPP_DISABLE_AVAILABILITY"    # [osx and x86_64]
         # check that devices and frontends are found using Python API
         - python snippets/openvino_available_components.py  # [unix]
 
