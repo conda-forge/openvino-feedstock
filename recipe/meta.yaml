@@ -625,6 +625,9 @@ outputs:
       files:
         - snippets/
       commands:
+        # https://conda-forge.org/docs/maintainer/knowledge_base/#newer-c-features-with-old-sdk
+        # Address: error: 'path' is unavailable: introduced in macOS 10.15
+        - export CXXFLAGS="${CXXFLAGS} -D_LIBCPP_DISABLE_AVAILABILITY"    # [osx and x86_64]
         - export MACOSX_DEPLOYMENT_TARGET={{ MACOSX_DEPLOYMENT_TARGET }}  # [osx]
         - export CMAKE_GENERATOR=Ninja  # [unix]
 
@@ -636,7 +639,7 @@ outputs:
         - test -f $PREFIX/lib/libopenvino_onnx_frontend${SHLIB_EXT}  # [unix]
         - test -f $PREFIX/lib/libopenvino_tensorflow_frontend${SHLIB_EXT}  # [unix]
         - test -f $PREFIX/lib/libopenvino_tensorflow_lite_frontend${SHLIB_EXT}  # [unix]
-        
+
         - if not exist %LIBRARY_BIN%\openvino%SHLIB_EXT% exit 1  # [win]
         - if not exist %LIBRARY_BIN%\openvino_c%SHLIB_EXT% exit 1  # [win]
         - if not exist %LIBRARY_BIN%\openvino_paddle_frontend%SHLIB_EXT% exit 1  # [win]
