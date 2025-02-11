@@ -30,5 +30,6 @@ cmake %CMAKE_ARGS%                                                           ^
     -B "%SRC_DIR%\build"
 if errorlevel 1 exit 1
 
-cmake --build "%SRC_DIR%\build" --config Release --parallel %CPU_COUNT%
+:REM on the CI running compilation in parallel results in out of memory errors
+cmake --build "%SRC_DIR%\build" --config Release --parallel 1
 if errorlevel 1 exit 1
