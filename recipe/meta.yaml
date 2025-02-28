@@ -1,6 +1,6 @@
 {% set name = "openvino" %}
 {% set version_postfix = "2025.0.0" %}
-{% set version = "2025.0.0" %}
+{% set version = "2025.0.1" %}
 
 package:
   name: {{ name|lower }}-split
@@ -8,9 +8,9 @@ package:
 
 source:
   - url: https://github.com/openvinotoolkit/openvino/archive/refs/tags/{{ version }}.tar.gz
-    sha256: d2cbff5a0ac1bc738c33ba103569f8daf20d3a17d3db94da11ae207ffb9e4395
+    sha256: 4c22d605b80b128439fa3b9c98984ace7edcc0e3c292bb0b3d508b7eb28cbc3a
     patches:
-    - patches/003-lin-arm64-compute-lib.patch  # [aarch64]
+      - patches/003-lin-arm64-compute-lib.patch # [aarch64]
   - url: https://github.com/ARM-software/ComputeLibrary/archive/refs/tags/v24.09.tar.gz  # [aarch64 or arm64]
     sha256: 49b8620f21cbbe49e825a131d9eacd548532646289b50e070b83860bd88087fe  # [aarch64 or arm64]
     folder: src/plugins/intel_cpu/thirdparty/ComputeLibrary  # [aarch64 or arm64]
@@ -31,7 +31,7 @@ source:
     folder: thirdparty/onnx/onnx
 
 build:
-  number: 1
+  number: 0
 
 requirements:
   build:
@@ -285,7 +285,7 @@ outputs:
         - onednn_third-party-programs.txt
         - runtime-third-party-programs.txt
     build:
-      skip: True  # [not x86_64]
+      skip: true  # [not x86_64]
     requirements:
       build:
         - {{ compiler('cxx') }}
@@ -314,7 +314,7 @@ outputs:
         - onednn_third-party-programs.txt
         - runtime-third-party-programs.txt
     build:
-      skip: True  # [not aarch64 and not arm64]
+      skip: true  # [not aarch64 and not arm64]
     requirements:
       build:
         - {{ compiler('cxx') }}
@@ -342,7 +342,7 @@ outputs:
         - onednn_third-party-programs.txt
         - runtime-third-party-programs.txt
     build:
-      skip: True  # [not linux64 and not win64]
+      skip: true  # [not linux64 and not win64]
     requirements:
       build:
         - {{ compiler('cxx') }}
@@ -374,7 +374,7 @@ outputs:
         - onednn_third-party-programs.txt
         - runtime-third-party-programs.txt
     build:
-        skip: True  # [not linux64]
+      skip: true  # [not linux64]
     requirements:
       build:
         - {{ compiler('cxx') }}
@@ -632,7 +632,6 @@ outputs:
         - test -f $PREFIX/lib/libopenvino_onnx_frontend${SHLIB_EXT}  # [unix]
         - test -f $PREFIX/lib/libopenvino_tensorflow_frontend${SHLIB_EXT}  # [unix]
         - test -f $PREFIX/lib/libopenvino_tensorflow_lite_frontend${SHLIB_EXT}  # [unix]
-        
         - if not exist %LIBRARY_BIN%\openvino%SHLIB_EXT% exit 1  # [win]
         - if not exist %LIBRARY_BIN%\openvino_c%SHLIB_EXT% exit 1  # [win]
         - if not exist %LIBRARY_BIN%\openvino_paddle_frontend%SHLIB_EXT% exit 1  # [win]
