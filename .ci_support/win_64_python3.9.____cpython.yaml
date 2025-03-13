@@ -9,11 +9,11 @@ channel_targets:
 cxx_compiler:
 - vs2019
 flatbuffers:
-- 24.3.25
+- 24.12.23
 libabseil:
-- '20240722'
+- '20250127'
 libprotobuf:
-- 5.28.3
+- 5.29.3
 megabuild:
 - 'false'
 pin_run_as_build:
