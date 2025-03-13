@@ -1,0 +1,28 @@
+From bbb1f0296951ab5171eb904ebc995f9863e7335c Mon Sep 17 00:00:00 2001
+From: Mark Harfouche <mark.harfouche@gmail.com>
+Date: Sat, 8 Feb 2025 13:52:43 -0500
+Subject: [PATCH] Relax OSX Runtime Requirements for Conda forge
+
+---
+ CMakeLists.txt | 5 -----
+ 1 file changed, 5 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 2187deb8e8..dbcba56b68 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -65,11 +65,6 @@ if(ENABLE_COVERAGE)
+     include(cmake/coverage.cmake)
+ endif()
+ 
+-if(APPLE AND CMAKE_OSX_DEPLOYMENT_TARGET AND
+-    CMAKE_OSX_DEPLOYMENT_TARGET VERSION_LESS 10.15)
+-    message(FATAL_ERROR "OpenVINO requires MACOSX_DEPLOYMENT_TARGET at least 10.15, specified ${CMAKE_OSX_DEPLOYMENT_TARGET}")
+-endif()
+-
+ # resolving dependencies for the project
+ message (STATUS "CMAKE_VERSION ......................... " ${CMAKE_VERSION})
+ message (STATUS "CMAKE_CROSSCOMPILING .................. " ${CMAKE_CROSSCOMPILING})
+-- 
+2.43.0
+
