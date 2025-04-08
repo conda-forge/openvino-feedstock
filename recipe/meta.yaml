@@ -34,7 +34,7 @@ source:
     folder: thirdparty/onnx/onnx
 
 build:
-  number: 3
+  number: 0
 
 requirements:
   build:
@@ -63,6 +63,7 @@ requirements:
     - libprotobuf
     - level-zero-devel  # [linux64]
     - zlib
+    - nlohmann_json
 
 outputs:
   - name: libopenvino
