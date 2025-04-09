@@ -20,6 +20,9 @@ source:
   - url: https://github.com/openvinotoolkit/oneDNN/archive/5baba714e16e11309774a62783f363cad30e97c7.tar.gz
     sha256: 4430875c1690abecc57d9cc8464be690430e217a0453c69e030c667e5801e749
     folder: src/plugins/intel_cpu/thirdparty/onednn
+  - url: https://github.com/ARM-software/kleidiai/archive/eaf63a6ae9a903fb4fa8a4d004a974995011f444.tar.gz
+    sha256: 756fa3040ff23f78a4c3f4c1984a3814d78d302b0b5dc3f0b255322368aefc58
+    folder: src/plugins/intel_cpu/thirdparty/kleidiai
   - url: https://github.com/openvinotoolkit/mlas/archive/d1bc25ec4660cddd87804fcf03b2411b5dfb2e94.tar.gz
     sha256: 0a44fbfd4b13e8609d66ddac4b11a27c90c1074cde5244c91ad197901666004c
     folder: src/plugins/intel_cpu/thirdparty/mlas
