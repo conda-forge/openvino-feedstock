@@ -25,6 +25,7 @@ cmake %CMAKE_ARGS%                                                           ^
     -DENABLE_TEMPLATE=OFF                                                    ^
     -DENABLE_SAMPLES=OFF                                                     ^
     -DCPACK_GENERATOR=CONDA-FORGE                                            ^
+    -DCMAKE_POLICY_VERSION_MINIMUM=3.5                                       ^
     -G "Visual Studio 16 2019"                                               ^
     -S "%SRC_DIR%"                                                           ^
     -B "%SRC_DIR%\build"
