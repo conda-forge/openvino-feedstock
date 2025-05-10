@@ -614,7 +614,7 @@ outputs:
         - if not exist %LIBRARY_BIN%\openvino_c%SHLIB_EXT% exit 1  # [win]
 
         # check that devices are found using OpenVINO C API
-        - $CC snippets/openvino_available_devices.c $(pkg-config --cflags --libs openvino) -Wl,-rpath,$PREFIX/lib -o openvino_devices_test  # [unix]
+        - $CC snippets/openvino_available_devices.c $(pkg-config --cflags --libs openvino) ${CFLAGS} ${LDFLAGS} -o openvino_devices_test  # [unix]
         - ./openvino_devices_test  # [unix]
 
         # check that frontends are found using OpenVINO C++ API
