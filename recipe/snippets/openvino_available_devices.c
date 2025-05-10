@@ -16,10 +16,18 @@ int main() {
     OV_CALL(ov_core_get_property(core, "GPU", "AVAILABLE_DEVICES", &ret));
     // OV_CALL(ov_core_get_property(core, "NPU", "AVAILABLE_DEVICES", &ret));
 #endif
+#ifdef CONDA_FORGE_OPENVINO_AUTO_FRONTEND
     OV_CALL(ov_core_get_property(core, "AUTO", "SUPPORTED_PROPERTIES", &ret));
+#endif
+#ifdef CONDA_FORGE_OPENVINO_MULTI_BACKEND
     OV_CALL(ov_core_get_property(core, "MULTI", "SUPPORTED_PROPERTIES", &ret));
+#endif
+#ifdef CONDA_FORGE_OPENVINO_HETERO_BACKEND
     OV_CALL(ov_core_get_property(core, "HETERO", "SUPPORTED_PROPERTIES", &ret));
+#endif
+#ifdef CONDA_FORGE_OPENVINO_BATCH_BACKEND
     OV_CALL(ov_core_get_property(core, "BATCH", "SUPPORTED_PROPERTIES", &ret));
+#endif
     ov_core_free(core);
     return EXIT_SUCCESS;
 }
