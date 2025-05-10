@@ -37,13 +37,13 @@ source:
     folder: thirdparty/onnx/onnx
 
 build:
-  number: 0
+  number: 1
 
 requirements:
   build:
-    - {{ compiler('c') }}
-    - {{ stdlib("c") }}
     - {{ compiler('cxx') }}
+    - {{ compiler('c') }}
+    - {{ stdlib('c') }}
     - ninja
     - pkg-config
     - scons  # [aarch64 or arm64]
@@ -86,7 +86,7 @@ outputs:
       build:
         - {{ compiler('cxx') }}
         - {{ compiler('c') }}
-        - {{ stdlib("c") }}
+        - {{ stdlib('c') }}
         - cmake
       host:
         - pugixml
@@ -117,7 +117,7 @@ outputs:
       build:
         - {{ compiler('cxx') }}
         - {{ compiler('c') }}
-        - {{ stdlib("c") }}
+        - {{ stdlib('c') }}
         - cmake
       host:
         - pugixml
@@ -147,7 +147,7 @@ outputs:
       build:
         - {{ compiler('cxx') }}
         - {{ compiler('c') }}
-        - {{ stdlib("c") }}
+        - {{ stdlib('c') }}
         - cmake
       host:
         - libprotobuf
@@ -178,7 +178,7 @@ outputs:
       build:
         - {{ compiler('cxx') }}
         - {{ compiler('c') }}
-        - {{ stdlib("c") }}
+        - {{ stdlib('c') }}
         - cmake
       host:
         - libprotobuf
@@ -209,7 +209,7 @@ outputs:
       build:
         - {{ compiler('cxx') }}
         - {{ compiler('c') }}
-        - {{ stdlib("c") }}
+        - {{ stdlib('c') }}
         - cmake
       host:
         - {{ pin_subpackage('libopenvino', exact=True) }}
@@ -238,7 +238,7 @@ outputs:
       build:
         - {{ compiler('cxx') }}
         - {{ compiler('c') }}
-        - {{ stdlib("c") }}
+        - {{ stdlib('c') }}
         - cmake
       host:
         - snappy
@@ -270,7 +270,7 @@ outputs:
       build:
         - {{ compiler('cxx') }}
         - {{ compiler('c') }}
-        - {{ stdlib("c") }}
+        - {{ stdlib('c') }}
         - cmake
       host:
         - {{ pin_subpackage('libopenvino', exact=True) }}
@@ -298,7 +298,7 @@ outputs:
       build:
         - {{ compiler('cxx') }}
         - {{ compiler('c') }}
-        - {{ stdlib("c") }}
+        - {{ stdlib('c') }}
         - cmake
       host:
         - pugixml
@@ -327,7 +327,7 @@ outputs:
       build:
         - {{ compiler('cxx') }}
         - {{ compiler('c') }}
-        - {{ stdlib("c") }}
+        - {{ stdlib('c') }}
         - cmake
       host:
         - pugixml
@@ -355,7 +355,7 @@ outputs:
       build:
         - {{ compiler('cxx') }}
         - {{ compiler('c') }}
-        - {{ stdlib("c") }}
+        - {{ stdlib('c') }}
         - cmake
       host:
         - tbb-devel
@@ -387,7 +387,7 @@ outputs:
       build:
         - {{ compiler('cxx') }}
         - {{ compiler('c') }}
-        - {{ stdlib("c") }}
+        - {{ stdlib('c') }}
         - cmake
       host:
         - {{ pin_subpackage('libopenvino', exact=True) }}
@@ -415,7 +415,7 @@ outputs:
       build:
         - {{ compiler('cxx') }}
         - {{ compiler('c') }}
-        - {{ stdlib("c") }}
+        - {{ stdlib('c') }}
         - cmake
       host:
         - tbb-devel
@@ -441,7 +441,7 @@ outputs:
       build:
         - {{ compiler('cxx') }}
         - {{ compiler('c') }}
-        - {{ stdlib("c") }}
+        - {{ stdlib('c') }}
         - cmake
       host:
         - tbb-devel
@@ -467,7 +467,7 @@ outputs:
       build:
         - {{ compiler('cxx') }}
         - {{ compiler('c') }}
-        - {{ stdlib("c") }}
+        - {{ stdlib('c') }}
         - cmake
       host:
         - pugixml
@@ -500,7 +500,7 @@ outputs:
       build:
         - {{ compiler('cxx') }}
         - {{ compiler('c') }}
-        - {{ stdlib("c") }}
+        - {{ stdlib('c') }}
         - python                              # [build_platform != target_platform]
         - cross-python_{{ target_platform }}  # [build_platform != target_platform]
         - make  # [unix]
@@ -580,52 +580,17 @@ outputs:
     build:
       run_exports:
         - {{ pin_subpackage('libopenvino', max_pin='x.x.x') }}
-        - {{ pin_subpackage('libopenvino-intel-cpu-plugin', max_pin='x.x.x') }}  # [x86_64]
-        - {{ pin_subpackage('libopenvino-arm-cpu-plugin', max_pin='x.x.x') }}  # [aarch64 or arm64]
-        - {{ pin_subpackage('libopenvino-intel-gpu-plugin', max_pin='x.x.x') }}  # [win64 or linux64]
-        - {{ pin_subpackage('libopenvino-intel-npu-plugin', max_pin='x.x.x') }}  # [linux64]
-        - {{ pin_subpackage('libopenvino-auto-plugin', max_pin='x.x.x') }}
-        - {{ pin_subpackage('libopenvino-hetero-plugin', max_pin='x.x.x') }}
-        - {{ pin_subpackage('libopenvino-auto-batch-plugin', max_pin='x.x.x') }}
-        - {{ pin_subpackage('libopenvino-ir-frontend', max_pin='x.x.x') }}
-        - {{ pin_subpackage('libopenvino-onnx-frontend', max_pin='x.x.x') }}
-        - {{ pin_subpackage('libopenvino-paddle-frontend', max_pin='x.x.x') }}
-        - {{ pin_subpackage('libopenvino-pytorch-frontend', max_pin='x.x.x') }}
-        - {{ pin_subpackage('libopenvino-tensorflow-frontend', max_pin='x.x.x') }}
-        - {{ pin_subpackage('libopenvino-tensorflow-lite-frontend', max_pin='x.x.x') }}
     requirements:
       build:
         - cmake
-      host:
-        # hmaarrfk: 2024/01
-        # without the tbb-devel package in the host section, we won't be able to drag on
-        # the comaptible dependency below
-        - tbb-devel
-      run:
-        # the subpackages below can be linked with
-        - {{ pin_subpackage('libopenvino-onnx-frontend', exact=True) }}
-        - {{ pin_subpackage('libopenvino-paddle-frontend', exact=True) }}
-        - {{ pin_subpackage('libopenvino-pytorch-frontend', exact=True) }}
-        - {{ pin_subpackage('libopenvino-tensorflow-frontend', exact=True) }}
-        - {{ pin_subpackage('libopenvino-tensorflow-lite-frontend', exact=True) }}
-        # the subpackages below are used as plugins only
-        - {{ pin_subpackage('libopenvino-ir-frontend', exact=True) }}
-        - {{ pin_subpackage('libopenvino-intel-cpu-plugin', exact=True) }}  # [x86_64]
-        - {{ pin_subpackage('libopenvino-arm-cpu-plugin', exact=True) }}  # [aarch64 or arm64]
-        - {{ pin_subpackage('libopenvino-intel-gpu-plugin', exact=True) }}  # [win64 or linux64]
-        - {{ pin_subpackage('libopenvino-intel-npu-plugin', exact=True) }}  # [linux64]
-        - {{ pin_subpackage('libopenvino-auto-plugin', exact=True) }}
-        - {{ pin_subpackage('libopenvino-hetero-plugin', exact=True) }}
-        - {{ pin_subpackage('libopenvino-auto-batch-plugin', exact=True) }}
-        - {{ pin_compatible('tbb-devel', max_pin='x') }}  # to property find libs via openvino.pc
     test:
       requires:
         - {{ compiler('cxx') }}
         - {{ compiler('c') }}
+        - {{ stdlib('c') }}
         - ninja
         - cmake
         - pkg-config
-        - {{ stdlib("c") }}
       files:
         - snippets/
       commands:
@@ -699,10 +664,10 @@ outputs:
       requires:
         - {{ compiler('cxx') }}
         - {{ compiler('c') }}
+        - {{ stdlib('c') }}
         - ninja
         - pkg-config
         - cmake
-        - {{ stdlib("c") }}
       files:
         - snippets/
       commands:
