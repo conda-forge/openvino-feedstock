@@ -584,7 +584,8 @@ outputs:
       build:
         - cmake
       run:
-        - {{ pin_subpackage('libopenvino', max_pin='x.x.x') }}
+        - {{ pin_subpackage('libopenvino', exact=True) }}
+        - {{ pin_compatible('tbb-devel', max_pin='x') }}  # to property find libs via openvino.pc
     test:
       requires:
         - {{ compiler('cxx') }}
