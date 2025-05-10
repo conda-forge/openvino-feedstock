@@ -1,0 +1,23 @@
+From 9d0e6b262cf8a5fd1bb0398db5d3f88dd96f9885 Mon Sep 17 00:00:00 2001
+From: Mark Harfouche <mark.harfouche@gmail.com>
+Date: Sat, 10 May 2025 18:45:46 -0400
+Subject: [PATCH] dont expose private deps or frontends in pkg-config flags
+
+---
+ cmake/templates/openvino.pc.in | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/cmake/templates/openvino.pc.in b/cmake/templates/openvino.pc.in
+index d0c049d1a1..80a21a7ae6 100644
+--- a/cmake/templates/openvino.pc.in
++++ b/cmake/templates/openvino.pc.in
+@@ -17,5 +17,4 @@ URL: https://docs.openvino.ai/latest/index.html
+ Version: @OpenVINO_VERSION@
+ Conflicts: openvino < @OpenVINO_VERSION@
+ Cflags: -I${includedir} @PKGCONFIG_OpenVINO_DEFINITIONS@
+-Libs: -L${libdir} @PKGCONFIG_OpenVINO_FRONTENDS@ -lopenvino_c -lopenvino @PKGCONFIG_OpenVINO_PRIVATE_DEPS@
+-Libs.private: -ldl -lm -lpthread -lrt
++Libs: -L${libdir} -lopenvino_c -lopenvino
+-- 
+2.49.0
+

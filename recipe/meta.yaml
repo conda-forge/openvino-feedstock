@@ -14,6 +14,9 @@ source:
     # https://conda-forge.org/docs/maintainer/knowledge_base/#newer-c-features-with-old-sdk
     # Address: error: 'path' is unavailable: introduced in macOS 10.15
     - patches/0001-Relax-OSX-Runtime-Requirements-for-Conda-forge.patch
+    # Enable slimmer builds for openvino dev -- hmaarrfk
+    # https://github.com/conda-forge/openvino-feedstock/issues/115
+    - patches/0001-dont-expose-private-deps-or-frontends-in-pkg-config-.patch
   - url: https://github.com/ARM-software/ComputeLibrary/archive/refs/tags/v24.09.tar.gz  # [aarch64 or arm64]
     sha256: 49b8620f21cbbe49e825a131d9eacd548532646289b50e070b83860bd88087fe  # [aarch64 or arm64]
     folder: src/plugins/intel_cpu/thirdparty/ComputeLibrary  # [aarch64 or arm64]
