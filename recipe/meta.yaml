@@ -583,6 +583,8 @@ outputs:
     requirements:
       build:
         - cmake
+      run:
+        - {{ pin_subpackage('libopenvino', max_pin='x.x.x') }}
     test:
       requires:
         - {{ compiler('cxx') }}
@@ -603,19 +605,9 @@ outputs:
         # check libraries (symlinks)
         - test -f $PREFIX/lib/libopenvino${SHLIB_EXT}  # [unix]
         - test -f $PREFIX/lib/libopenvino_c${SHLIB_EXT}  # [unix]
-        - test -f $PREFIX/lib/libopenvino_paddle_frontend${SHLIB_EXT}  # [unix]
-        - test -f $PREFIX/lib/libopenvino_pytorch_frontend${SHLIB_EXT}  # [unix]
-        - test -f $PREFIX/lib/libopenvino_onnx_frontend${SHLIB_EXT}  # [unix]
-        - test -f $PREFIX/lib/libopenvino_tensorflow_frontend${SHLIB_EXT}  # [unix]
-        - test -f $PREFIX/lib/libopenvino_tensorflow_lite_frontend${SHLIB_EXT}  # [unix]
 
         - if not exist %LIBRARY_BIN%\openvino%SHLIB_EXT% exit 1  # [win]
         - if not exist %LIBRARY_BIN%\openvino_c%SHLIB_EXT% exit 1  # [win]
-        - if not exist %LIBRARY_BIN%\openvino_paddle_frontend%SHLIB_EXT% exit 1  # [win]
-        - if not exist %LIBRARY_BIN%\openvino_pytorch_frontend%SHLIB_EXT% exit 1  # [win]
-        - if not exist %LIBRARY_BIN%\openvino_onnx_frontend%SHLIB_EXT% exit 1  # [win]
-        - if not exist %LIBRARY_BIN%\openvino_tensorflow_frontend%SHLIB_EXT% exit 1  # [win]
-        - if not exist %LIBRARY_BIN%\openvino_tensorflow_lite_frontend%SHLIB_EXT% exit 1  # [win]
 
         # check that devices are found using OpenVINO C API
         - $CC snippets/openvino_available_devices.c $(pkg-config --cflags --libs openvino) -Wl,-rpath,$PREFIX/lib -o openvino_devices_test  # [unix]
