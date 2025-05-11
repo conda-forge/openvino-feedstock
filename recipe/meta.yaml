@@ -583,11 +583,20 @@ outputs:
     build:
       run_exports:
         - {{ pin_subpackage('libopenvino', max_pin='x.x.x') }}
+        - {{ pin_subpackage('libopenvino-intel-cpu-plugin', max_pin='x.x.x') }}  # [x86_64]
+        - {{ pin_subpackage('libopenvino-arm-cpu-plugin', max_pin='x.x.x') }}  # [aarch64 or arm64]
+        - {{ pin_subpackage('libopenvino-intel-gpu-plugin', max_pin='x.x.x') }}  # [win64 or linux64]
+        - {{ pin_subpackage('libopenvino-ir-frontend', max_pin='x.x.x') }}
     requirements:
       build:
         - cmake
       run:
         - {{ pin_subpackage('libopenvino', exact=True) }}
+        - {{ pin_subpackage('libopenvino-ir-frontend', exact=True) }}
+        # We include a minimal subset of plugins to strike a balance between usability and bloat
+        - {{ pin_subpackage('libopenvino-intel-cpu-plugin', exact=True) }}  # [x86_64]
+        - {{ pin_subpackage('libopenvino-arm-cpu-plugin', exact=True) }}  # [aarch64 or arm64]
+        - {{ pin_subpackage('libopenvino-intel-gpu-plugin', exact=True) }}  # [win64 or linux64]
         - {{ pin_compatible('tbb-devel', max_pin='x') }}  # to property find libs via openvino.pc
     test:
       requires:
