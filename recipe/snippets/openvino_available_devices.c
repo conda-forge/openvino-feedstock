@@ -10,7 +10,6 @@
 int main() {
     ov_core_t* core = NULL;
     char* ret = NULL;
-    printf("OpenVINO version: %s\n", ov_get_openvino_version());
     OV_CALL(ov_core_create(&core));
     printf("OpenVINO core created\n");
     OV_CALL(ov_core_get_property(core, "CPU", "AVAILABLE_DEVICES", &ret));
