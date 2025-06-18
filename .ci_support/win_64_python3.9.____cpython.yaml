@@ -15,7 +15,7 @@ libabseil:
 libprotobuf:
 - 5.29.3
 megabuild:
-- 'false'
+- false
 pin_run_as_build:
   python:
     min_pin: x.x
