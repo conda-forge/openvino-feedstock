@@ -1,6 +1,6 @@
 {% set name = "openvino" %}
-{% set version_postfix = "2025.1.0" %}
-{% set version = "2025.1.0" %}
+{% set version_postfix = "2025.2.0" %}
+{% set version = "2025.2.0" %}
 
 package:
   name: {{ name|lower }}-split
@@ -8,16 +8,16 @@ package:
 
 source:
   - url: https://github.com/openvinotoolkit/openvino/archive/refs/tags/{{ version }}.tar.gz
-    sha256: 246c68e1799d035c85f773c986e4eb08f867d821c287abc638b9828e94852457
+    sha256: 15cd5c9beb320a8feadd18bcae40970608de154d5057277281dc53dd7023e383
     patches:
     - patches/003-lin-arm64-compute-lib.patch  # [aarch64]
     # https://conda-forge.org/docs/maintainer/knowledge_base/#newer-c-features-with-old-sdk
     # Address: error: 'path' is unavailable: introduced in macOS 10.15
     - patches/0001-Relax-OSX-Runtime-Requirements-for-Conda-forge.patch
-  - url: https://github.com/ARM-software/ComputeLibrary/archive/refs/tags/v24.09.tar.gz  # [aarch64 or arm64]
-    sha256: 49b8620f21cbbe49e825a131d9eacd548532646289b50e070b83860bd88087fe  # [aarch64 or arm64]
+  - url: https://github.com/ARM-software/ComputeLibrary/archive/refs/tags/v25.03.tar.gz  # [aarch64 or arm64]
+    sha256: 30f83cea6d338a0e33495c33c547b7b720027baff4c3eea66014709fdd52aaac  # [aarch64 or arm64]
     folder: src/plugins/intel_cpu/thirdparty/ComputeLibrary  # [aarch64 or arm64]
-  - url: https://github.com/openvinotoolkit/oneDNN/archive/5baba714e16e11309774a62783f363cad30e97c7.tar.gz
+  - url: https://github.com/openvinotoolkit/oneDNN/archive/793dd02883483385fb7ee3b1af1e4273ce833444.tar.gz
     sha256: 4430875c1690abecc57d9cc8464be690430e217a0453c69e030c667e5801e749
     folder: src/plugins/intel_cpu/thirdparty/onednn
   - url: https://github.com/ARM-software/kleidiai/archive/eaf63a6ae9a903fb4fa8a4d004a974995011f444.tar.gz
@@ -26,11 +26,11 @@ source:
   - url: https://github.com/openvinotoolkit/mlas/archive/d1bc25ec4660cddd87804fcf03b2411b5dfb2e94.tar.gz
     sha256: 0a44fbfd4b13e8609d66ddac4b11a27c90c1074cde5244c91ad197901666004c
     folder: src/plugins/intel_cpu/thirdparty/mlas
-  - url: https://github.com/oneapi-src/oneDNN/archive/refs/tags/v3.8-pc.tar.gz  # [win64 or linux64]
-    sha256: dcf8382b520b1e23c7c450128533feaea8145d341be14671c8dbc9ede2f59912  # [win64 or linux64]
+  - url: https://github.com/uxlfoundation/oneDNN/archive/c7d59a12849295c8bdf6401b8ea3968f4346ee0c.tar.gz  # [win64 or linux64]
+    sha256: 05bc693ee788768f18397bd235ad40f55261e4336a683469a50072bfddbf9f98  # [win64 or linux64]
     folder: src/plugins/intel_gpu/thirdparty/onednn_gpu  # [win64 or linux64]
-  - url: https://github.com/intel/level-zero-npu-extensions/archive/c0156a3390ae39671ff8f2a6f5471f04bb65bb12.tar.gz  # [linux64]
-    sha256: 557f3324925a62dd487aafb322d5ce0a967496e560ba1adaf62c62b8b02fa403  # [linux64]
+  - url: https://github.com/intel/level-zero-npu-extensions/archive/fd679a50f138840633fee8c780dbbbaee971179c.tar.gz  # [linux64]
+    sha256: 9ed3985369dc9fa637058ce45a90fb068933159c9b6186b10154bb8cc0b95306  # [linux64]
     folder: src/plugins/intel_npu/thirdparty/level-zero-ext  # [linux64]
   - url: https://github.com/onnx/onnx/archive/refs/tags/v1.17.0.tar.gz
     sha256: 8d5e983c36037003615e5a02d36b18fc286541bf52de1a78f6cf9f32005a820e
@@ -745,6 +745,5 @@ about:
 extra:
   feedstock-name: openvino
   recipe-maintainers:
-    - ilya-lavrenov
     - artanokhov
     - culhatsker
