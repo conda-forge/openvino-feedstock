@@ -18,7 +18,7 @@ source:
     sha256: 30f83cea6d338a0e33495c33c547b7b720027baff4c3eea66014709fdd52aaac  # [aarch64 or arm64]
     folder: src/plugins/intel_cpu/thirdparty/ComputeLibrary  # [aarch64 or arm64]
   - url: https://github.com/openvinotoolkit/oneDNN/archive/793dd02883483385fb7ee3b1af1e4273ce833444.tar.gz
-    sha256: 4430875c1690abecc57d9cc8464be690430e217a0453c69e030c667e5801e749
+    sha256: f6ae708f5b78361cab2c544a976d66bd7ccd74b4b6df7710d4d86a383f6916f9
     folder: src/plugins/intel_cpu/thirdparty/onednn
   - url: https://github.com/ARM-software/kleidiai/archive/eaf63a6ae9a903fb4fa8a4d004a974995011f444.tar.gz
     sha256: 756fa3040ff23f78a4c3f4c1984a3814d78d302b0b5dc3f0b255322368aefc58
