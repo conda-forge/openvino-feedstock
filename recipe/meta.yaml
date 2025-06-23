@@ -746,4 +746,5 @@ extra:
   feedstock-name: openvino
   recipe-maintainers:
     - artanokhov
+    - mryzhov
     - culhatsker
