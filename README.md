@@ -52,6 +52,15 @@ Package license:
 
 Summary: OpenVINO Auto plugin
 
+About libopenvino-dev
+---------------------
+
+
+
+Package license: 
+
+Summary: OpenVINO C++ / C Runtime & Development files
+
 About libopenvino-hetero-plugin
 -------------------------------
 
@@ -115,6 +124,15 @@ Package license:
 
 Summary: OpenVINO Paddle Frontend
 
+About libopenvino-python
+------------------------
+
+
+
+Package license: 
+
+Summary: OpenVINO Python API
+
 About libopenvino-pytorch-frontend
 ----------------------------------
 
@@ -141,24 +159,6 @@ About libopenvino-tensorflow-lite-frontend
 Package license: 
 
 Summary: OpenVINO TensorFlow Lite Frontend
-
-About libopenvino-dev
----------------------
-
-
-
-Package license: 
-
-Summary: OpenVINO C++ / C Runtime & Development files
-
-About libopenvino-python
-------------------------
-
-
-
-Package license: 
-
-Summary: OpenVINO Python API
 
 About openvino
 --------------
@@ -405,5 +405,4 @@ Feedstock Maintainers
 
 * [@artanokhov](https://github.com/artanokhov/)
 * [@culhatsker](https://github.com/culhatsker/)
-* [@ilya-lavrenov](https://github.com/ilya-lavrenov/)
 
