@@ -405,4 +405,5 @@ Feedstock Maintainers
 
 * [@artanokhov](https://github.com/artanokhov/)
 * [@culhatsker](https://github.com/culhatsker/)
+* [@mryzhov](https://github.com/mryzhov/)
 
