@@ -3,8 +3,8 @@ setlocal enabledelayedexpansion
 
 mkdir -p build
 
-set CFLAGS=%CFLAGS% /wd4996
-set CXXFLAGS=%CXXFLAGS% /wd4996
+set CFLAGS=%CFLAGS% /wd4996 /Zm2000
+set CXXFLAGS=%CXXFLAGS% /wd4996 /Zm2000
 
 cmake %CMAKE_ARGS%                                                           ^
     -DCMAKE_INSTALL_PREFIX="%LIBRARY_PREFIX%"                                ^
