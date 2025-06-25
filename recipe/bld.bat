@@ -3,8 +3,8 @@ setlocal enabledelayedexpansion
 
 mkdir -p build
 
-set CFLAGS=%CFLAGS% /wd4996 /Zm2000
-set CXXFLAGS=%CXXFLAGS% /wd4996 /Zm2000
+set CFLAGS=%CFLAGS% /wd4996 /Zm2000 /Od /GL- /Gy- /DNDEBUG
+set CXXFLAGS=%CXXFLAGS% /wd4996 /Zm2000 /Od /GL- /Gy- /DNDEBUG
 
 cmake %CMAKE_ARGS%                                                           ^
     -DCMAKE_INSTALL_PREFIX="%LIBRARY_PREFIX%"                                ^
@@ -31,5 +31,5 @@ cmake %CMAKE_ARGS%                                                           ^
     -B "%SRC_DIR%\build"
 if errorlevel 1 exit 1
 
-cmake --build "%SRC_DIR%\build" --config Release --parallel %CPU_COUNT%
+cmake --build "%SRC_DIR%\build" --config Release
 if errorlevel 1 exit 1
