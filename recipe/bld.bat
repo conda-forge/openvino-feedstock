@@ -3,8 +3,8 @@ setlocal enabledelayedexpansion
 
 mkdir -p build
 
-set CFLAGS=%CFLAGS% /wd4996
-set CXXFLAGS=%CXXFLAGS% /wd4996
+set CFLAGS=%CFLAGS% /wd4996 /Zm2000 /Od /GL- /Gy- /DNDEBUG
+set CXXFLAGS=%CXXFLAGS% /wd4996 /Zm2000 /Od /GL- /Gy- /DNDEBUG
 
 cmake %CMAKE_ARGS%                                                           ^
     -DCMAKE_INSTALL_PREFIX="%LIBRARY_PREFIX%"                                ^
@@ -26,7 +26,7 @@ cmake %CMAKE_ARGS%                                                           ^
     -DENABLE_SAMPLES=OFF                                                     ^
     -DCPACK_GENERATOR=CONDA-FORGE                                            ^
     -DCMAKE_POLICY_VERSION_MINIMUM=3.5                                       ^
-    -G "Visual Studio 16 2019"                                               ^
+    -G "Visual Studio 17 2022"                                               ^
     -S "%SRC_DIR%"                                                           ^
     -B "%SRC_DIR%\build"
 if errorlevel 1 exit 1
