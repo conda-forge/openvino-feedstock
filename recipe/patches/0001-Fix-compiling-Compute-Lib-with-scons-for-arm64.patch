@@ -1,0 +1,23 @@
+From 33681232e8ea37e0a5944f41caf273bf4e09f42b Mon Sep 17 00:00:00 2001
+From: Anokhov <artyom.anokhov@intel.com>
+Date: Wed, 3 May 2023 22:13:36 +0200
+Subject: [PATCH] Fix compiling Compute Lib with scons for arm64
+
+See issue ARM-software/ComputeLibrary/issues/824
+---
+ src/plugins/intel_cpu/thirdparty/ACLConfig.cmake | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/plugins/intel_cpu/thirdparty/ACLConfig.cmake b/src/plugins/intel_cpu/thirdparty/ACLConfig.cmake
+index 617be73dfd..1d77a03530 100644
+--- a/src/plugins/intel_cpu/thirdparty/ACLConfig.cmake
++++ b/src/plugins/intel_cpu/thirdparty/ACLConfig.cmake
+@@ -202,7 +202,7 @@ elseif(NOT TARGET arm_compute::arm_compute)
+         list(APPEND ARM_COMPUTE_OPTIONS os=windows)
+     endif()
+ 
+-    if(CMAKE_CROSSCOMPILING)
++    if(CMAKE_CROSSCOMPILING AND NOT CPACK_GENERATOR STREQUAL "CONDA-FORGE")
+         list(APPEND ARM_COMPUTE_OPTIONS build=cross_compile)
+     else()
+         list(APPEND ARM_COMPUTE_OPTIONS build=native)
