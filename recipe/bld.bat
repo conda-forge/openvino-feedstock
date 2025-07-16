@@ -26,6 +26,7 @@ cmake %CMAKE_ARGS%                                                           ^
     -DENABLE_SAMPLES=OFF                                                     ^
     -DCPACK_GENERATOR=CONDA-FORGE                                            ^
     -DCMAKE_POLICY_VERSION_MINIMUM=3.5                                       ^
+    -DProtobuf_USE_STATIC_LIBS=OFF                                           ^
     -G "Visual Studio 17 2022"                                               ^
     -S "%SRC_DIR%"                                                           ^
     -B "%SRC_DIR%\build"
