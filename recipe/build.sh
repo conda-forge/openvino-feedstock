@@ -6,11 +6,6 @@ if [[ "${CONDA_BUILD_CROSS_COMPILATION:-0}" == 1 ]]; then
     CMAKE_ARGS="${CMAKE_ARGS} -DProtobuf_PROTOC_EXECUTABLE=$BUILD_PREFIX/bin/protoc"
 fi
 
-if [[ "${target_platform}" == osx-64 ]]; then
-    # https://conda-forge.org/docs/maintainer/knowledge_base/#newer-c-features-with-old-sdk
-    # Address: error: 'path' is unavailable: introduced in macOS 10.15
-    export CXXFLAGS="${CXXFLAGS} -D_LIBCPP_DISABLE_AVAILABILITY"
-fi
 export CXXFLAGS="${CXXFLAGS} -Wno-deprecated-declarations"
 export CFLAGS="${CFLAGS} -Wno-deprecated-declarations"
 mkdir -p build

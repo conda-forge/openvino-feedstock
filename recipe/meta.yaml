@@ -11,9 +11,6 @@ source:
     sha256: 15cd5c9beb320a8feadd18bcae40970608de154d5057277281dc53dd7023e383
     patches:
     - patches/003-lin-arm64-compute-lib.patch  # [aarch64]
-    # https://conda-forge.org/docs/maintainer/knowledge_base/#newer-c-features-with-old-sdk
-    # Address: error: 'path' is unavailable: introduced in macOS 10.15
-    - patches/0001-Relax-OSX-Runtime-Requirements-for-Conda-forge.patch
   - url: https://github.com/ARM-software/ComputeLibrary/archive/refs/tags/v25.03.tar.gz  # [aarch64 or arm64]
     sha256: 30f83cea6d338a0e33495c33c547b7b720027baff4c3eea66014709fdd52aaac  # [aarch64 or arm64]
     folder: src/plugins/intel_cpu/thirdparty/ComputeLibrary  # [aarch64 or arm64]
