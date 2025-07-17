@@ -564,7 +564,7 @@ outputs:
         - if [[ $($PYTHON -c 'from openvino.frontend import FrontEndManager as fem; print(len(fem().get_available_front_ends()))') != 4 ]]; then exit 1; fi  # [unix]
       requires:
         - pip
-        - pytorch 2.6.0
+        - pytorch *
 
   - name: libopenvino-dev
     version: {{ version }}
