@@ -29,6 +29,7 @@ cmake ${CMAKE_ARGS}                                                          \
     -DCMAKE_POLICY_VERSION_MINIMUM=3.5                                       \
     -DProtobuf_USE_STATIC_LIBS=OFF                                           \
     -DUSE_PROTOBUF_SHARED_LIBS=ON                                            \
+    -DOV_FORCE_ADHOC_SIGN=ON                                                 \
     -G Ninja                                                                 \
     -S "$SRC_DIR"                                                            \
     -B "$SRC_DIR/build"
