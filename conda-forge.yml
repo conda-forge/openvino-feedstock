@@ -3,7 +3,7 @@ azure:
     variables:
       CONDA_BLD_PATH: C:\\bld\\
       MINIFORGE_HOME: C:\Miniforge
-      SET_PAGEFILE: "True"
+      SET_PAGEFILE: 'True'
   store_build_artifacts: true
   timeout_minutes: 600
 build_platform:
