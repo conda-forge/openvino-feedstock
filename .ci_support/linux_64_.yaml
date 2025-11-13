@@ -6,8 +6,6 @@ c_stdlib:
 - sysroot
 c_stdlib_version:
 - '2.17'
-cdt_name:
-- conda
 channel_sources:
 - conda-forge
 channel_targets:
@@ -19,7 +17,7 @@ cxx_compiler_version:
 docker_image:
 - quay.io/condaforge/linux-anvil-x86_64:cos7
 flatbuffers:
-- 24.12.23
+- 25.2.10
 libabseil:
 - '20250512'
 libprotobuf:
@@ -42,9 +40,9 @@ snappy:
 target_platform:
 - linux-64
 tbb:
-- '2021'
+- '2022'
 tbb_devel:
-- '2021'
+- '2022'
 zip_keys:
 - - c_compiler_version
   - cxx_compiler_version
