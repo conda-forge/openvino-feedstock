@@ -53,6 +53,7 @@ requirements:
   host:
     - tbb-devel
     - snappy
+    - ittapi  # [x86_64]
     - ocl-icd                       # [linux64]
     - clhpp                         # [linux64 or win64]
     - khronos-opencl-icd-loader     # [win64]
