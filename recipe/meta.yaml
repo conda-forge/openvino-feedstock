@@ -33,9 +33,6 @@ source:
   - url: https://github.com/onnx/onnx/archive/refs/tags/v1.17.0.tar.gz
     sha256: 8d5e983c36037003615e5a02d36b18fc286541bf52de1a78f6cf9f32005a820e
     folder: thirdparty/onnx/onnx
-  - url: https://github.com/intel/ittapi/archive/ca45fef1a12cef3316e6ff362a4d36571270e392.tar.gz  # [aarch64 or arm64]
-    sha256: 62a0802b8680c2dbd6947bf7f020290ea9a7f0b523a846eb189759db956cd44a
-    folder: thirdparty/ittapi/ittapi
 
 build:
   number: 2
@@ -57,7 +54,6 @@ requirements:
   host:
     - tbb-devel
     - snappy
-    - ittapi  # [x86_64]
     - ocl-icd                       # [linux64]
     - clhpp                         # [linux64 or win64]
     - khronos-opencl-icd-loader     # [win64]

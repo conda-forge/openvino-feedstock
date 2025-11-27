@@ -12,6 +12,7 @@ mkdir -p build
 
 cmake ${CMAKE_ARGS}                                                          \
     -DENABLE_SYSTEM_TBB=ON                                                   \
+    -DENABLE_PROFILING_ITT=OFF                                               \
     -DENABLE_SYSTEM_PUGIXML=ON                                               \
     -DENABLE_SYSTEM_PROTOBUF=ON                                              \
     -DENABLE_SYSTEM_SNAPPY=ON                                                \
