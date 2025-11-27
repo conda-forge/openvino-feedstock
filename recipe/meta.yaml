@@ -11,6 +11,7 @@ source:
     patches:
     - patches/0001-Fix-compiling-Compute-Lib-with-scons-for-arm64.patch     # [aarch64]
     - patches/0002-don-t-prescribe-protobuf-major-version.patch
+    - patches/0003-linux-aarch64-define-HWCAP2_I8MM-constant-properly.patch     # [aarch64]
   - url: https://github.com/ARM-software/ComputeLibrary/archive/refs/tags/v25.03.tar.gz  # [aarch64 or arm64]
     sha256: 30f83cea6d338a0e33495c33c547b7b720027baff4c3eea66014709fdd52aaac  # [aarch64 or arm64]
     folder: src/plugins/intel_cpu/thirdparty/ComputeLibrary  # [aarch64 or arm64]
@@ -32,6 +33,9 @@ source:
   - url: https://github.com/onnx/onnx/archive/refs/tags/v1.17.0.tar.gz
     sha256: 8d5e983c36037003615e5a02d36b18fc286541bf52de1a78f6cf9f32005a820e
     folder: thirdparty/onnx/onnx
+  - url: https://github.com/intel/ittapi/archive/ca45fef1a12cef3316e6ff362a4d36571270e392.tar.gz  # [aarch64 or arm64]
+    sha256: 62a0802b8680c2dbd6947bf7f020290ea9a7f0b523a846eb189759db956cd44a
+    folder: thirdparty/ittapi/ittapi
 
 build:
   number: 2
