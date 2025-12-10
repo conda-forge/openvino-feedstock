@@ -57,15 +57,15 @@ requirements:
   host:
     - tbb-devel
     - snappy
-    - ocl-icd  # [linux64]
-    - clhpp  # [linux64 or win64]
-    - khronos-opencl-icd-loader  # [win64]
+    - ocl-icd                       # [linux64]
+    - clhpp                         # [linux64 or win64]
+    - khronos-opencl-icd-loader     # [win64]
     - pugixml
     # Header only library, keep in sync with corresponded submodule version on release tag, i.e.
     # https://github.com/openvinotoolkit/openvino/tree/2025.4.0/thirdparty
-    - xbyak  7.23.1  # [x86_64]
+    - xbyak  7.23.1                 # [x86_64]
     - libprotobuf
-    - level-zero-devel  # [linux64]
+    - level-zero-devel              # [linux64]
     - zlib
     - nlohmann_json
 
@@ -94,12 +94,12 @@ outputs:
         - tbb-devel
     test:
       commands:
-        - test -f $PREFIX/lib/libopenvino${SHLIB_EXT}.{{ version_postfix }}  # [linux]
-        - test -f $PREFIX/lib/libopenvino_c${SHLIB_EXT}.{{ version_postfix }}  # [linux]
-        - test -f $PREFIX/lib/libopenvino.{{ version_postfix }}${SHLIB_EXT}  # [osx]
-        - test -f $PREFIX/lib/libopenvino_c.{{ version_postfix }}${SHLIB_EXT}  # [osx]
-        - if not exist %LIBRARY_BIN%\\openvino%SHLIB_EXT% exit 1  # [win]
-        - if not exist %LIBRARY_BIN%\\openvino_c%SHLIB_EXT% exit 1  # [win]
+        - test -f $PREFIX/lib/libopenvino.so.{{ version_postfix }}          # [linux]
+        - test -f $PREFIX/lib/libopenvino_c.so.{{ version_postfix }}        # [linux]
+        - test -f $PREFIX/lib/libopenvino.{{ version_postfix }}.dylib       # [osx]
+        - test -f $PREFIX/lib/libopenvino_c.{{ version_postfix }}.dylib     # [osx]
+        - if not exist %LIBRARY_BIN%\openvino.dll exit 1                    # [win]
+        - if not exist %LIBRARY_BIN%\openvino_c.dll exit 1                  # [win]
 
   - name: libopenvino-ir-frontend
     version: {{ version }}
