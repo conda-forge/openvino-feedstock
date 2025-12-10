@@ -36,7 +36,7 @@ source:
     folder: thirdparty/onnx/onnx
 
 build:
-  number: 0
+  number: 1
 
 requirements:
   build:
@@ -61,7 +61,9 @@ requirements:
     - clhpp  # [linux64 or win64]
     - khronos-opencl-icd-loader  # [win64]
     - pugixml
-    - xbyak  # [x86_64]
+    # Header only library, keep in sync with corresponded submodule version on release tag, i.e.
+    # https://github.com/openvinotoolkit/openvino/tree/2025.4.0/thirdparty
+    - xbyak  7.23.1  # [x86_64]
     - libprotobuf
     - level-zero-devel  # [linux64]
     - zlib
