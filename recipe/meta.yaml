@@ -47,10 +47,8 @@ requirements:
     - pkg-config
     - scons  # [aarch64 or arm64]
     - cmake
-    # Pin python here to a modern version in May 2023
-    # So that most packages get "shared"
-    - python  3.11  # [megabuild]
-    - python  # [not megabuild]
+    # only one python version during initial build
+    - python  3.12
     - ccache
     - libprotobuf
     - flatbuffers
