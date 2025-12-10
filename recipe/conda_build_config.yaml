@@ -2,3 +2,6 @@
 megabuild:
 - true      # [unix]
 - false     # [not unix]
+
+github_actions_labels:
+- cirun-azure-windows-2xlarge   # [win]
