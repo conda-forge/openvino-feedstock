@@ -36,8 +36,6 @@ source:
 
 build:
   number: 1
-  # debug
-  skip: true  # [not win]
 
 requirements:
   build:
