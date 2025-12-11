@@ -1,9 +1,8 @@
-{% set name = "openvino" %}
 {% set version_postfix = "2025.3.0" %}
 {% set version = "2025.3.0" %}
 
 package:
-  name: {{ name|lower }}-split
+  name: openvino-split
   version: {{ version }}
 
 source:
