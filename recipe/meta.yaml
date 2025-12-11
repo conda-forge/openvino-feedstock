@@ -126,9 +126,9 @@ outputs:
         - {{ pin_subpackage('libopenvino', exact=True) }}
     test:
       commands:
-        - test -f $PREFIX/lib/libopenvino_ir_frontend${SHLIB_EXT}.{{ version_postfix }}  # [linux]
-        - test -f $PREFIX/lib/libopenvino_ir_frontend.{{ version_postfix }}${SHLIB_EXT}  # [osx]
-        - if not exist %LIBRARY_BIN%\\openvino_ir_frontend%SHLIB_EXT% exit 1  # [win]
+        - test -f $PREFIX/lib/libopenvino_ir_frontend.so.{{ version_postfix }}      # [linux]
+        - test -f $PREFIX/lib/libopenvino_ir_frontend.{{ version_postfix }}.dylib   # [osx]
+        - if not exist %LIBRARY_BIN%\openvino_ir_frontend.dll exit 1                # [win]
 
   - name: libopenvino-onnx-frontend
     version: {{ version }}
@@ -157,9 +157,9 @@ outputs:
         - {{ pin_subpackage('libopenvino', exact=True) }}
     test:
       commands:
-        - test -f $PREFIX/lib/libopenvino_onnx_frontend${SHLIB_EXT}.{{ version_postfix }}  # [linux]
-        - test -f $PREFIX/lib/libopenvino_onnx_frontend.{{ version_postfix }}${SHLIB_EXT}  # [osx]
-        - if not exist %LIBRARY_BIN%\\openvino_onnx_frontend%SHLIB_EXT% exit 1  # [win]
+        - test -f $PREFIX/lib/libopenvino_onnx_frontend.so.{{ version_postfix }}     # [linux]
+        - test -f $PREFIX/lib/libopenvino_onnx_frontend.{{ version_postfix }}.dylib  # [osx]
+        - if not exist %LIBRARY_BIN%\openvino_onnx_frontend.dll exit 1               # [win]
 
   - name: libopenvino-paddle-frontend
     version: {{ version }}
@@ -188,9 +188,9 @@ outputs:
         - {{ pin_subpackage('libopenvino', exact=True) }}
     test:
       commands:
-        - test -f $PREFIX/lib/libopenvino_paddle_frontend${SHLIB_EXT}.{{ version_postfix }}  # [linux]
-        - test -f $PREFIX/lib/libopenvino_paddle_frontend.{{ version_postfix }}${SHLIB_EXT}  # [osx]
-        - if not exist %LIBRARY_BIN%\\openvino_paddle_frontend%SHLIB_EXT% exit 1  # [win]
+        - test -f $PREFIX/lib/libopenvino_paddle_frontend.so.{{ version_postfix }}      # [linux]
+        - test -f $PREFIX/lib/libopenvino_paddle_frontend.{{ version_postfix }}.dylib   # [osx]
+        - if not exist %LIBRARY_BIN%\openvino_paddle_frontend.dll exit 1                # [win]
 
   - name: libopenvino-pytorch-frontend
     version: {{ version }}
@@ -217,9 +217,9 @@ outputs:
         - {{ pin_subpackage('libopenvino', exact=True) }}
     test:
       commands:
-        - test -f $PREFIX/lib/libopenvino_pytorch_frontend${SHLIB_EXT}.{{ version_postfix }}  # [linux]
-        - test -f $PREFIX/lib/libopenvino_pytorch_frontend.{{ version_postfix }}${SHLIB_EXT}  # [osx]
-        - if not exist %LIBRARY_BIN%\\openvino_pytorch_frontend%SHLIB_EXT% exit 1  # [win]
+        - test -f $PREFIX/lib/libopenvino_pytorch_frontend.so.{{ version_postfix }}     # [linux]
+        - test -f $PREFIX/lib/libopenvino_pytorch_frontend.{{ version_postfix }}.dylib  # [osx]
+        - if not exist %LIBRARY_BIN%\openvino_pytorch_frontend.dll exit 1               # [win]
 
   - name: libopenvino-tensorflow-frontend
     version: {{ version }}
@@ -249,9 +249,9 @@ outputs:
         - {{ pin_subpackage('libopenvino', exact=True) }}
     test:
       commands:
-        - test -f $PREFIX/lib/libopenvino_tensorflow_frontend${SHLIB_EXT}.{{ version_postfix }}  # [linux]
-        - test -f $PREFIX/lib/libopenvino_tensorflow_frontend.{{ version_postfix }}${SHLIB_EXT}  # [osx]
-        - if not exist %LIBRARY_BIN%\\openvino_tensorflow_frontend%SHLIB_EXT% exit 1  # [win]
+        - test -f $PREFIX/lib/libopenvino_tensorflow_frontend.so.{{ version_postfix }}      # [linux]
+        - test -f $PREFIX/lib/libopenvino_tensorflow_frontend.{{ version_postfix }}.dylib   # [osx]
+        - if not exist %LIBRARY_BIN%\openvino_tensorflow_frontend.dll exit 1                # [win]
 
   - name: libopenvino-tensorflow-lite-frontend
     version: {{ version }}
@@ -278,9 +278,9 @@ outputs:
         - {{ pin_subpackage('libopenvino', exact=True) }}
     test:
       commands:
-        - test -f $PREFIX/lib/libopenvino_tensorflow_lite_frontend${SHLIB_EXT}.{{ version_postfix }}  # [linux]
-        - test -f $PREFIX/lib/libopenvino_tensorflow_lite_frontend.{{ version_postfix }}${SHLIB_EXT}  # [osx]
-        - if not exist %LIBRARY_BIN%\\openvino_tensorflow_lite_frontend%SHLIB_EXT% exit 1  # [win]
+        - test -f $PREFIX/lib/libopenvino_tensorflow_lite_frontend.so.{{ version_postfix }}     # [linux]
+        - test -f $PREFIX/lib/libopenvino_tensorflow_lite_frontend.{{ version_postfix }}.dylib  # [osx]
+        - if not exist %LIBRARY_BIN%\openvino_tensorflow_lite_frontend.dll exit 1               # [win]
 
   - name: libopenvino-intel-cpu-plugin
     version: {{ version }}
@@ -308,8 +308,8 @@ outputs:
         - {{ pin_subpackage('libopenvino', exact=True) }}
     test:
       commands:
-        - test -f $PREFIX/lib/openvino-{{ version_postfix }}/libopenvino_intel_cpu_plugin.so  # [unix]
-        - if not exist %LIBRARY_BIN%\\openvino-{{ version_postfix }}\\openvino_intel_cpu_plugin%SHLIB_EXT% exit 1  # [win]
+        - test -f $PREFIX/lib/openvino-{{ version_postfix }}/libopenvino_intel_cpu_plugin.so              # [unix]
+        - if not exist %LIBRARY_BIN%\openvino-{{ version_postfix }}\openvino_intel_cpu_plugin.dll exit 1  # [win]
 
   - name: libopenvino-arm-cpu-plugin
     version: {{ version }}
@@ -368,8 +368,8 @@ outputs:
         - {{ pin_subpackage('libopenvino', exact=True) }}
     test:
       commands:
-        - test -f $PREFIX/lib/openvino-{{ version_postfix }}/libopenvino_intel_gpu_plugin.so  # [unix]
-        - if not exist %LIBRARY_BIN%\\openvino-{{ version_postfix }}\\openvino_intel_gpu_plugin%SHLIB_EXT% exit 1  # [win]
+        - test -f $PREFIX/lib/openvino-{{ version_postfix }}/libopenvino_intel_gpu_plugin.so              # [unix]
+        - if not exist %LIBRARY_BIN%\openvino-{{ version_postfix }}\openvino_intel_gpu_plugin.dll exit 1  # [win]
 
   - name: libopenvino-intel-npu-plugin
     version: {{ version }}
@@ -398,8 +398,8 @@ outputs:
         - {{ pin_subpackage('libopenvino', exact=True) }}
     test:
       commands:
-        - test -f $PREFIX/lib/openvino-{{ version_postfix }}/libopenvino_intel_npu_plugin.so  # [linux64]
-        - if not exist %LIBRARY_BIN%\\openvino-{{ version_postfix }}\\openvino_intel_npu_plugin%SHLIB_EXT% exit 1  # [win]
+        - test -f $PREFIX/lib/openvino-{{ version_postfix }}/libopenvino_intel_npu_plugin.so              # [linux64]
+        - if not exist %LIBRARY_BIN%\openvino-{{ version_postfix }}\openvino_intel_npu_plugin.dll exit 1  # [win]
 
   - name: libopenvino-auto-plugin
     version: {{ version }}
@@ -424,8 +424,8 @@ outputs:
         - {{ pin_subpackage('libopenvino', exact=True) }}
     test:
       commands:
-        - test -f $PREFIX/lib/openvino-{{ version_postfix }}/libopenvino_auto_plugin.so  # [unix]
-        - if not exist %LIBRARY_BIN%\\openvino-{{ version_postfix }}\\openvino_auto_plugin%SHLIB_EXT% exit 1  # [win]
+        - test -f $PREFIX/lib/openvino-{{ version_postfix }}/libopenvino_auto_plugin.so              # [unix]
+        - if not exist %LIBRARY_BIN%\openvino-{{ version_postfix }}\openvino_auto_plugin.dll exit 1  # [win]
 
   - name: libopenvino-auto-batch-plugin
     version: {{ version }}
@@ -450,8 +450,8 @@ outputs:
         - {{ pin_subpackage('libopenvino', exact=True) }}
     test:
       commands:
-        - test -f $PREFIX/lib/openvino-{{ version_postfix }}/libopenvino_auto_batch_plugin.so  # [unix]
-        - if not exist %LIBRARY_BIN%\\openvino-{{ version_postfix }}\\openvino_auto_batch_plugin%SHLIB_EXT% exit 1  # [win]
+        - test -f $PREFIX/lib/openvino-{{ version_postfix }}/libopenvino_auto_batch_plugin.so              # [unix]
+        - if not exist %LIBRARY_BIN%\openvino-{{ version_postfix }}\openvino_auto_batch_plugin.dll exit 1  # [win]
 
   - name: libopenvino-hetero-plugin
     version: {{ version }}
@@ -476,8 +476,8 @@ outputs:
         - {{ pin_subpackage('libopenvino', exact=True) }}
     test:
       commands:
-        - test -f $PREFIX/lib/openvino-{{ version_postfix }}/libopenvino_hetero_plugin.so  # [unix]
-        - if not exist %LIBRARY_BIN%\\openvino-{{ version_postfix }}\\openvino_hetero_plugin%SHLIB_EXT% exit 1  # [win]
+        - test -f $PREFIX/lib/openvino-{{ version_postfix }}/libopenvino_hetero_plugin.so              # [unix]
+        - if not exist %LIBRARY_BIN%\openvino-{{ version_postfix }}\openvino_hetero_plugin.dll exit 1  # [win]
 
   - name: libopenvino-python
     script: install/install_python.sh
@@ -637,21 +637,21 @@ outputs:
         - export CMAKE_GENERATOR=Ninja  # [unix]
 
         # check libraries (symlinks)
-        - test -f $PREFIX/lib/libopenvino${SHLIB_EXT}  # [unix]
-        - test -f $PREFIX/lib/libopenvino_c${SHLIB_EXT}  # [unix]
-        - test -f $PREFIX/lib/libopenvino_paddle_frontend${SHLIB_EXT}  # [unix]
-        - test -f $PREFIX/lib/libopenvino_pytorch_frontend${SHLIB_EXT}  # [unix]
-        - test -f $PREFIX/lib/libopenvino_onnx_frontend${SHLIB_EXT}  # [unix]
-        - test -f $PREFIX/lib/libopenvino_tensorflow_frontend${SHLIB_EXT}  # [unix]
-        - test -f $PREFIX/lib/libopenvino_tensorflow_lite_frontend${SHLIB_EXT}  # [unix]
+        - test -f $PREFIX/lib/libopenvino${SHLIB_EXT}                               # [unix]
+        - test -f $PREFIX/lib/libopenvino_c${SHLIB_EXT}                             # [unix]
+        - test -f $PREFIX/lib/libopenvino_paddle_frontend${SHLIB_EXT}               # [unix]
+        - test -f $PREFIX/lib/libopenvino_pytorch_frontend${SHLIB_EXT}              # [unix]
+        - test -f $PREFIX/lib/libopenvino_onnx_frontend${SHLIB_EXT}                 # [unix]
+        - test -f $PREFIX/lib/libopenvino_tensorflow_frontend${SHLIB_EXT}           # [unix]
+        - test -f $PREFIX/lib/libopenvino_tensorflow_lite_frontend${SHLIB_EXT}      # [unix]
 
-        - if not exist %LIBRARY_BIN%\openvino%SHLIB_EXT% exit 1  # [win]
-        - if not exist %LIBRARY_BIN%\openvino_c%SHLIB_EXT% exit 1  # [win]
-        - if not exist %LIBRARY_BIN%\openvino_paddle_frontend%SHLIB_EXT% exit 1  # [win]
-        - if not exist %LIBRARY_BIN%\openvino_pytorch_frontend%SHLIB_EXT% exit 1  # [win]
-        - if not exist %LIBRARY_BIN%\openvino_onnx_frontend%SHLIB_EXT% exit 1  # [win]
-        - if not exist %LIBRARY_BIN%\openvino_tensorflow_frontend%SHLIB_EXT% exit 1  # [win]
-        - if not exist %LIBRARY_BIN%\openvino_tensorflow_lite_frontend%SHLIB_EXT% exit 1  # [win]
+        - if not exist %LIBRARY_BIN%\openvino.dll exit 1                            # [win]
+        - if not exist %LIBRARY_BIN%\openvino_c.dll exit 1                          # [win]
+        - if not exist %LIBRARY_BIN%\openvino_paddle_frontend.dll exit 1            # [win]
+        - if not exist %LIBRARY_BIN%\openvino_pytorch_frontend.dll exit 1           # [win]
+        - if not exist %LIBRARY_BIN%\openvino_onnx_frontend.dll exit 1              # [win]
+        - if not exist %LIBRARY_BIN%\openvino_tensorflow_frontend.dll exit 1        # [win]
+        - if not exist %LIBRARY_BIN%\openvino_tensorflow_lite_frontend.dll exit 1   # [win]
 
         # check that devices are found using OpenVINO C API
         - $CC snippets/openvino_available_devices.c $(pkg-config --cflags --libs openvino) -Wl,-rpath,$PREFIX/lib -o openvino_devices_test  # [unix]
@@ -660,8 +660,8 @@ outputs:
         # check that frontends are found using OpenVINO C++ API
         - cmake -G "Ninja Multi-Config" -S snippets -B snippets_openvino_dev_build
         - cmake --build snippets_openvino_dev_build --config Release --verbose
-        - ./snippets_openvino_dev_build/Release/openvino_frontends_test  # [unix]
-        - .\\snippets_openvino_dev_build\\Release\\openvino_frontends_test.exe  # [win]
+        - ./snippets_openvino_dev_build/Release/openvino_frontends_test      # [unix]
+        - .\snippets_openvino_dev_build\Release\openvino_frontends_test.exe  # [win]
 
   - name: openvino
     version: {{ version }}
@@ -720,8 +720,8 @@ outputs:
         # check that frontends are found using OpenVINO C++ API
         - cmake -G "Ninja Multi-Config" -S snippets -B snippets_openvino_{{ CONDA_PY }}_build
         - cmake --build snippets_openvino_{{ CONDA_PY }}_build --config Release --verbose
-        - ./snippets_openvino_{{ CONDA_PY }}_build/Release/openvino_frontends_test  # [unix]
-        - .\\snippets_openvino_{{ CONDA_PY }}_build\\Release\\openvino_frontends_test.exe  # [win]
+        - ./snippets_openvino_{{ CONDA_PY }}_build/Release/openvino_frontends_test      # [unix]
+        - .\snippets_openvino_{{ CONDA_PY }}_build\Release\openvino_frontends_test.exe  # [win]
 
 about:
   home: https://github.com/openvinotoolkit/openvino
