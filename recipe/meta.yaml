@@ -529,7 +529,6 @@ outputs:
         - {{ pin_subpackage('libopenvino-tensorflow-frontend', exact=True) }}
         - numpy <2.2.0
         - openvino-telemetry >=2023.1.1
-        - singledispatchmethod  # [py <= 37]
         - packaging
         - python
     test:
