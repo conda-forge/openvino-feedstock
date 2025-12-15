@@ -10,12 +10,12 @@ cxx_compiler:
 - vs2022
 flatbuffers:
 - 25.2.10
+github_actions_labels:
+- cirun-azure-windows-2xlarge
 libabseil:
 - '20250512'
 libprotobuf:
 - 6.31.1
-megabuild:
-- false
 pin_run_as_build:
   python:
     min_pin: x.x
@@ -23,6 +23,9 @@ pin_run_as_build:
 pugixml:
 - '1.15'
 python:
+- 3.10.* *_cpython
+- 3.11.* *_cpython
+- 3.12.* *_cpython
 - 3.13.* *_cp313
 snappy:
 - '1.2'
