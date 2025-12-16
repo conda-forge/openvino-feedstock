@@ -12,6 +12,7 @@ source:
     - patches/0001-Fix-compiling-Compute-Lib-with-scons-for-arm64.patch     # [aarch64]
     - patches/0002-don-t-prescribe-protobuf-major-version.patch
     - patches/0003-linux-aarch64-define-HWCAP2_I8MM-constant-properly.patch     # [aarch64]
+    - patches/0004-pyproject-numpy-cap-fix.patch
   - url: https://github.com/ARM-software/ComputeLibrary/archive/refs/tags/v25.03.tar.gz  # [aarch64 or arm64]
     sha256: 30f83cea6d338a0e33495c33c547b7b720027baff4c3eea66014709fdd52aaac  # [aarch64 or arm64]
     folder: src/plugins/intel_cpu/thirdparty/ComputeLibrary  # [aarch64 or arm64]
@@ -525,7 +526,7 @@ outputs:
         - {{ pin_subpackage('libopenvino-paddle-frontend', exact=True) }}
         - {{ pin_subpackage('libopenvino-pytorch-frontend', exact=True) }}
         - {{ pin_subpackage('libopenvino-tensorflow-frontend', exact=True) }}
-        - numpy <2.3.0
+        - numpy <2.4.0
         - openvino-telemetry >=2023.1.1
         - packaging
         - python
