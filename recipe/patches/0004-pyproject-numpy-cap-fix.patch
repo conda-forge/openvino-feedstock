@@ -1,0 +1,13 @@
+diff --git a/pyproject.toml b/pyproject.toml
+index 030ed40653..d4ac99f525 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -17,7 +17,7 @@ classifiers = [
+ requires-python = ">=3.10"
+ 
+ dependencies = [
+-    "numpy>=1.16.6,<2.3.0",
++    "numpy>=1.16.6,<2.4.0",
+     "openvino-telemetry>=2023.2.1",
+     "packaging"
+ ]
