@@ -525,7 +525,7 @@ outputs:
         - {{ pin_subpackage('libopenvino-paddle-frontend', exact=True) }}
         - {{ pin_subpackage('libopenvino-pytorch-frontend', exact=True) }}
         - {{ pin_subpackage('libopenvino-tensorflow-frontend', exact=True) }}
-        - numpy <2.4.0
+        - numpy <2.3.0
         - openvino-telemetry >=2023.1.1
         - packaging
         - python
