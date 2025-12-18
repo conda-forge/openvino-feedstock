@@ -1,4 +1,4 @@
-{% set version_postfix = "2025.4.0" %}
+{% set version_postfix = "2025.4.1" %}
 {% set version = "2025.4.1" %}
 
 package:
