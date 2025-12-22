@@ -1,14 +1,14 @@
-From 168316c62b6022251dd11f4c5b9c0f85da3e425a Mon Sep 17 00:00:00 2001
+From f9edd14d37ce155f6ed41fb3a1e51d06173b8c37 Mon Sep 17 00:00:00 2001
 From: Aleksandr Voron <aleksandr.voron@intel.com>
 Date: Thu, 27 Nov 2025 17:26:03 +0100
-Subject: [PATCH] fix
+Subject: [PATCH 3/3] linux-aarch64: define HWCAP2_I8MM constant properly
 
 ---
  src/inference/src/system_conf.cpp | 3 ++-
  1 file changed, 2 insertions(+), 1 deletion(-)
 
 diff --git a/src/inference/src/system_conf.cpp b/src/inference/src/system_conf.cpp
-index dd47185947e381..fbfd82e4eff0c2 100644
+index 318fbf94c6..c0e864481b 100644
 --- a/src/inference/src/system_conf.cpp
 +++ b/src/inference/src/system_conf.cpp
 @@ -22,6 +22,7 @@
