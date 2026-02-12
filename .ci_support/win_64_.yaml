@@ -9,13 +9,13 @@ channel_targets:
 cxx_compiler:
 - vs2022
 flatbuffers:
-- 25.2.10
+- 25.9.23
 github_actions_labels:
 - cirun-azure-windows-2xlarge
 libabseil:
-- '20250512'
+- '20260107'
 libprotobuf:
-- 6.31.1
+- 6.33.5
 pin_run_as_build:
   python:
     min_pin: x.x
