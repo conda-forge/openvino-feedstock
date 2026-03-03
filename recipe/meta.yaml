@@ -503,7 +503,7 @@ outputs:
         - make  # [unix]
         - ccache
         - cmake
-        - pybind11
+        - pybind11  3.0.1
         - wheel
       host:
         - tbb-devel  # for OpenVINO Developer package only
