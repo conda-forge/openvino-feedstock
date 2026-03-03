@@ -1,4 +1,4 @@
-from openvino.runtime import Core
+from openvino import Core
 from openvino.frontend import FrontEndManager
 import platform
 
