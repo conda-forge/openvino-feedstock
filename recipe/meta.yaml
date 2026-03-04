@@ -1,5 +1,5 @@
-{% set version_postfix = "2025.4.1" %}
-{% set version = "2025.4.1" %}
+{% set version_postfix = "2026.0.0" %}
+{% set version = "2026.0.0" %}
 
 package:
   name: openvino-split
@@ -7,35 +7,34 @@ package:
 
 source:
   - url: https://github.com/openvinotoolkit/openvino/archive/refs/tags/{{ version }}.tar.gz
-    sha256: 9926c8a8188d0baa9730623efaeb9f0bccf7059f5e4e957a8d238c3226c2b19b
+    sha256: 529ce766bcca30991c21d0e065886e175b5210d81d6f6b3d7cdaaa89fe22ea8a
     patches:
       - patches/0001-Fix-compiling-Compute-Lib-with-scons-for-arm64.patch   # [aarch64]
       - patches/0002-don-t-prescribe-protobuf-major-version.patch
-      - patches/0003-linux-aarch64-define-HWCAP2_I8MM-constant-properly.patch   # [aarch64]
-  - url: https://github.com/ARM-software/ComputeLibrary/archive/refs/tags/v25.03.tar.gz  # [aarch64 or arm64]
-    sha256: 30f83cea6d338a0e33495c33c547b7b720027baff4c3eea66014709fdd52aaac  # [aarch64 or arm64]
+  - url: https://github.com/ARM-software/ComputeLibrary/archive/refs/tags/v52.6.0.tar.gz  # [aarch64 or arm64]
+    sha256: fa2aee62b237283c9a9dff5dc4c5052bb34313d09b510fb97dd63baf6964cb8e  # [aarch64 or arm64]
     folder: src/plugins/intel_cpu/thirdparty/ComputeLibrary  # [aarch64 or arm64]
-  - url: https://github.com/openvinotoolkit/oneDNN/archive/a4ed4a789b6e0869e4f651bbfeff6878e91d388e.tar.gz
-    sha256: 6fe2fa4edd68b5f3448d80eaaf7d5d9d329d679d7d25f80d3800a4f199e86dae
+  - url: https://github.com/openvinotoolkit/oneDNN/archive/c6b79c1207bd5f20b9395536dab1d71a47cfcb1d.tar.gz
+    sha256: c6825a7aad5bc83686da759aeb89cf979bd820ba4795b55241fde0d6b093f4d6
     folder: src/plugins/intel_cpu/thirdparty/onednn
-  - url: https://github.com/ARM-software/kleidiai/archive/eaf63a6ae9a903fb4fa8a4d004a974995011f444.tar.gz
-    sha256: 756fa3040ff23f78a4c3f4c1984a3814d78d302b0b5dc3f0b255322368aefc58
+  - url: https://github.com/ARM-software/kleidiai/archive/7d82645ca2f3c3d58a5c0b1a96905e53916c8ff8.tar.gz
+    sha256: 7f6dc8992d229d5a0be8c2dec09011bab7c45201ed06ae60fbcd3c9343d09368
     folder: src/plugins/intel_cpu/thirdparty/kleidiai
   - url: https://github.com/openvinotoolkit/mlas/archive/d1bc25ec4660cddd87804fcf03b2411b5dfb2e94.tar.gz
     sha256: 0a44fbfd4b13e8609d66ddac4b11a27c90c1074cde5244c91ad197901666004c
     folder: src/plugins/intel_cpu/thirdparty/mlas
-  - url: https://github.com/uxlfoundation/oneDNN/archive/29d64fe0ec0f1f20d7f80aa76630d58a6011a869.tar.gz  # [win64 or linux64]
-    sha256: 90139a1193b9773f94ff3310cd6118d3b6ccf1adb24461c84aa87890caa5ee77  # [win64 or linux64]
+  - url: https://github.com/uxlfoundation/oneDNN/archive/929fe4e5629be2a5e89f1ba13b13458b965ffe57.tar.gz  # [win64 or linux64]
+    sha256: a646e1e702a856e0e99b3925f0ead792194c9d62c1ed25e5cbd18927320617e6  # [win64 or linux64]
     folder: src/plugins/intel_gpu/thirdparty/onednn_gpu  # [win64 or linux64]
-  - url: https://github.com/intel/level-zero-npu-extensions/archive/61e4aeb00afd2a5b6955986269eed3a713c7b562.tar.gz  # [linux64]
-    sha256: ccfd713b62700cf82476ee550c269cb5fb7edad70e96e7e0f4f6d7888f64642c  # [linux64]
+  - url: https://github.com/intel/level-zero-npu-extensions/archive/8404c63a88d182726038d2b07c219731dada9c21.tar.gz  # [linux64]
+    sha256: b72a46a1e66da3c804cdf08ba493e2cd2ee617e1dccf6cc6c69d1baf63f37973  # [linux64]
     folder: src/plugins/intel_npu/thirdparty/level-zero-ext  # [linux64]
-  - url: https://github.com/onnx/onnx/archive/refs/tags/v1.17.0.tar.gz
-    sha256: 8d5e983c36037003615e5a02d36b18fc286541bf52de1a78f6cf9f32005a820e
+  - url: https://github.com/onnx/onnx/archive/refs/tags/v1.18.0.tar.gz
+    sha256: b466af96fd8d9f485d1bb14f9bbdd2dfb8421bc5544583f014088fb941a1d21e
     folder: thirdparty/onnx/onnx
 
 build:
-  number: 3
+  number: 1
 
 requirements:
   build:
@@ -519,7 +518,7 @@ outputs:
         - make  # [unix]
         - ccache
         - cmake
-        - pybind11
+        - pybind11  3.0.1
         - wheel
       host:
         - tbb-devel  # for OpenVINO Developer package only
@@ -574,7 +573,7 @@ outputs:
         - ovc --help
         - benchmark_app --help
         - test $(pip list | grep openvino | wc -l) -eq 2  # [unix]
-        - if [[ $($PYTHON -c 'import openvino.runtime as ov; print(ov.__version__[0:8])') != {{ version_postfix }} ]]; then exit 1; fi  # [unix]
+        - if [[ $($PYTHON -c 'import openvino as ov; print(ov.__version__[0:8])') != {{ version_postfix }} ]]; then exit 1; fi  # [unix]
         - if [[ $($PYTHON -c 'from openvino.frontend import FrontEndManager as fem; print(len(fem().get_available_front_ends()))') != 4 ]]; then exit 1; fi  # [unix]
       requires:
         - pip
