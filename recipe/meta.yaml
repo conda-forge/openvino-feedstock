@@ -34,7 +34,7 @@ source:
     folder: thirdparty/onnx/onnx
 
 build:
-  number: 0
+  number: 1
 
 requirements:
   build:
@@ -71,6 +71,7 @@ outputs:
     script: install/install.sh
     about:
       summary: OpenVINO Core Runtime library
+      license: Apache-2.0
       license_file:
         - LICENSE
         - licensing/third-party-programs.txt
@@ -102,6 +103,7 @@ outputs:
     script: install/install_ir.sh
     about:
       summary: OpenVINO IR Frontend
+      license: Apache-2.0
       license_file:
         - LICENSE
         - licensing/third-party-programs.txt
@@ -132,6 +134,7 @@ outputs:
     script: install/install_onnx.sh
     about:
       summary: OpenVINO ONNX Frontend
+      license: Apache-2.0
       license_file:
         - LICENSE
         - licensing/third-party-programs.txt
@@ -163,6 +166,7 @@ outputs:
     script: install/install_paddle.sh
     about:
       summary: OpenVINO Paddle Frontend
+      license: Apache-2.0
       license_file:
         - LICENSE
         - licensing/third-party-programs.txt
@@ -194,6 +198,7 @@ outputs:
     script: install/install_pytorch.sh
     about:
       summary: OpenVINO Pytorch Frontend
+      license: Apache-2.0
       license_file:
         - LICENSE
         - licensing/third-party-programs.txt
@@ -223,6 +228,7 @@ outputs:
     script: install/install_tensorflow.sh
     about:
       summary: OpenVINO TensorFlow Frontend
+      license: Apache-2.0
       license_file:
         - LICENSE
         - licensing/third-party-programs.txt
@@ -255,6 +261,7 @@ outputs:
     script: install/install_tensorflow_lite.sh
     about:
       summary: OpenVINO TensorFlow Lite Frontend
+      license: Apache-2.0
       license_file:
         - LICENSE
         - licensing/third-party-programs.txt
@@ -284,6 +291,7 @@ outputs:
     script: install/install_cpu.sh
     about:
       summary: OpenVINO Intel® CPU plugin
+      license: Apache-2.0
       license_file:
         - LICENSE
         - licensing/third-party-programs.txt
@@ -313,6 +321,7 @@ outputs:
     script: install/install_cpu.sh
     about:
       summary: OpenVINO ARM® CPU plugin
+      license: Apache-2.0
       license_file:
         - LICENSE
         - licensing/third-party-programs.txt
@@ -341,6 +350,7 @@ outputs:
     script: install/install_gpu.sh
     about:
       summary: OpenVINO Intel® GPU plugin
+      license: Apache-2.0
       license_file:
         - LICENSE
         - licensing/third-party-programs.txt
@@ -373,6 +383,7 @@ outputs:
     script: install/install_npu.sh
     about:
       summary: OpenVINO Intel® NPU plugin
+      license: Apache-2.0
       license_file:
         - LICENSE
         - licensing/third-party-programs.txt
@@ -403,6 +414,7 @@ outputs:
     script: install/install_auto.sh
     about:
       summary: OpenVINO Auto plugin
+      license: Apache-2.0
       license_file:
         - LICENSE
         - licensing/third-party-programs.txt
@@ -429,6 +441,7 @@ outputs:
     script: install/install_batch.sh
     about:
       summary: OpenVINO Auto Batch plugin
+      license: Apache-2.0
       license_file:
         - LICENSE
         - licensing/third-party-programs.txt
@@ -455,6 +468,7 @@ outputs:
     script: install/install_hetero.sh
     about:
       summary: OpenVINO Hetero plugin
+      license: Apache-2.0
       license_file:
         - LICENSE
         - licensing/third-party-programs.txt
@@ -480,6 +494,7 @@ outputs:
     script: install/install_python.sh
     about:
       summary: OpenVINO Python API
+      license: Apache-2.0
       license_file:
         - LICENSE
         - licensing/third-party-programs.txt
@@ -569,6 +584,7 @@ outputs:
     script: install/install_dev.sh
     about:
       summary: OpenVINO C++ / C Runtime & Development files
+      license: Apache-2.0
       license_file:
         - LICENSE
         - licensing/third-party-programs.txt
@@ -663,6 +679,7 @@ outputs:
     version: {{ version }}
     about:
       summary: OpenVINO C++ / C / Python Runtimes & Development files
+      license: Apache-2.0
       license_file:
         - LICENSE
         - licensing/third-party-programs.txt
