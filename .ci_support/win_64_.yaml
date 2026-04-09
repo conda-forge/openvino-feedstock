@@ -11,7 +11,7 @@ cxx_compiler:
 flatbuffers:
 - 25.9.23
 github_actions_labels:
-- cirun-azure-windows-2xlarge
+- self-hosted@cirun-azure-windows-2xlarge
 libabseil:
 - '20260107'
 libprotobuf:
