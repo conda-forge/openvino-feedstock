@@ -15,9 +15,6 @@ github:
 github_actions:
   resize_win_partitions: true
   timeout_minutes: 720
-  triggers:
-  - push
-  - pull_request
 provider:
   win_64: github_actions
 test: native_and_emulated
