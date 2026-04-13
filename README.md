@@ -30,7 +30,7 @@ About libopenvino
 
 
 
-Package license: 
+Package license: Apache-2.0
 
 Summary: OpenVINO Core Runtime library
 
@@ -39,7 +39,7 @@ About libopenvino-auto-batch-plugin
 
 
 
-Package license: 
+Package license: Apache-2.0
 
 Summary: OpenVINO Auto Batch plugin
 
@@ -48,7 +48,7 @@ About libopenvino-auto-plugin
 
 
 
-Package license: 
+Package license: Apache-2.0
 
 Summary: OpenVINO Auto plugin
 
@@ -57,7 +57,7 @@ About libopenvino-dev
 
 
 
-Package license: 
+Package license: Apache-2.0
 
 Summary: OpenVINO C++ / C Runtime & Development files
 
@@ -66,7 +66,7 @@ About libopenvino-hetero-plugin
 
 
 
-Package license: 
+Package license: Apache-2.0
 
 Summary: OpenVINO Hetero plugin
 
@@ -75,34 +75,16 @@ About libopenvino-intel-cpu-plugin
 
 
 
-Package license: 
+Package license: Apache-2.0
 
 Summary: OpenVINO Intel® CPU plugin
-
-About libopenvino-intel-gpu-plugin
-----------------------------------
-
-
-
-Package license: 
-
-Summary: OpenVINO Intel® GPU plugin
-
-About libopenvino-intel-npu-plugin
-----------------------------------
-
-
-
-Package license: 
-
-Summary: OpenVINO Intel® NPU plugin
 
 About libopenvino-ir-frontend
 -----------------------------
 
 
 
-Package license: 
+Package license: Apache-2.0
 
 Summary: OpenVINO IR Frontend
 
@@ -111,7 +93,7 @@ About libopenvino-onnx-frontend
 
 
 
-Package license: 
+Package license: Apache-2.0
 
 Summary: OpenVINO ONNX Frontend
 
@@ -120,7 +102,7 @@ About libopenvino-paddle-frontend
 
 
 
-Package license: 
+Package license: Apache-2.0
 
 Summary: OpenVINO Paddle Frontend
 
@@ -129,7 +111,7 @@ About libopenvino-python
 
 
 
-Package license: 
+Package license: Apache-2.0
 
 Summary: OpenVINO Python API
 
@@ -138,7 +120,7 @@ About libopenvino-pytorch-frontend
 
 
 
-Package license: 
+Package license: Apache-2.0
 
 Summary: OpenVINO Pytorch Frontend
 
@@ -147,7 +129,7 @@ About libopenvino-tensorflow-frontend
 
 
 
-Package license: 
+Package license: Apache-2.0
 
 Summary: OpenVINO TensorFlow Frontend
 
@@ -156,7 +138,7 @@ About libopenvino-tensorflow-lite-frontend
 
 
 
-Package license: 
+Package license: Apache-2.0
 
 Summary: OpenVINO TensorFlow Lite Frontend
 
@@ -165,7 +147,7 @@ About openvino
 
 
 
-Package license: 
+Package license: Apache-2.0
 
 Summary: OpenVINO C++ / C / Python Runtimes & Development files
 
@@ -174,9 +156,27 @@ About libopenvino-arm-cpu-plugin
 
 
 
-Package license: 
+Package license: Apache-2.0
 
 Summary: OpenVINO ARM® CPU plugin
+
+About libopenvino-intel-gpu-plugin
+----------------------------------
+
+
+
+Package license: Apache-2.0
+
+Summary: OpenVINO Intel® GPU plugin
+
+About libopenvino-intel-npu-plugin
+----------------------------------
+
+
+
+Package license: Apache-2.0
+
+Summary: OpenVINO Intel® NPU plugin
 
 Current build status
 ====================
