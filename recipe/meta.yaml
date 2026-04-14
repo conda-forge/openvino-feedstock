@@ -1,5 +1,5 @@
 {% set version_postfix = "2026.1.0" %}
-{% set version = "2026.1.0" %}
+{% set version = "2026.1.1" %}
 
 package:
   name: openvino-split
@@ -7,7 +7,7 @@ package:
 
 source:
   - url: https://github.com/openvinotoolkit/openvino/archive/refs/tags/{{ version }}.tar.gz
-    sha256: 8810fcf950c891ed4541e3fa1153f58cd8390a459a87e5fee509cd5ffe64e974
+    sha256: 94224cbdfbbdf9dc1dfc1305d545eb656f93bab7a784a8b45a39da54400179f3
     patches:
       - patches/0001-Fix-compiling-Compute-Lib-with-scons-for-arm64.patch   # [aarch64]
       - patches/0002-don-t-prescribe-protobuf-major-version.patch
