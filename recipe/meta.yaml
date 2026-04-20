@@ -35,7 +35,7 @@ source:
     folder: thirdparty/onnx/onnx
 
 build:
-  number: 2
+  number: 3
 
 requirements:
   build:
@@ -404,7 +404,7 @@ outputs:
         - {{ pin_subpackage('libopenvino', exact=True) }}
         - pugixml
         - tbb-devel
-        - level-zero-devel
+        - level-zero-devel  1.27.0
       run:
         - {{ pin_subpackage('libopenvino', exact=True) }}
     test:
@@ -578,6 +578,8 @@ outputs:
         - test $(pip list | grep openvino | wc -l) -eq 2  # [unix]
         - if [[ $($PYTHON -c 'import openvino as ov; print(ov.__version__[0:8])') != {{ version_postfix }} ]]; then exit 1; fi  # [unix]
         - if [[ $($PYTHON -c 'from openvino.frontend import FrontEndManager as fem; print(len(fem().get_available_front_ends()))') != 4 ]]; then exit 1; fi  # [unix]
+        - $PYTHON -c "import openvino as ov; cores=[]; exec('for i in range(5):\n core=ov.Core()\n cores.append(core)\n print(core.available_devices)')"  # [unix]
+        - "%PYTHON% -c \"import openvino as ov; cores=[]; exec('for i in range(5):\n core=ov.Core()\n cores.append(core)\n print(core.available_devices)')\""  # [win]
       requires:
         - pip
         - pytorch *
