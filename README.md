@@ -379,6 +379,3 @@ Feedstock Maintainers
 * [@culhatsker](https://github.com/culhatsker/)
 * [@mryzhov](https://github.com/mryzhov/)
 
-
-<!-- dummy commit to enable rerendering -->
-
