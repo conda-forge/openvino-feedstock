@@ -405,7 +405,7 @@ outputs:
         - pugixml
         - tbb-devel
         - level-zero-devel  1.27.0
-        - level-zero  1.27.0
+        - level-zero  1.28.4
       run:
         - {{ pin_subpackage('libopenvino', exact=True) }}
     test:
