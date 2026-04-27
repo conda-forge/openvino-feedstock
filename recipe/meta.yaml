@@ -64,7 +64,7 @@ requirements:
     - libprotobuf
     # Keep in sync with corresponded submodule version on release tag, i.e.
     # https://github.com/openvinotoolkit/openvino/tree/2026.1.0/thirdparty/level_zero
-    - level-zero-devel  1.27.0      # [linux64]
+    - level-zero-devel              # [linux64]
     - zlib
     - nlohmann_json
 
@@ -404,8 +404,7 @@ outputs:
         - {{ pin_subpackage('libopenvino', exact=True) }}
         - pugixml
         - tbb-devel
-        - level-zero-devel  1.27.0
-        - level-zero  1.28.4
+        - level-zero-devel
       run:
         - {{ pin_subpackage('libopenvino', exact=True) }}
     test:
