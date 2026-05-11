@@ -34,11 +34,6 @@ jobs:
             os: ubuntu
             runs_on: ['ubuntu-latest']
             DOCKER_IMAGE: quay.io/condaforge/linux-anvil-x86_64:alma9
-          - CONFIG: win_64_
-            STORE_BUILD_ARTIFACTS: False
-            UPLOAD_PACKAGES: True
-            os: windows
-            runs_on: ['cirun-azure-windows-2xlarge--${{ github.run_id }}-win_64_', 'windows', 'x64', 'self-hosted']
     steps:
 
     - name: Checkout code

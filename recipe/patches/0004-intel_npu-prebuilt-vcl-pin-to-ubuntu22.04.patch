@@ -1,0 +1,49 @@
+From: hmaarrfk <mark.harfouche@conda-forge.org>
+Date: 2026-05-10
+Subject: intel_npu: pin prebuilt vcl path to ubuntu22.04 (skip lsb_release)
+
+`src/plugins/intel_npu/cmake/download_compiler_libs.cmake` gates the
+download/install of the prebuilt vcl
+(`libopenvino_intel_npu_compiler.so` / `libnpu_driver_compiler.so`)
+on `lsb_release -is == "Ubuntu"` + a `22.04`/`24.04` version check.
+The conda-forge build runs inside AlmaLinux 9 where `lsb_release` is
+not installed, so OS_NAME/OS_VERSION come back empty and the whole
+install block is silently skipped — the NPU plugin ends up without
+the compiler library and users see `Failed to load
+openvino_intel_npu_compiler` at runtime.
+
+The recipe pre-fetches the ubuntu_22_04 prebuilt tarball at the same
+on-disk path `download_and_extract()` looks for (so the function's
+existence check short-circuits the file(DOWNLOAD) call and reuses
+our copy).  This patch removes the lsb_release probe and just claims
+Ubuntu 22.04 so the install + configure_file step is exercised.
+
+The 22.04 prebuilt requires glibc 2.34 at runtime, which the
+downstream conda package expresses via `__glibc >=2.34` on the
+libopenvino-intel-npu-plugin output.
+---
+ src/plugins/intel_npu/cmake/download_compiler_libs.cmake | 11 +++++++++--
+ 1 file changed, 9 insertions(+), 2 deletions(-)
+
+diff --git a/src/plugins/intel_npu/cmake/download_compiler_libs.cmake b/src/plugins/intel_npu/cmake/download_compiler_libs.cmake
+index 3f34a73e..cd03bf5e 100644
+--- a/src/plugins/intel_npu/cmake/download_compiler_libs.cmake
++++ b/src/plugins/intel_npu/cmake/download_compiler_libs.cmake
+@@ -137,8 +137,15 @@ if(ENABLE_INTEL_NPU_COMPILER)
+         # Check if the operating system is Linux and not macOS
+         if(UNIX AND NOT APPLE)
+             # Get the OS name and version
+-            execute_process(COMMAND lsb_release -is OUTPUT_VARIABLE OS_NAME OUTPUT_STRIP_TRAILING_WHITESPACE)
+-            execute_process(COMMAND lsb_release -rs OUTPUT_VARIABLE OS_VERSION OUTPUT_STRIP_TRAILING_WHITESPACE)
++            # conda-forge build runs on AlmaLinux 9 where lsb_release
++            # is not available; the upstream check would silently skip
++            # the prebuilt vcl install.  The vcl tarball is pre-fetched
++            # by the recipe at the same temp/compiler_libs/ubuntu22.04/
++            # path download_and_extract() expects, so just claim
++            # Ubuntu 22.04 here.  The downstream conda package adds a
++            # __glibc>=2.34 constraint to match the prebuilt's ABI.
++            set(OS_NAME "Ubuntu")
++            set(OS_VERSION "22.04")
+
+             if(OS_NAME STREQUAL "Ubuntu")
+                 if(OS_VERSION STREQUAL "22.04")
