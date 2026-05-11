@@ -5,6 +5,14 @@ bot:
 build_platform:
   linux_aarch64: linux_64
   osx_arm64: osx_64
+# TEMPORARY: drop osx, win, linux-aarch64 from the CI matrix while
+# iterating on the NPU compiler-bundle changes (linux-64 only).
+# Restore these before merge.
+provider:
+  linux_aarch64: null
+  osx_64: null
+  osx_arm64: null
+  win_64: null
 channel_priority: strict
 conda_build:
   error_overlinking: true
@@ -15,6 +23,4 @@ github:
 github_actions:
   resize_win_partitions: true
   timeout_minutes: 720
-provider:
-  win_64: github_actions
 test: native_and_emulated

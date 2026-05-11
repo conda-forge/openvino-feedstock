@@ -79,6 +79,38 @@ Package license: Apache-2.0
 
 Summary: OpenVINO Intel® CPU plugin
 
+About libopenvino-intel-gpu-plugin
+----------------------------------
+
+
+
+Package license: Apache-2.0
+
+Summary: OpenVINO Intel® GPU plugin
+
+About libopenvino-intel-npu-plugin
+----------------------------------
+
+
+
+Package license: Apache-2.0
+
+Summary: OpenVINO Intel® NPU plugin (driver compiler bundled)
+
+OpenVINO plugin that schedules inference on the Intel NPU
+(libopenvino_intel_npu_plugin.so), plus the MLIR-based driver
+compiler (libopenvino_intel_npu_compiler.so, renamed from
+libnpu_driver_compiler.so) the plugin uses to lower OpenVINO
+IR to NPU blobs. The compiler is Intel's prebuilt vcl 7.6.0
+(the same artifact OpenVINO upstream auto-downloads on
+Ubuntu 22.04/24.04 builds) — installing it from a conda
+environment requires glibc >= 2.34 at runtime.
+
+The userspace Level Zero driver (libze_intel_npu.so,
+packaged as intel-level-zero-npu) is required at runtime to
+actually enumerate NPU hardware.
+
+
 About libopenvino-ir-frontend
 -----------------------------
 
@@ -160,96 +192,11 @@ Package license: Apache-2.0
 
 Summary: OpenVINO ARM® CPU plugin
 
-About libopenvino-intel-gpu-plugin
-----------------------------------
-
-
-
-Package license: Apache-2.0
-
-Summary: OpenVINO Intel® GPU plugin
-
-About libopenvino-intel-npu-plugin
-----------------------------------
-
-
-
-Package license: Apache-2.0
-
-Summary: OpenVINO Intel® NPU plugin (driver compiler bundled)
-
-OpenVINO plugin that schedules inference on the Intel NPU
-(libopenvino_intel_npu_plugin.so), plus the MLIR-based driver
-compiler (libopenvino_intel_npu_compiler.so, renamed from
-libnpu_driver_compiler.so) the plugin uses to lower OpenVINO
-IR to NPU blobs. The compiler is Intel's prebuilt vcl 7.6.0
-(the same artifact OpenVINO upstream auto-downloads on
-Ubuntu 22.04/24.04 builds) — installing it from a conda
-environment requires glibc >= 2.34 at runtime.
-
-The userspace Level Zero driver (libze_intel_npu.so,
-packaged as intel-level-zero-npu) is required at runtime to
-actually enumerate NPU hardware.
-
-
 Current build status
 ====================
 
 
 <table>
-    
-  <tr>
-    <td>Azure</td>
-    <td>
-      <details>
-        <summary>
-          <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=19204&branchName=main">
-            <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/openvino-feedstock?branchName=main">
-          </a>
-        </summary>
-        <table>
-          <thead><tr><th>Variant</th><th>Status</th></tr></thead>
-          <tbody><tr>
-              <td>linux_64</td>
-              <td>
-                <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=19204&branchName=main">
-                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/openvino-feedstock?branchName=main&jobName=linux&configuration=linux%20linux_64_" alt="variant">
-                </a>
-              </td>
-            </tr><tr>
-              <td>linux_aarch64</td>
-              <td>
-                <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=19204&branchName=main">
-                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/openvino-feedstock?branchName=main&jobName=linux&configuration=linux%20linux_aarch64_" alt="variant">
-                </a>
-              </td>
-            </tr><tr>
-              <td>osx_64</td>
-              <td>
-                <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=19204&branchName=main">
-                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/openvino-feedstock?branchName=main&jobName=osx&configuration=osx%20osx_64_" alt="variant">
-                </a>
-              </td>
-            </tr><tr>
-              <td>osx_arm64</td>
-              <td>
-                <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=19204&branchName=main">
-                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/openvino-feedstock?branchName=main&jobName=osx&configuration=osx%20osx_arm64_" alt="variant">
-                </a>
-              </td>
-            </tr><tr>
-              <td>win_64</td>
-              <td>
-                <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=19204&branchName=main">
-                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/openvino-feedstock?branchName=main&jobName=win&configuration=win%20win_64_" alt="variant">
-                </a>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </details>
-    </td>
-  </tr>
 </table>
 
 Current release info

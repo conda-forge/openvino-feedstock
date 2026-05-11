@@ -7,3 +7,9 @@ github_actions_labels:                      # [win]
 # this override once intel-level-zero-npu lands on conda-forge.
 channel_sources:          # [linux64]
 - conda-forge,mark.harfouche  # [linux64]
+
+# TEMPORARY: restrict to Python 3.12 only while iterating on the NPU
+# compiler-bundle changes.  Restore the conda-forge-pinning default
+# (currently 3.10..3.14) before merge.
+python:
+- 3.12.* *_cpython
