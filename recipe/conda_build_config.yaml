@@ -1,2 +1,9 @@
 github_actions_labels:                      # [win]
 - self-hosted@cirun-azure-windows-2xlarge   # [win]
+
+# Pull intel-level-zero-npu (libze_intel_npu.so, the userspace NPU
+# driver) from the mark.harfouche channel while the
+# conda-forge/staged-recipes PR (#33291) is still in review. Drop
+# this override once intel-level-zero-npu lands on conda-forge.
+channel_sources:          # [linux64]
+- conda-forge,mark.harfouche  # [linux64]

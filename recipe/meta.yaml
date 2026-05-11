@@ -12,6 +12,7 @@ source:
       - patches/0001-Fix-compiling-Compute-Lib-with-scons-for-arm64.patch   # [aarch64]
       - patches/0002-don-t-prescribe-protobuf-major-version.patch
       - patches/0003-level_zero-compilation-condition.patch   # [win64 ]
+      - patches/0004-intel_npu-prebuilt-vcl-pin-to-ubuntu22.04.patch        # [linux64]
   - url: https://github.com/ARM-software/ComputeLibrary/archive/refs/tags/v52.8.0.tar.gz  # [aarch64 or arm64]
     sha256: 1bceef23aa5b3cc7321cf80e0729e87482f12544b107cdabffb88a6a52aa4adc  # [aarch64 or arm64]
     folder: src/plugins/intel_cpu/thirdparty/ComputeLibrary  # [aarch64 or arm64]
@@ -30,12 +31,25 @@ source:
   - url: https://github.com/intel/level-zero-npu-extensions/archive/42768cc73e74f6d371bd9dd51b1860b07774e7ec.tar.gz  # [linux64]
     sha256: 340b6c6757febfc55e5e707e2b5ab9d2cd0a526e82d921ee192c9ef5675bfe40  # [linux64]
     folder: src/plugins/intel_npu/thirdparty/level-zero-ext  # [linux64]
+  # Intel-published prebuilt vcl (VPUX compiler L0).  OpenVINO's
+  # src/plugins/intel_npu/cmake/download_compiler_libs.cmake would
+  # otherwise download this at configure time via file(DOWNLOAD),
+  # but only on Ubuntu 22.04 / 24.04 (gated on `lsb_release -is`).
+  # The conda-forge build runs on AlmaLinux 9, so the download is
+  # silently skipped and libopenvino_intel_npu_compiler.so never
+  # ships.  Pre-fetch the tarball at the same on-disk path the cmake
+  # expects and patch the distro check out (see patch 0004).  The
+  # prebuilt requires glibc >= 2.34, expressed as a run-dep on the
+  # libopenvino-intel-npu-plugin output.
+  - url: https://storage.openvinotoolkit.org/dependencies/thirdparty/linux/npu_compiler_vcl_ubuntu_22_04-7_6_0-da3cc32.tar.gz  # [linux64]
+    sha256: db1a967d14ce47af64fcd8c66ced0ae8de68923bfd82fb02236fffa0fc625c0d  # [linux64]
+    folder: src/plugins/intel_npu/temp/compiler_libs/ubuntu22.04/npu_compiler_vcl_ubuntu_22_04-7_6_0-da3cc32  # [linux64]
   - url: https://github.com/onnx/onnx/archive/refs/tags/v1.18.0.tar.gz
     sha256: b466af96fd8d9f485d1bb14f9bbdd2dfb8421bc5544583f014088fb941a1d21e
     folder: thirdparty/onnx/onnx
 
 build:
-  number: 4
+  number: 5
 
 requirements:
   build:
@@ -385,7 +399,20 @@ outputs:
     version: {{ version }}
     script: install/install_npu.sh
     about:
-      summary: OpenVINO Intel® NPU plugin
+      summary: OpenVINO Intel® NPU plugin (driver compiler bundled)
+      description: |
+        OpenVINO plugin that schedules inference on the Intel NPU
+        (libopenvino_intel_npu_plugin.so), plus the MLIR-based driver
+        compiler (libopenvino_intel_npu_compiler.so, renamed from
+        libnpu_driver_compiler.so) the plugin uses to lower OpenVINO
+        IR to NPU blobs. The compiler is Intel's prebuilt vcl 7.6.0
+        (the same artifact OpenVINO upstream auto-downloads on
+        Ubuntu 22.04/24.04 builds) — installing it from a conda
+        environment requires glibc >= 2.34 at runtime.
+
+        The userspace Level Zero driver (libze_intel_npu.so,
+        packaged as intel-level-zero-npu) is required at runtime to
+        actually enumerate NPU hardware.
       license: Apache-2.0
       license_file:
         - LICENSE
@@ -408,9 +435,19 @@ outputs:
         - level-zero >=1.28.4
       run:
         - {{ pin_subpackage('libopenvino', exact=True) }}
+        # Intel's prebuilt vcl is built on Ubuntu 22.04 and links
+        # against glibc 2.34+ symbols (readelf -V on
+        # libopenvino_intel_npu_compiler.so shows GLIBC_2.34).
+        - __glibc >=2.34
+        # libze_loader.so.1 (RPATH=$ORIGIN) dlopens libze_intel_npu.so.1
+        # from $CONDA_PREFIX/lib at runtime to actually reach NPU
+        # hardware.  intel-level-zero-npu is only built on linux-64
+        # (matching this output's skip selector).
+        - intel-level-zero-npu
     test:
       commands:
         - test -f $PREFIX/lib/openvino-{{ version_postfix }}/libopenvino_intel_npu_plugin.so              # [linux64]
+        - test -f $PREFIX/lib/openvino-{{ version_postfix }}/libopenvino_intel_npu_compiler.so            # [linux64]
         - if not exist %LIBRARY_BIN%\openvino-{{ version_postfix }}\openvino_intel_npu_plugin.dll exit 1  # [win]
 
   - name: libopenvino-auto-plugin
