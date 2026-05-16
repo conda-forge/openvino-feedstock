@@ -42,6 +42,9 @@ source:
   - url: https://github.com/openvinotoolkit/npu_compiler/archive/97d6545ee65327641e38707ad1f30479520d812c.tar.gz  # [linux64]
     sha256: e8801f45449c731d3b3fe38f264652c5824d3e48ebadeaddc37c53292c1f0ee4  # [linux64]
     folder: src/plugins/intel_npu/npu_compiler  # [linux64]
+    patches:                                                                  # [linux64]
+      - patches/0004-npu_compiler-undef-glibc-major-minor-macros.patch         # [linux64]
+      - patches/0005-npu_compiler-dedup-Platform-constants-with-openvino.patch  # [linux64]
   # npu_compiler thirdparty/llvm-project submodule: Intel's LLVM/MLIR
   # 20.x fork (intel-staging/npu-compiler-llvm, branch npu/release/20.x).
   # Built in-tree and statically linked into the compiler .so.
@@ -56,6 +59,22 @@ source:
   - url: https://github.com/intel/npu-nn-cost-model/archive/33ef9a69b4e694ad5bfc521af829a9cc9ce19b4c.tar.gz  # [linux64]
     sha256: cb4a0cce989763401a910ec6020b799ef56a9adec87df70bfec001678477a1b8  # [linux64]
     folder: src/plugins/intel_npu/npu_compiler/thirdparty/vpucostmodel  # [linux64]
+  # OpenVINO's own thirdparty/flatbuffers and thirdparty/gtest git
+  # submodules.  The feedstock's main (shared) build uses system
+  # copies, but the static NPU compiler extra-module sub-build
+  # (build.sh) builds flatbuffers in-tree -- npu_compiler's
+  # thirdparty/flatbuffers.cmake reuses OpenVINO's in-tree `flatbuffers`
+  # / `flatc` CMake targets, which only exist when
+  # ENABLE_SYSTEM_FLATBUFFERS=OFF.  gtest is pulled by OpenVINO's
+  # dependencies.cmake; vendor it so configure succeeds (it is
+  # EXCLUDE_FROM_ALL and never actually compiled).  Submodule commits
+  # read from `git ls-tree 2026.1.0 thirdparty/{flatbuffers,gtest}`.
+  - url: https://github.com/google/flatbuffers/archive/595bf0007ab1929570c7671f091313c8fc20644e.tar.gz  # [linux64]
+    sha256: 987300083ec1f1b095d5596ef8fb657ba46c45d786bc866a5e9029d7590a5e48  # [linux64]
+    folder: thirdparty/flatbuffers/flatbuffers  # [linux64]
+  - url: https://github.com/openvinotoolkit/googletest/archive/99760ac1776430f3df65947992bf4e8ebc0d7660.tar.gz  # [linux64]
+    sha256: a2be20c53eade3fcea3f4258321c68cfb32af4835d97110c6aecbf67b10afe62  # [linux64]
+    folder: thirdparty/gtest/gtest  # [linux64]
   - url: https://github.com/onnx/onnx/archive/refs/tags/v1.18.0.tar.gz
     sha256: b466af96fd8d9f485d1bb14f9bbdd2dfb8421bc5544583f014088fb941a1d21e
     folder: thirdparty/onnx/onnx
