@@ -81,12 +81,15 @@ if [[ "${target_platform}" == "linux-64" ]]; then
         -DENABLE_OV_PYTORCH_FRONTEND=OFF                                     \
         -DENABLE_OV_PADDLE_FRONTEND=OFF                                      \
         -DENABLE_OV_TF_FRONTEND=OFF                                          \
-        -DENABLE_OV_TF_LITE_FRONTEND=OFF                                     \
         -DENABLE_OV_JAX_FRONTEND=OFF                                         \
         -DTHREADING=TBB                                                      \
         -DENABLE_SYSTEM_TBB=ON                                               \
         -DENABLE_TBBBIND_2_5=OFF                                             \
         -DENABLE_SYSTEM_PUGIXML=ON                                           \
+        -DENABLE_SYSTEM_PROTOBUF=ON                                          \
+        -DENABLE_SYSTEM_SNAPPY=ON                                            \
+        -DENABLE_SYSTEM_LEVEL_ZERO=ON                                        \
+        -DENABLE_SYSTEM_FLATBUFFERS=OFF                                      \
         -DENABLE_HETERO=OFF                                                  \
         -DENABLE_MULTI=OFF                                                   \
         -DENABLE_AUTO=OFF                                                    \
