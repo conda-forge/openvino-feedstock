@@ -45,6 +45,8 @@ source:
     patches:                                                                  # [linux64]
       - patches/0004-npu_compiler-undef-glibc-major-minor-macros.patch         # [linux64]
       - patches/0005-npu_compiler-dedup-Platform-constants-with-openvino.patch  # [linux64]
+      - patches/0006-npu_compiler-drop-OptionMode-arg-from-Config-update.patch  # [linux64]
+      - patches/0007-npu_compiler-fallback-commit-hash-for-archive-source.patch  # [linux64]
   # npu_compiler thirdparty/llvm-project submodule: Intel's LLVM/MLIR
   # 20.x fork (intel-staging/npu-compiler-llvm, branch npu/release/20.x).
   # Built in-tree and statically linked into the compiler .so.
