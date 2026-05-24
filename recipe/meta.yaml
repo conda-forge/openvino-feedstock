@@ -478,6 +478,8 @@ outputs:
         - tbb-devel
         - level-zero-devel
         - level-zero >=1.28.4
+        # the NPU compiler's in-tree LLVM links libz; run-export adds libzlib
+        - zlib
       run:
         - {{ pin_subpackage('libopenvino', exact=True) }}
         # libze_loader.so.1 (RPATH=$ORIGIN) dlopens libze_intel_npu.so.1
