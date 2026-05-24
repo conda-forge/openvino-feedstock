@@ -1,0 +1,40 @@
+c_compiler:
+- vs2022
+c_stdlib:
+- vs
+channel_sources:
+- conda-forge
+channel_targets:
+- conda-forge main
+cxx_compiler:
+- vs2022
+flatbuffers:
+- 25.9.23
+github_actions_labels:
+- self-hosted@cirun-azure-windows-2xlarge
+libabseil:
+- '20260107'
+libprotobuf:
+- 6.33.5
+pin_run_as_build:
+  python:
+    min_pin: x.x
+    max_pin: x.x
+pugixml:
+- '1.15'
+python:
+- 3.10.* *_cpython
+- 3.11.* *_cpython
+- 3.12.* *_cpython
+- 3.13.* *_cp313
+- 3.14.* *_cp314
+snappy:
+- '1.2'
+target_platform:
+- win-64
+tbb:
+- '2022'
+tbb_devel:
+- '2022'
+zlib:
+- '1'
