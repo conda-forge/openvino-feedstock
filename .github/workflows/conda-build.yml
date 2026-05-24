@@ -38,7 +38,7 @@ jobs:
             STORE_BUILD_ARTIFACTS: False
             UPLOAD_PACKAGES: True
             os: windows
-            runs_on: ['cirun-azure-windows-2xlarge--${{ github.run_id }}-win_64_', 'windows', 'x64', 'self-hosted']
+            runs_on: ['namespace-profile-16cpu-on-win-64']
     steps:
 
     - name: Checkout code
