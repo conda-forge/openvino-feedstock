@@ -45,6 +45,7 @@ cmake ${CMAKE_ARGS}                                                          \
     -DENABLE_NCC_STYLE=OFF                                                   \
     -DENABLE_TEMPLATE=OFF                                                    \
     -DENABLE_SAMPLES=OFF                                                     \
+    -DENABLE_TESTS=OFF                                                       \
     -DCPACK_GENERATOR=CONDA-FORGE                                            \
     -DCMAKE_POLICY_VERSION_MINIMUM=3.5                                       \
     -DProtobuf_USE_STATIC_LIBS=OFF                                           \

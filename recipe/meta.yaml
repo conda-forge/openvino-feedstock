@@ -47,6 +47,7 @@ source:
       - patches/0005-npu_compiler-dedup-Platform-constants-with-openvino.patch  # [linux64]
       - patches/0006-npu_compiler-drop-OptionMode-arg-from-Config-update.patch  # [linux64]
       - patches/0007-npu_compiler-fallback-commit-hash-for-archive-source.patch  # [linux64]
+      - patches/0008-npu_compiler-gate-vpux-driver-compiler-tests.patch  # [linux64]
   # npu_compiler thirdparty/llvm-project submodule: Intel's LLVM/MLIR
   # 20.x fork (intel-staging/npu-compiler-llvm, branch npu/release/20.x).
   # Built in-tree and statically linked into the compiler .so.
@@ -61,22 +62,18 @@ source:
   - url: https://github.com/intel/npu-nn-cost-model/archive/33ef9a69b4e694ad5bfc521af829a9cc9ce19b4c.tar.gz  # [linux64]
     sha256: cb4a0cce989763401a910ec6020b799ef56a9adec87df70bfec001678477a1b8  # [linux64]
     folder: src/plugins/intel_npu/npu_compiler/thirdparty/vpucostmodel  # [linux64]
-  # OpenVINO's own thirdparty/flatbuffers and thirdparty/gtest git
-  # submodules.  The feedstock's main (shared) build uses system
-  # copies, but the static NPU compiler extra-module sub-build
-  # (build.sh) builds flatbuffers in-tree -- npu_compiler's
-  # thirdparty/flatbuffers.cmake reuses OpenVINO's in-tree `flatbuffers`
-  # / `flatc` CMake targets, which only exist when
-  # ENABLE_SYSTEM_FLATBUFFERS=OFF.  gtest is pulled by OpenVINO's
-  # dependencies.cmake; vendor it so configure succeeds (it is
-  # EXCLUDE_FROM_ALL and never actually compiled).  Submodule commits
-  # read from `git ls-tree 2026.1.0 thirdparty/{flatbuffers,gtest}`.
+  # OpenVINO's own thirdparty/flatbuffers git submodule.  The from-source
+  # NPU compiler is built as an extra module of this single SHARED OpenVINO
+  # tree.  npu_compiler's thirdparty/flatbuffers.cmake reuses OpenVINO's
+  # in-tree `flatbuffers` / `flatc` CMake targets (the plain, un-namespaced
+  # names), which only exist when OpenVINO builds flatbuffers in-tree.
+  # The conda-forge flatbuffers package is 25.9.23 while OpenVINO pins
+  # 24.3.25 here; the generated-schema (flatc) / library pair must match,
+  # so flatbuffers is kept in-tree rather than using the system package.
+  # Commit read from `git ls-tree 2026.1.0 thirdparty/flatbuffers`.
   - url: https://github.com/google/flatbuffers/archive/595bf0007ab1929570c7671f091313c8fc20644e.tar.gz  # [linux64]
     sha256: 987300083ec1f1b095d5596ef8fb657ba46c45d786bc866a5e9029d7590a5e48  # [linux64]
     folder: thirdparty/flatbuffers/flatbuffers  # [linux64]
-  - url: https://github.com/openvinotoolkit/googletest/archive/99760ac1776430f3df65947992bf4e8ebc0d7660.tar.gz  # [linux64]
-    sha256: a2be20c53eade3fcea3f4258321c68cfb32af4835d97110c6aecbf67b10afe62  # [linux64]
-    folder: thirdparty/gtest/gtest  # [linux64]
   - url: https://github.com/onnx/onnx/archive/refs/tags/v1.18.0.tar.gz
     sha256: b466af96fd8d9f485d1bb14f9bbdd2dfb8421bc5544583f014088fb941a1d21e
     folder: thirdparty/onnx/onnx
@@ -96,8 +93,7 @@ requirements:
     # only one python version during initial build
     - python  3.12
     - ccache
-    # lld is used as the linker for the from-source NPU compiler
-    # sub-build (linking the in-tree LLVM/MLIR fork).
+    # lld links the from-source NPU compiler's in-tree LLVM/MLIR fork.
     - lld  # [linux64]
     - libprotobuf
     - flatbuffers
@@ -467,7 +463,7 @@ outputs:
         - {{ compiler('c') }}
         - {{ stdlib("c") }}
         - cmake
-        # needed for the from-source NPU compiler extra-module sub-build
+        # needed for the from-source NPU compiler extra-module build
         - ninja
         - ccache
         - lld
@@ -477,6 +473,10 @@ outputs:
         - pugixml
         - tbb-devel
         - level-zero-devel
+        # Pulls the level-zero (loader) run-export.  The plugin dlopens
+        # libze_loader.so.1 rather than DT_NEEDED-linking it, so conda-build
+        # emits an "overdepending" warning for level-zero -- that warning is
+        # expected; the loader is a genuine runtime dependency (see run:).
         - level-zero >=1.28.4
         # the NPU compiler's in-tree LLVM links libz; run-export adds libzlib
         - zlib
