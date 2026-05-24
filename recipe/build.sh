@@ -25,6 +25,9 @@ if [[ "${target_platform}" == "linux-64" ]]; then
     )
 fi
 
+# ENABLE_INTEL_NPU_COMPILER below toggles *downloading* Intel's prebuilt NPU
+# compiler (download_compiler_libs.cmake), not building one -- keep it OFF; we
+# build the compiler from source via OPENVINO_EXTRA_MODULES.
 cmake ${CMAKE_ARGS}                                                          \
     -DENABLE_SYSTEM_TBB=ON                                                   \
     -DENABLE_PROFILING_ITT=OFF                                               \
