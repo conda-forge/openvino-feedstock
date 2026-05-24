@@ -11,6 +11,6 @@ cmake --install "$SRC_DIR/build" --component npu
 # in the versioned openvino-<version> plugin directory.  Existence of
 # both libraries under $PREFIX is verified by this output's test:
 # commands in meta.yaml, so there are no in-script existence assertions.
-NPU_COMPILER_SO=$(find "$SRC_DIR/build_npucompiler" -name 'libopenvino_intel_npu_compiler.so' -type f | head -n 1)
+NPU_COMPILER_SO=$(find "$SRC_DIR/build" -name 'libopenvino_intel_npu_compiler.so' -type f | head -n 1)
 PLUGIN_DIR=$(dirname "$(find "$PREFIX/lib" -name 'libopenvino_intel_npu_plugin.so' -type f | head -n 1)")
 install -m 0755 "${NPU_COMPILER_SO}" "${PLUGIN_DIR}/libopenvino_intel_npu_compiler.so"
