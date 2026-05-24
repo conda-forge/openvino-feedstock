@@ -18,3 +18,7 @@ github_actions:
 provider:
   win_64: github_actions
 test: native_and_emulated
+workflow_settings:
+  # Upload built packages + logs as a downloadable CI artifact (applies to
+  # all providers, incl. the Azure linux-64 build that ships the NPU plugin).
+  store_build_artifacts: true
