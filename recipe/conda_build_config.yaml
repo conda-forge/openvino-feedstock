@@ -1,2 +1,2 @@
 github_actions_labels:                      # [win]
-- self-hosted@cirun-azure-windows-2xlarge   # [win]
+- namespace-profile-16cpu-on-win-64         # [win]

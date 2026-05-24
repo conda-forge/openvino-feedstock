@@ -30,12 +30,56 @@ source:
   - url: https://github.com/intel/level-zero-npu-extensions/archive/42768cc73e74f6d371bd9dd51b1860b07774e7ec.tar.gz  # [linux64]
     sha256: 340b6c6757febfc55e5e707e2b5ab9d2cd0a526e82d921ee192c9ef5675bfe40  # [linux64]
     folder: src/plugins/intel_npu/thirdparty/level-zero-ext  # [linux64]
+  # NPU driver compiler (the MLIR-based VPUX compiler) built from
+  # source instead of bundling Intel's prebuilt vcl tarball (#162).
+  # It is built as an OpenVINO extra module (see build.sh) and yields
+  # libopenvino_intel_npu_compiler.so.  npu_compiler is vendored at
+  # tag npu_ud_2026_12_1_rc1 together with its three submodules at the
+  # exact commits recorded by that tag's git tree.  Plain GitHub
+  # archive tarballs are used: verified that neither npu_compiler nor
+  # npu-nn-cost-model store build-time blobs in git-lfs at these
+  # commits, so the tarballs carry real content (no lfs smudge step).
+  - url: https://github.com/openvinotoolkit/npu_compiler/archive/97d6545ee65327641e38707ad1f30479520d812c.tar.gz  # [linux64]
+    sha256: e8801f45449c731d3b3fe38f264652c5824d3e48ebadeaddc37c53292c1f0ee4  # [linux64]
+    folder: src/plugins/intel_npu/npu_compiler  # [linux64]
+    patches:                                                                  # [linux64]
+      - patches/0004-npu_compiler-undef-glibc-major-minor-macros.patch         # [linux64]
+      - patches/0005-npu_compiler-dedup-Platform-constants-with-openvino.patch  # [linux64]
+      - patches/0006-npu_compiler-drop-OptionMode-arg-from-Config-update.patch  # [linux64]
+      - patches/0007-npu_compiler-fallback-commit-hash-for-archive-source.patch  # [linux64]
+      - patches/0008-npu_compiler-gate-vpux-driver-compiler-tests.patch  # [linux64]
+  # npu_compiler thirdparty/llvm-project submodule: Intel's LLVM/MLIR
+  # 20.x fork (intel-staging/npu-compiler-llvm, branch npu/release/20.x).
+  # Built in-tree and statically linked into the compiler .so.
+  - url: https://github.com/intel-staging/npu-compiler-llvm/archive/cf3934f4e8ada928544a743481e037935a21e857.tar.gz  # [linux64]
+    sha256: 0c4c304c51ed9b1de4e92733201597ea22d53516ca4044cacd5d063699debb28  # [linux64]
+    folder: src/plugins/intel_npu/npu_compiler/thirdparty/llvm-project  # [linux64]
+  # npu_compiler thirdparty/elf submodule (npu_plugin_elf).
+  - url: https://github.com/openvinotoolkit/npu_plugin_elf/archive/82c444bcb9feb0f55fa33e18fbd711ec35426fba.tar.gz  # [linux64]
+    sha256: 75ca714b84b5426ed2261e3ec798111f6dafde8d38f01351be0210021b689257  # [linux64]
+    folder: src/plugins/intel_npu/npu_compiler/thirdparty/elf  # [linux64]
+  # npu_compiler thirdparty/vpucostmodel submodule (npu-nn-cost-model).
+  - url: https://github.com/intel/npu-nn-cost-model/archive/33ef9a69b4e694ad5bfc521af829a9cc9ce19b4c.tar.gz  # [linux64]
+    sha256: cb4a0cce989763401a910ec6020b799ef56a9adec87df70bfec001678477a1b8  # [linux64]
+    folder: src/plugins/intel_npu/npu_compiler/thirdparty/vpucostmodel  # [linux64]
+  # OpenVINO's own thirdparty/flatbuffers git submodule.  The from-source
+  # NPU compiler is built as an extra module of this single SHARED OpenVINO
+  # tree.  npu_compiler's thirdparty/flatbuffers.cmake reuses OpenVINO's
+  # in-tree `flatbuffers` / `flatc` CMake targets (the plain, un-namespaced
+  # names), which only exist when OpenVINO builds flatbuffers in-tree.
+  # The conda-forge flatbuffers package is 25.9.23 while OpenVINO pins
+  # 24.3.25 here; the generated-schema (flatc) / library pair must match,
+  # so flatbuffers is kept in-tree rather than using the system package.
+  # Commit read from `git ls-tree 2026.1.0 thirdparty/flatbuffers`.
+  - url: https://github.com/google/flatbuffers/archive/595bf0007ab1929570c7671f091313c8fc20644e.tar.gz  # [linux64]
+    sha256: 987300083ec1f1b095d5596ef8fb657ba46c45d786bc866a5e9029d7590a5e48  # [linux64]
+    folder: thirdparty/flatbuffers/flatbuffers  # [linux64]
   - url: https://github.com/onnx/onnx/archive/refs/tags/v1.18.0.tar.gz
     sha256: b466af96fd8d9f485d1bb14f9bbdd2dfb8421bc5544583f014088fb941a1d21e
     folder: thirdparty/onnx/onnx
 
 build:
-  number: 4
+  number: 5
 
 requirements:
   build:
@@ -49,6 +93,8 @@ requirements:
     # only one python version during initial build
     - python  3.12
     - ccache
+    # lld links the from-source NPU compiler's in-tree LLVM/MLIR fork.
+    - lld  # [linux64]
     - libprotobuf
     - flatbuffers
   host:
@@ -385,13 +431,30 @@ outputs:
     version: {{ version }}
     script: install/install_npu.sh
     about:
-      summary: OpenVINO Intel® NPU plugin
-      license: Apache-2.0
+      summary: OpenVINO Intel® NPU plugin (driver compiler bundled)
+      description: |
+        OpenVINO plugin that schedules inference on the Intel NPU
+        (libopenvino_intel_npu_plugin.so), plus the MLIR-based driver
+        compiler (libopenvino_intel_npu_compiler.so) the plugin uses
+        to lower OpenVINO IR to NPU blobs. The compiler is built from
+        source from openvinotoolkit/npu_compiler (tag
+        npu_ud_2026_12_1_rc1) as an OpenVINO extra module; its Intel
+        LLVM/MLIR 20.x fork is compiled in-tree and statically linked
+        into the library. Because it is built against the conda-forge
+        sysroot it carries no glibc 2.34 floor.
+
+        The userspace Level Zero driver (libze_intel_npu.so,
+        packaged as intel-level-zero-npu) is required at runtime to
+        actually enumerate NPU hardware.
+      license: Apache-2.0 AND Apache-2.0-with-LLVM-exception
       license_file:
         - LICENSE
         - licensing/third-party-programs.txt
         - licensing/onednn_third-party-programs.txt
         - licensing/runtime-third-party-programs.txt
+        # NPU compiler built from source (see source: + build.sh)
+        - src/plugins/intel_npu/npu_compiler/LICENSE                          # [linux64]
+        - src/plugins/intel_npu/npu_compiler/thirdparty/llvm-project/llvm/LICENSE.TXT  # [linux64]
     build:
       skip: true  # [not linux64]
     requirements:
@@ -400,17 +463,34 @@ outputs:
         - {{ compiler('c') }}
         - {{ stdlib("c") }}
         - cmake
+        # needed for the from-source NPU compiler extra-module build
+        - ninja
+        - ccache
+        - lld
+        - python  3.12
       host:
         - {{ pin_subpackage('libopenvino', exact=True) }}
         - pugixml
         - tbb-devel
         - level-zero-devel
+        # Pulls the level-zero (loader) run-export.  The plugin dlopens
+        # libze_loader.so.1 rather than DT_NEEDED-linking it, so conda-build
+        # emits an "overdepending" warning for level-zero -- that warning is
+        # expected; the loader is a genuine runtime dependency (see run:).
         - level-zero >=1.28.4
+        # the NPU compiler's in-tree LLVM links libz; run-export adds libzlib
+        - zlib
       run:
         - {{ pin_subpackage('libopenvino', exact=True) }}
+        # libze_loader.so.1 (RPATH=$ORIGIN) dlopens libze_intel_npu.so.1
+        # from $CONDA_PREFIX/lib at runtime to actually reach NPU
+        # hardware.  intel-level-zero-npu is only built on linux-64
+        # (matching this output's skip selector).
+        - intel-level-zero-npu
     test:
       commands:
         - test -f $PREFIX/lib/openvino-{{ version_postfix }}/libopenvino_intel_npu_plugin.so              # [linux64]
+        - test -f $PREFIX/lib/openvino-{{ version_postfix }}/libopenvino_intel_npu_compiler.so            # [linux64]
         - if not exist %LIBRARY_BIN%\openvino-{{ version_postfix }}\openvino_intel_npu_plugin.dll exit 1  # [win]
 
   - name: libopenvino-auto-plugin
