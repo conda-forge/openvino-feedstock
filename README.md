@@ -93,18 +93,19 @@ About libopenvino-intel-npu-plugin
 
 
 
-Package license: Apache-2.0
+Package license: Apache-2.0 AND Apache-2.0-with-LLVM-exception
 
 Summary: OpenVINO Intel® NPU plugin (driver compiler bundled)
 
 OpenVINO plugin that schedules inference on the Intel NPU
 (libopenvino_intel_npu_plugin.so), plus the MLIR-based driver
-compiler (libopenvino_intel_npu_compiler.so, renamed from
-libnpu_driver_compiler.so) the plugin uses to lower OpenVINO
-IR to NPU blobs. The compiler is Intel's prebuilt vcl 7.6.0
-(the same artifact OpenVINO upstream auto-downloads on
-Ubuntu 22.04/24.04 builds) — installing it from a conda
-environment requires glibc >= 2.34 at runtime.
+compiler (libopenvino_intel_npu_compiler.so) the plugin uses
+to lower OpenVINO IR to NPU blobs. The compiler is built from
+source from openvinotoolkit/npu_compiler (tag
+npu_ud_2026_12_1_rc1) as an OpenVINO extra module; its Intel
+LLVM/MLIR 20.x fork is compiled in-tree and statically linked
+into the library. Because it is built against the conda-forge
+sysroot it carries no glibc 2.34 floor.
 
 The userspace Level Zero driver (libze_intel_npu.so,
 packaged as intel-level-zero-npu) is required at runtime to
