@@ -35,7 +35,7 @@ source:
     folder: thirdparty/onnx/onnx
 
 build:
-  number: 4
+  number: 5
 
 requirements:
   build:
@@ -412,6 +412,50 @@ outputs:
       commands:
         - test -f $PREFIX/lib/openvino-{{ version_postfix }}/libopenvino_intel_npu_plugin.so              # [linux64]
         - if not exist %LIBRARY_BIN%\openvino-{{ version_postfix }}\openvino_intel_npu_plugin.dll exit 1  # [win]
+
+  # Shared support library for the Intel NPU driver compiler. Re-exposes the
+  # OpenVINO-internal npu_al/npu_ops/xml_util symbols (with their internal deps
+  # statically absorbed and hidden via --exclude-libs,ALL) as ONE shared lib, so
+  # intel-driver-compiler-npu can link them without a full OpenVINO rebuild and
+  # without shipping any static library. Built as an OPENVINO_EXTRA_MODULES (see
+  # build.sh + recipe/npu_compiler_support/). linux64 only.
+  - name: libopenvino-npu-compiler-support
+    version: {{ version }}
+    build:
+      skip: true  # [not linux64]
+      run_exports:
+        - {{ pin_subpackage('libopenvino-npu-compiler-support', max_pin='x.x.x') }}
+    script: install/install_npu_compiler_support.sh
+    about:
+      summary: OpenVINO Intel® NPU driver-compiler support shared library
+      license: Apache-2.0
+      license_file:
+        - LICENSE
+        - licensing/third-party-programs.txt
+        - licensing/onednn_third-party-programs.txt
+        - licensing/runtime-third-party-programs.txt
+    requirements:
+      build:
+        - {{ compiler('cxx') }}
+        - {{ compiler('c') }}
+        - {{ stdlib("c") }}
+        - cmake
+      host:
+        - {{ pin_subpackage('libopenvino', exact=True) }}
+        - pugixml
+        - tbb-devel
+      run:
+        - {{ pin_subpackage('libopenvino', exact=True) }}
+    test:
+      requires:
+        - binutils  # [linux64]
+      commands:
+        - test -f $PREFIX/lib/libopenvino_npu_compiler_support.so                                            # [linux64]
+        - test -f $PREFIX/lib/cmake/OpenVINONPUCompilerSupport/OpenVINONPUCompilerSupportConfig.cmake        # [linux64]
+        # exports the NPU symbols the driver compiler links ...
+        - test -n "$(nm -D -C $PREFIX/lib/libopenvino_npu_compiler_support.so | grep ' T ' | grep intel_npu)"        # [linux64]
+        # ... and keeps the absorbed internal reference impls hidden (no static lib leaked)
+        - test -z "$(nm -D -C $PREFIX/lib/libopenvino_npu_compiler_support.so | grep ' T ' | grep 'ov::reference')"  # [linux64]
 
   - name: libopenvino-auto-plugin
     version: {{ version }}
