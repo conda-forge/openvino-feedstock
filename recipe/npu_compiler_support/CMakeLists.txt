@@ -72,6 +72,20 @@ install(DIRECTORY
         COMPONENT npu_compiler_support
         FILES_MATCHING PATTERN "*.h" PATTERN "*.hpp")
 
+# The NPU public headers above transitively #include OpenVINO Developer-API
+# headers (e.g. openvino/runtime/aligned_buffer.hpp) that the conda-forge
+# libopenvino-dev consumer package does NOT ship. The NPU driver compiler needs
+# them at build time, so bundle the dev_api header trees here (headers only --
+# no static libs). Verified: with these on the include path the npu_al/npu_ops/
+# xml_util headers compile against conda-forge libopenvino-dev.
+install(DIRECTORY
+            ${OpenVINO_SOURCE_DIR}/src/core/dev_api/
+            ${OpenVINO_SOURCE_DIR}/src/inference/dev_api/
+            ${OpenVINO_SOURCE_DIR}/src/frontends/common/dev_api/
+        DESTINATION ${_inc}
+        COMPONENT npu_compiler_support
+        FILES_MATCHING PATTERN "*.h" PATTERN "*.hpp")
+
 install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/OpenVINONPUCompilerSupportConfig.cmake
         DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/OpenVINONPUCompilerSupport
         COMPONENT npu_compiler_support)
