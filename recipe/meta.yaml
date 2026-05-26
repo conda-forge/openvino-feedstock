@@ -35,7 +35,7 @@ source:
     folder: thirdparty/onnx/onnx
 
 build:
-  number: 6
+  number: 7
 
 requirements:
   build:
@@ -454,6 +454,10 @@ outputs:
         - test -f $PREFIX/lib/cmake/OpenVINONPUCompilerSupport/OpenVINONPUCompilerSupportConfig.cmake        # [linux64]
         # exports the NPU symbols the driver compiler links ...
         - test -n "$(nm -D -C $PREFIX/lib/libopenvino_npu_compiler_support.so | grep ' T ' | grep intel_npu)"        # [linux64]
+        # ... including the ov::util::pugixml::get_*_attr XML helpers the driver
+        # compiler's deserializers need (defined in common/util/xml_parse_utils.cpp)
+        - test -n "$(nm -D -C $PREFIX/lib/libopenvino_npu_compiler_support.so | grep ' T ' | grep 'pugixml::get_uint64_attr')"  # [linux64]
+        - test -n "$(nm -D -C $PREFIX/lib/libopenvino_npu_compiler_support.so | grep ' T ' | grep 'pugixml::get_str_attr')"     # [linux64]
         # ... and keeps the absorbed internal reference impls hidden (no static lib leaked)
         - test -z "$(nm -D -C $PREFIX/lib/libopenvino_npu_compiler_support.so | grep ' T ' | grep 'ov::reference')"  # [linux64]
 
