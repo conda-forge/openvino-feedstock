@@ -26,7 +26,14 @@ file(GLOB_RECURSE OPS_SRC CONFIGURE_DEPENDS ${_npu}/src/ops/src/*.cpp)
 file(GLOB_RECURSE LOG_SRC CONFIGURE_DEPENDS ${_npu}/src/utils/src/logger/*.cpp)
 file(GLOB_RECURSE XML_SRC CONFIGURE_DEPENDS ${OpenVINO_SOURCE_DIR}/src/core/xml_util/src/*.cpp)
 
-add_library(${SUPPORT_TARGET} SHARED ${AL_SRC} ${OPS_SRC} ${LOG_SRC} ${XML_SRC})
+# xml_deserialize_util.cpp (in xml_util above) and the NPU driver compiler's
+# vcl_deserializer.cpp / xml_deserializer.cpp call ov::util::pugixml::get_*_attr,
+# which are defined in src/common/util/src/xml_parse_utils.cpp (the openvino_util
+# component, compiled with hidden visibility inside libopenvino.so). Recompile it
+# here with default visibility so those symbols are exported by this support lib.
+set(UTIL_XML_SRC ${OpenVINO_SOURCE_DIR}/src/common/util/src/xml_parse_utils.cpp)
+
+add_library(${SUPPORT_TARGET} SHARED ${AL_SRC} ${OPS_SRC} ${LOG_SRC} ${XML_SRC} ${UTIL_XML_SRC})
 
 set_target_properties(${SUPPORT_TARGET} PROPERTIES
     CXX_VISIBILITY_PRESET default
@@ -38,7 +45,8 @@ target_include_directories(${SUPPORT_TARGET} PRIVATE
     $<TARGET_PROPERTY:openvino::npu_al,INTERFACE_INCLUDE_DIRECTORIES>
     $<TARGET_PROPERTY:openvino::npu_ops,INTERFACE_INCLUDE_DIRECTORIES>
     $<TARGET_PROPERTY:openvino::xml_util,INTERFACE_INCLUDE_DIRECTORIES>
-    $<TARGET_PROPERTY:openvino::npu_logger_utils,INTERFACE_INCLUDE_DIRECTORIES>)
+    $<TARGET_PROPERTY:openvino::npu_logger_utils,INTERFACE_INCLUDE_DIRECTORIES>
+    ${OpenVINO_SOURCE_DIR}/src/common/util/include)
 
 target_link_libraries(${SUPPORT_TARGET} PRIVATE
     openvino::runtime
@@ -68,6 +76,7 @@ install(DIRECTORY
             ${_npu}/src/ops/include/
             ${_npu}/src/utils/include/
             ${OpenVINO_SOURCE_DIR}/src/core/xml_util/include/
+            ${OpenVINO_SOURCE_DIR}/src/common/util/include/
         DESTINATION ${_inc}
         COMPONENT npu_compiler_support
         FILES_MATCHING PATTERN "*.h" PATTERN "*.hpp")
@@ -83,6 +92,28 @@ install(DIRECTORY
             ${OpenVINO_SOURCE_DIR}/src/inference/dev_api/
             ${OpenVINO_SOURCE_DIR}/src/frontends/common/dev_api/
         DESTINATION ${_inc}
+        COMPONENT npu_compiler_support
+        FILES_MATCHING PATTERN "*.h" PATTERN "*.hpp")
+
+# openvino/itt.hpp + openvino/function_name.hpp: the NPU compiler sources
+# (#include "openvino/itt.hpp") and the conditional_compilation headers need
+# these; conda-forge libopenvino-dev does not ship them. Headers only.
+install(DIRECTORY
+            ${OpenVINO_SOURCE_DIR}/src/common/itt/include/
+        DESTINATION ${_inc}
+        COMPONENT npu_compiler_support
+        FILES_MATCHING PATTERN "*.h" PATTERN "*.hpp")
+
+# transformations public headers: the driver compiler's ELF metadata + IE
+# frontend transitively #include <transformations/utils/utils.hpp> and other
+# transformations/ headers. The vpux_compiler_l0 CMake adds
+# ${OPENVINO_SOURCE_DIR}/common/transformations/include to its include path, so
+# ship the tree under a transformations_compat/ root the consumer points
+# OPENVINO_SOURCE_DIR at. Headers only -- the transformations lib itself is in
+# the conda-forge libopenvino runtime.
+install(DIRECTORY
+            ${OpenVINO_SOURCE_DIR}/src/common/transformations/include/
+        DESTINATION ${_inc}/transformations_compat/common/transformations/include
         COMPONENT npu_compiler_support
         FILES_MATCHING PATTERN "*.h" PATTERN "*.hpp")
 
