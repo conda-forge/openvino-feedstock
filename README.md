@@ -178,11 +178,27 @@ Package license: Apache-2.0
 
 Summary: OpenVINO Intel® NPU plugin
 
+About libopenvino-npu-compiler-support
+--------------------------------------
+
+
+
+Package license: Apache-2.0
+
+Summary: OpenVINO Intel® NPU driver-compiler support shared library
+
 Current build status
 ====================
 
 
-<table>
+<table><tr>
+    <td>GitHub Actions</td>
+    <td>
+      <a href="https://github.com/conda-forge/openvino-feedstock/actions/workflows/conda-build.yml">
+        <img src="https://github.com/conda-forge/openvino-feedstock/actions/workflows/conda-build.yml/badge.svg?event=push&branch=main">
+      </a>
+    </td>
+  </tr>
     
   <tr>
     <td>Azure</td>
@@ -196,38 +212,10 @@ Current build status
         <table>
           <thead><tr><th>Variant</th><th>Status</th></tr></thead>
           <tbody><tr>
-              <td>linux_64</td>
-              <td>
-                <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=19204&branchName=main">
-                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/openvino-feedstock?branchName=main&jobName=linux&configuration=linux%20linux_64_" alt="variant">
-                </a>
-              </td>
-            </tr><tr>
-              <td>linux_aarch64</td>
-              <td>
-                <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=19204&branchName=main">
-                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/openvino-feedstock?branchName=main&jobName=linux&configuration=linux%20linux_aarch64_" alt="variant">
-                </a>
-              </td>
-            </tr><tr>
               <td>osx_64</td>
               <td>
                 <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=19204&branchName=main">
                   <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/openvino-feedstock?branchName=main&jobName=osx&configuration=osx%20osx_64_" alt="variant">
-                </a>
-              </td>
-            </tr><tr>
-              <td>osx_arm64</td>
-              <td>
-                <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=19204&branchName=main">
-                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/openvino-feedstock?branchName=main&jobName=osx&configuration=osx%20osx_arm64_" alt="variant">
-                </a>
-              </td>
-            </tr><tr>
-              <td>win_64</td>
-              <td>
-                <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=19204&branchName=main">
-                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/openvino-feedstock?branchName=main&jobName=win&configuration=win%20win_64_" alt="variant">
                 </a>
               </td>
             </tr>
@@ -253,6 +241,7 @@ Current release info
 | [![Conda Recipe](https://img.shields.io/badge/recipe-libopenvino--intel--gpu--plugin-green.svg)](https://anaconda.org/conda-forge/libopenvino-intel-gpu-plugin) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/libopenvino-intel-gpu-plugin.svg)](https://anaconda.org/conda-forge/libopenvino-intel-gpu-plugin) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/libopenvino-intel-gpu-plugin.svg)](https://anaconda.org/conda-forge/libopenvino-intel-gpu-plugin) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/libopenvino-intel-gpu-plugin.svg)](https://anaconda.org/conda-forge/libopenvino-intel-gpu-plugin) |
 | [![Conda Recipe](https://img.shields.io/badge/recipe-libopenvino--intel--npu--plugin-green.svg)](https://anaconda.org/conda-forge/libopenvino-intel-npu-plugin) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/libopenvino-intel-npu-plugin.svg)](https://anaconda.org/conda-forge/libopenvino-intel-npu-plugin) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/libopenvino-intel-npu-plugin.svg)](https://anaconda.org/conda-forge/libopenvino-intel-npu-plugin) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/libopenvino-intel-npu-plugin.svg)](https://anaconda.org/conda-forge/libopenvino-intel-npu-plugin) |
 | [![Conda Recipe](https://img.shields.io/badge/recipe-libopenvino--ir--frontend-green.svg)](https://anaconda.org/conda-forge/libopenvino-ir-frontend) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/libopenvino-ir-frontend.svg)](https://anaconda.org/conda-forge/libopenvino-ir-frontend) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/libopenvino-ir-frontend.svg)](https://anaconda.org/conda-forge/libopenvino-ir-frontend) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/libopenvino-ir-frontend.svg)](https://anaconda.org/conda-forge/libopenvino-ir-frontend) |
+| [![Conda Recipe](https://img.shields.io/badge/recipe-libopenvino--npu--compiler--support-green.svg)](https://anaconda.org/conda-forge/libopenvino-npu-compiler-support) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/libopenvino-npu-compiler-support.svg)](https://anaconda.org/conda-forge/libopenvino-npu-compiler-support) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/libopenvino-npu-compiler-support.svg)](https://anaconda.org/conda-forge/libopenvino-npu-compiler-support) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/libopenvino-npu-compiler-support.svg)](https://anaconda.org/conda-forge/libopenvino-npu-compiler-support) |
 | [![Conda Recipe](https://img.shields.io/badge/recipe-libopenvino--onnx--frontend-green.svg)](https://anaconda.org/conda-forge/libopenvino-onnx-frontend) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/libopenvino-onnx-frontend.svg)](https://anaconda.org/conda-forge/libopenvino-onnx-frontend) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/libopenvino-onnx-frontend.svg)](https://anaconda.org/conda-forge/libopenvino-onnx-frontend) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/libopenvino-onnx-frontend.svg)](https://anaconda.org/conda-forge/libopenvino-onnx-frontend) |
 | [![Conda Recipe](https://img.shields.io/badge/recipe-libopenvino--paddle--frontend-green.svg)](https://anaconda.org/conda-forge/libopenvino-paddle-frontend) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/libopenvino-paddle-frontend.svg)](https://anaconda.org/conda-forge/libopenvino-paddle-frontend) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/libopenvino-paddle-frontend.svg)](https://anaconda.org/conda-forge/libopenvino-paddle-frontend) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/libopenvino-paddle-frontend.svg)](https://anaconda.org/conda-forge/libopenvino-paddle-frontend) |
 | [![Conda Recipe](https://img.shields.io/badge/recipe-libopenvino--python-green.svg)](https://anaconda.org/conda-forge/libopenvino-python) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/libopenvino-python.svg)](https://anaconda.org/conda-forge/libopenvino-python) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/libopenvino-python.svg)](https://anaconda.org/conda-forge/libopenvino-python) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/libopenvino-python.svg)](https://anaconda.org/conda-forge/libopenvino-python) |
@@ -271,16 +260,16 @@ conda config --add channels conda-forge
 conda config --set channel_priority strict
 ```
 
-Once the `conda-forge` channel has been enabled, `libopenvino, libopenvino-arm-cpu-plugin, libopenvino-auto-batch-plugin, libopenvino-auto-plugin, libopenvino-dev, libopenvino-hetero-plugin, libopenvino-intel-cpu-plugin, libopenvino-intel-gpu-plugin, libopenvino-intel-npu-plugin, libopenvino-ir-frontend, libopenvino-onnx-frontend, libopenvino-paddle-frontend, libopenvino-python, libopenvino-pytorch-frontend, libopenvino-tensorflow-frontend, libopenvino-tensorflow-lite-frontend, openvino` can be installed with `conda`:
+Once the `conda-forge` channel has been enabled, `libopenvino, libopenvino-arm-cpu-plugin, libopenvino-auto-batch-plugin, libopenvino-auto-plugin, libopenvino-dev, libopenvino-hetero-plugin, libopenvino-intel-cpu-plugin, libopenvino-intel-gpu-plugin, libopenvino-intel-npu-plugin, libopenvino-ir-frontend, libopenvino-npu-compiler-support, libopenvino-onnx-frontend, libopenvino-paddle-frontend, libopenvino-python, libopenvino-pytorch-frontend, libopenvino-tensorflow-frontend, libopenvino-tensorflow-lite-frontend, openvino` can be installed with `conda`:
 
 ```
-conda install libopenvino libopenvino-arm-cpu-plugin libopenvino-auto-batch-plugin libopenvino-auto-plugin libopenvino-dev libopenvino-hetero-plugin libopenvino-intel-cpu-plugin libopenvino-intel-gpu-plugin libopenvino-intel-npu-plugin libopenvino-ir-frontend libopenvino-onnx-frontend libopenvino-paddle-frontend libopenvino-python libopenvino-pytorch-frontend libopenvino-tensorflow-frontend libopenvino-tensorflow-lite-frontend openvino
+conda install libopenvino libopenvino-arm-cpu-plugin libopenvino-auto-batch-plugin libopenvino-auto-plugin libopenvino-dev libopenvino-hetero-plugin libopenvino-intel-cpu-plugin libopenvino-intel-gpu-plugin libopenvino-intel-npu-plugin libopenvino-ir-frontend libopenvino-npu-compiler-support libopenvino-onnx-frontend libopenvino-paddle-frontend libopenvino-python libopenvino-pytorch-frontend libopenvino-tensorflow-frontend libopenvino-tensorflow-lite-frontend openvino
 ```
 
 or with `mamba`:
 
 ```
-mamba install libopenvino libopenvino-arm-cpu-plugin libopenvino-auto-batch-plugin libopenvino-auto-plugin libopenvino-dev libopenvino-hetero-plugin libopenvino-intel-cpu-plugin libopenvino-intel-gpu-plugin libopenvino-intel-npu-plugin libopenvino-ir-frontend libopenvino-onnx-frontend libopenvino-paddle-frontend libopenvino-python libopenvino-pytorch-frontend libopenvino-tensorflow-frontend libopenvino-tensorflow-lite-frontend openvino
+mamba install libopenvino libopenvino-arm-cpu-plugin libopenvino-auto-batch-plugin libopenvino-auto-plugin libopenvino-dev libopenvino-hetero-plugin libopenvino-intel-cpu-plugin libopenvino-intel-gpu-plugin libopenvino-intel-npu-plugin libopenvino-ir-frontend libopenvino-npu-compiler-support libopenvino-onnx-frontend libopenvino-paddle-frontend libopenvino-python libopenvino-pytorch-frontend libopenvino-tensorflow-frontend libopenvino-tensorflow-lite-frontend openvino
 ```
 
 It is possible to list all of the versions of `libopenvino` available on your platform with `conda`:
