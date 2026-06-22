@@ -2,9 +2,6 @@ bot:
   version_updates:
     exclude:
     - '20250505181427'
-build_platform:
-  linux_aarch64: linux_aarch64
-  osx_arm64: osx_64
 channel_priority: strict
 conda_build:
   error_overlinking: true
@@ -20,6 +17,7 @@ workflow_settings:
 github_actions:
   timeout_minutes: 720
 provider:
-  linux_aarch64: github_actions
+  linux_aarch64: default
+  osx_arm64: default
   win_64: github_actions
 test: native_and_emulated
