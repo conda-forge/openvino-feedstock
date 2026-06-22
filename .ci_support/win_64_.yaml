@@ -11,11 +11,11 @@ cxx_compiler:
 flatbuffers:
 - 25.9.23
 github_actions_labels:
-- self-hosted@cirun-azure-windows-2xlarge
+- blacksmith-8vcpu-windows-2025
 libabseil:
-- '20260107'
+- '20260526'
 libprotobuf:
-- 6.33.5
+- 7.35.1
 pin_run_as_build:
   python:
     min_pin: x.x

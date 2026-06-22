@@ -35,7 +35,7 @@ jobs:
             runs_on: ['ubuntu-latest']
             tools_install_dir: ~/miniforge3
           - CONFIG: linux_aarch64_
-            DOCKER_IMAGE: quay.io/condaforge/linux-anvil-x86_64:alma9
+            DOCKER_IMAGE: quay.io/condaforge/linux-anvil-aarch64:alma9
             STORE_BUILD_ARTIFACTS: False
             UPLOAD_PACKAGES: True
             build_workspace_dir: build_artifacts
@@ -44,7 +44,7 @@ jobs:
             os: ubuntu
             pagefile_size: 0
             resize_partitions: False
-            runs_on: ['ubuntu-latest']
+            runs_on: ['ubuntu-24.04-arm']
             tools_install_dir: ~/miniforge3
           - CONFIG: win_64_
             STORE_BUILD_ARTIFACTS: False
@@ -54,8 +54,8 @@ jobs:
             free_disk_space: skip
             os: windows
             pagefile_size: 0
-            resize_partitions: True
-            runs_on: ['cirun-azure-windows-2xlarge--${{ github.run_id }}-win_64_', 'windows', 'x64', 'self-hosted']
+            resize_partitions: False
+            runs_on: ['blacksmith-8vcpu-windows-2025']
             tools_install_dir: C:\Miniforge
     steps:
 
@@ -130,31 +130,6 @@ jobs:
           export IS_PR_BUILD="False"
         fi
         ./.scripts/run_osx_build.sh
-
-    # https://github.com/aktech/cirun-azure-resize-disk
-    - name: Resize all partitions to maximum
-      if: matrix.os == 'windows' && matrix.resize_partitions
-      shell: pwsh
-      run: |
-        Write-Output "=== RESIZING PARTITIONS ==="
-        $disks = Get-Disk | Where-Object PartitionStyle -ne 'RAW'
-
-        foreach ($disk in $disks) {
-            $partitions = Get-Partition -DiskNumber $disk.Number
-            foreach ($partition in $partitions) {
-                try {
-                    $size = Get-PartitionSupportedSize -DiskNumber $disk.Number -PartitionNumber $partition.PartitionNumber
-                    if ($partition.Size -lt $size.SizeMax) {
-                        Write-Output "Resizing Disk $($disk.Number) Partition $($partition.PartitionNumber) from $($partition.Size) to $($size.SizeMax)"
-                        Resize-Partition -DiskNumber $disk.Number -PartitionNumber $partition.PartitionNumber -Size $size.SizeMax -Verbose
-                    } else {
-                        Write-Output "Disk $($disk.Number) Partition $($partition.PartitionNumber) already at max size ($($partition.Size))"
-                    }
-                } catch {
-                    Write-Warning "Failed resizing Disk $($disk.Number) Partition $($partition.PartitionNumber): $_"
-                }
-            }
-        }
 
     - name: Build on windows
       id: build-windows
