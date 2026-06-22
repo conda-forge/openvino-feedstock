@@ -9,11 +9,6 @@ conda_forge_output_validation: true
 github:
   branch_name: main
   tooling_branch_name: main
-workflow_settings:
-  resize_partitions:
-    - provider: github_actions
-      os: win
-      value: true  
 github_actions:
   timeout_minutes: 720
 provider:
