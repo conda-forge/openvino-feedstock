@@ -1,5 +1,5 @@
-{% set version_postfix = "2026.2.1" %}
-{% set version = "2026.2.1" %}
+{% set version_postfix = "2026.3.0" %}
+{% set version = "2026.3.0" %}
 
 package:
   name: openvino-split
@@ -7,35 +7,34 @@ package:
 
 source:
   - url: https://github.com/openvinotoolkit/openvino/archive/refs/tags/{{ version }}.tar.gz
-    sha256: 9255a1cd87ad330242ed5063c2bcb2d04cc6897ab50b9fc95da5ac4a4625ae4d
+    sha256: 48d97d500916e8fd57972a9ed729584c6d73c286554486745fb786e4cf5cf5df
     patches:
       - patches/0001-Fix-compiling-Compute-Lib-with-scons-for-arm64.patch   # [aarch64]
       - patches/0002-don-t-prescribe-protobuf-major-version.patch
-  - url: https://github.com/ARM-software/ComputeLibrary/archive/refs/tags/v53.0.0.tar.gz  # [aarch64 or arm64]
-    sha256: 370c480385493c5be9c639dfcfabaa4bc8eac74fe21332905b1630a4c0cb3a87  # [aarch64 or arm64]
+  - url: https://github.com/ARM-software/ComputeLibrary/archive/7f8a8ab512ad8d1c1c207003ac5f96c4445da36f.tar.gz  # [aarch64 or arm64]
+    sha256: 040222d5e80191dc3c1f6c855b35638d9e0b547f6c1bf81b0618778c26d8307c  # [aarch64 or arm64]
     folder: src/plugins/intel_cpu/thirdparty/ComputeLibrary  # [aarch64 or arm64]
-  - url: https://github.com/openvinotoolkit/oneDNN/archive/87f65fdd1927b1d0cbdf0ea37728146abfbffb52.tar.gz
-    sha256: 2843f9d4e92a83d16d37a92dcc29b87732415f9cd9fd87769651aa67da197521
+  - url: https://github.com/openvinotoolkit/oneDNN/archive/f82d833de6f13fac4bb1926d521ca8fec4f4ae01.tar.gz
+    sha256: 119c80210ceec0ea2b2b1908b862ed9c3b4366e65d4e0bdea82142f14b7f6712
     folder: src/plugins/intel_cpu/thirdparty/onednn
-  - url: https://github.com/ARM-software/kleidiai/archive/7d82645ca2f3c3d58a5c0b1a96905e53916c8ff8.tar.gz
-    sha256: 7f6dc8992d229d5a0be8c2dec09011bab7c45201ed06ae60fbcd3c9343d09368
+  - url: https://github.com/ARM-software/kleidiai/archive/dc50c2e68d2eb28efe17c835c754f1d6421f30e8.tar.gz
+    sha256: e2032ce93f2cdd2cd7f698ba2a5f216a446a12a8c918d79e7e398476dba80c8b
     folder: src/plugins/intel_cpu/thirdparty/kleidiai
   - url: https://github.com/openvinotoolkit/mlas/archive/d1bc25ec4660cddd87804fcf03b2411b5dfb2e94.tar.gz
     sha256: 0a44fbfd4b13e8609d66ddac4b11a27c90c1074cde5244c91ad197901666004c
     folder: src/plugins/intel_cpu/thirdparty/mlas
-  - url: https://github.com/uxlfoundation/oneDNN/archive/20db47e2d3c4df1b66e93bed2e97d30da175512d.tar.gz  # [win64 or linux64]
-    sha256: 175fe1fd5b4fb53c5250b7e7c1bc815498365c6fb3ca198002cd045fee57747b  # [win64 or linux64]
+  - url: https://github.com/uxlfoundation/oneDNN/archive/babb7375ff500dd8ad77d26cbd2b044122b7a8b4.tar.gz  # [win64 or linux64]
+    sha256: d21d5e8757f4012c51a2e26ed47e15751217dfcee7327bbfbe909a446f126c4f  # [win64 or linux64]
     folder: src/plugins/intel_gpu/thirdparty/onednn_gpu  # [win64 or linux64]
   - url: https://github.com/intel/level-zero-npu-extensions/archive/f9ad3bf89c2418d714aef2e6b96a5aafb12a1971.tar.gz  # [linux64]
     sha256: 3255ea26d1d530a57a6558573cc233b717ecd34bf7adafd9401887ee4ddf5d6b  # [linux64]
     folder: src/plugins/intel_npu/thirdparty/level-zero-ext  # [linux64]
-  - url: https://github.com/onnx/onnx/archive/refs/tags/v1.18.0.tar.gz
-    sha256: b466af96fd8d9f485d1bb14f9bbdd2dfb8421bc5544583f014088fb941a1d21e
+  - url: https://github.com/onnx/onnx/archive/e709452ef2bbc1d113faf678c24e6d3467696e83.tar.gz
+    sha256: 3001af7fb316cefd02c3b586139167d43eb3cf79b78aed47645831593dfbd015
     folder: thirdparty/onnx/onnx
 
 build:
-  number: 0
-
+  number: 1
 
 requirements:
   build:
