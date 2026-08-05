@@ -15,11 +15,13 @@ cxx_compiler:
 cxx_compiler_version:
 - '14'
 docker_image:
-- quay.io/condaforge/linux-anvil-x86_64:alma9
+- quay.io/condaforge/linux-anvil-x86_64:alma10
 flatbuffers:
 - 25.9.23
 libabseil:
 - '20260526'
+libopenvino:
+- 2026.2.1
 libprotobuf:
 - 7.35.1
 pin_run_as_build:
