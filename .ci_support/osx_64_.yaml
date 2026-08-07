@@ -22,6 +22,8 @@ flatbuffers:
 - 25.9.23
 libabseil:
 - '20260526'
+libopenvino:
+- 2026.2.1
 libprotobuf:
 - 7.35.1
 macos_machine:
