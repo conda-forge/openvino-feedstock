@@ -11,6 +11,7 @@ source:
     patches:
       - patches/0001-Fix-compiling-Compute-Lib-with-scons-for-arm64.patch   # [aarch64]
       - patches/0002-don-t-prescribe-protobuf-major-version.patch
+      - patches/0003-Fix-NPU-Level-Zero-target-dependency.patch   # [linux64]
   - url: https://github.com/ARM-software/ComputeLibrary/archive/7f8a8ab512ad8d1c1c207003ac5f96c4445da36f.tar.gz  # [aarch64 or arm64]
     sha256: 040222d5e80191dc3c1f6c855b35638d9e0b547f6c1bf81b0618778c26d8307c  # [aarch64 or arm64]
     folder: src/plugins/intel_cpu/thirdparty/ComputeLibrary  # [aarch64 or arm64]
@@ -34,7 +35,7 @@ source:
     folder: thirdparty/onnx/onnx
 
 build:
-  number: 1
+  number: 0
 
 requirements:
   build:
