@@ -15,7 +15,7 @@ github_actions_labels:
 libabseil:
 - '20260526'
 libopenvino:
-- 2026.2.1
+- 2026.3.0
 libprotobuf:
 - 7.35.1
 pin_run_as_build:
