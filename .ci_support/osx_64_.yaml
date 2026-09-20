@@ -23,7 +23,7 @@ flatbuffers:
 libabseil:
 - '20260526'
 libopenvino:
-- 2026.3.0
+- 2026.3.1
 libprotobuf:
 - 7.35.1
 macos_machine:
@@ -35,7 +35,6 @@ pin_run_as_build:
 pugixml:
 - '1.15'
 python:
-- 3.10.* *_cpython
 - 3.11.* *_cpython
 - 3.12.* *_cpython
 - 3.13.* *_cp313
