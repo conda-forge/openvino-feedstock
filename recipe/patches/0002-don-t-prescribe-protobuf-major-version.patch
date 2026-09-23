@@ -1,22 +1,16 @@
-From 1509896dfd838ea24ff1051c132d17607850940b Mon Sep 17 00:00:00 2001
-From: "H. Vetinari" <h.vetinari@gmx.com>
-Date: Wed, 16 Jul 2025 18:51:08 +1100
-Subject: [PATCH 2/3] don't prescribe protobuf major version
-
----
- thirdparty/dependencies.cmake | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
 diff --git a/thirdparty/dependencies.cmake b/thirdparty/dependencies.cmake
-index 371ea475b1..185963233f 100644
+index 457f9300d2..9fb9b6dc49 100644
 --- a/thirdparty/dependencies.cmake
 +++ b/thirdparty/dependencies.cmake
-@@ -359,7 +359,7 @@ if(ENABLE_OV_PADDLE_FRONTEND OR ENABLE_OV_ONNX_FRONTEND OR ENABLE_OV_TF_FRONTEND
+@@ -376,9 +376,9 @@ if(ENABLE_OV_PADDLE_FRONTEND OR ENABLE_OV_ONNX_FRONTEND OR ENABLE_OV_TF_FRONTEND
          # try to find newer version first (major is changed)
          # see https://protobuf.dev/support/version-support/ and
          # https://github.com/protocolbuffers/protobuf/commit/d61f75ff6db36b4f9c0765f131f8edc2f86310fa
 -        find_package(Protobuf 5.26.0 QUIET CONFIG)
 +        find_package(Protobuf QUIET CONFIG)
          if(NOT Protobuf_FOUND)
-             find_package(Protobuf 4.22.0 QUIET CONFIG)
+-            find_package(Protobuf 5.26.0 QUIET CONFIG)
++            find_package(Protobuf QUIET CONFIG)
          endif()
+         if(Protobuf_FOUND)
+             # protobuf was found via CONFIG mode, let's save it for later usage in OpenVINOConfig.cmake static build

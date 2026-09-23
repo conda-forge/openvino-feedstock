@@ -1,5 +1,5 @@
-{% set version_postfix = "2026.3.1" %}
-{% set version = "2026.3.1" %}
+{% set version_postfix = "2026.4.0" %}
+{% set version = "2026.4.0" %}
 
 package:
   name: openvino-split
@@ -7,16 +7,17 @@ package:
 
 source:
   - url: https://github.com/openvinotoolkit/openvino/archive/refs/tags/{{ version }}.tar.gz
-    sha256: 06128c315f2d81a6d9d390e4e505748eb32f58bc8e717e32143d228546668505
+    sha256: ff816f55e591ded0b60a748405010a8507291ee2b16ef2caf4c4ff662c4d4b6d
     patches:
       - patches/0001-Fix-compiling-Compute-Lib-with-scons-for-arm64.patch   # [aarch64]
       - patches/0002-don-t-prescribe-protobuf-major-version.patch
       - patches/0003-Fix-NPU-Level-Zero-target-dependency.patch   # [linux64]
+      - patches/0004-fix-aarch64-autovec-preference.patch  # [aarch64]
   - url: https://github.com/ARM-software/ComputeLibrary/archive/7f8a8ab512ad8d1c1c207003ac5f96c4445da36f.tar.gz  # [aarch64 or arm64]
     sha256: 040222d5e80191dc3c1f6c855b35638d9e0b547f6c1bf81b0618778c26d8307c  # [aarch64 or arm64]
     folder: src/plugins/intel_cpu/thirdparty/ComputeLibrary  # [aarch64 or arm64]
-  - url: https://github.com/openvinotoolkit/oneDNN/archive/f82d833de6f13fac4bb1926d521ca8fec4f4ae01.tar.gz
-    sha256: 119c80210ceec0ea2b2b1908b862ed9c3b4366e65d4e0bdea82142f14b7f6712
+  - url: https://github.com/openvinotoolkit/oneDNN/archive/1289c3b65dd6a119a5ed12a816517d9c3a21d81b.tar.gz
+    sha256: 726a93992e65152f338fa7bce536fa9ed6c9f395de80d1e55f01ecc3fece7f11
     folder: src/plugins/intel_cpu/thirdparty/onednn
   - url: https://github.com/ARM-software/kleidiai/archive/dc50c2e68d2eb28efe17c835c754f1d6421f30e8.tar.gz
     sha256: e2032ce93f2cdd2cd7f698ba2a5f216a446a12a8c918d79e7e398476dba80c8b
@@ -24,14 +25,14 @@ source:
   - url: https://github.com/openvinotoolkit/mlas/archive/d1bc25ec4660cddd87804fcf03b2411b5dfb2e94.tar.gz
     sha256: 0a44fbfd4b13e8609d66ddac4b11a27c90c1074cde5244c91ad197901666004c
     folder: src/plugins/intel_cpu/thirdparty/mlas
-  - url: https://github.com/uxlfoundation/oneDNN/archive/babb7375ff500dd8ad77d26cbd2b044122b7a8b4.tar.gz  # [win64 or linux64]
-    sha256: d21d5e8757f4012c51a2e26ed47e15751217dfcee7327bbfbe909a446f126c4f  # [win64 or linux64]
+  - url: https://github.com/uxlfoundation/oneDNN/archive/a3d459721b72c3a9d2685b46c03dafee7af0f25c.tar.gz  # [win64 or linux64]
+    sha256: cf6b29b5b41c8f2de1a05c3dd0013c4ee773724b0d20d6fa7dbb9b332e698180  # [win64 or linux64]
     folder: src/plugins/intel_gpu/thirdparty/onednn_gpu  # [win64 or linux64]
-  - url: https://github.com/intel/level-zero-npu-extensions/archive/f9ad3bf89c2418d714aef2e6b96a5aafb12a1971.tar.gz  # [linux64]
-    sha256: 3255ea26d1d530a57a6558573cc233b717ecd34bf7adafd9401887ee4ddf5d6b  # [linux64]
+  - url: https://github.com/intel/level-zero-npu-extensions/archive/b11dc98b48f9f0dbb8c3b44f73b42f295a32097f.tar.gz  # [linux64]
+    sha256: efcd63604c4b837d69e810affe1c70c7438af62ae39e7f1e89714009d4c7e98e  # [linux64]
     folder: src/plugins/intel_npu/thirdparty/level-zero-ext  # [linux64]
-  - url: https://github.com/onnx/onnx/archive/e709452ef2bbc1d113faf678c24e6d3467696e83.tar.gz
-    sha256: 3001af7fb316cefd02c3b586139167d43eb3cf79b78aed47645831593dfbd015
+  - url: https://github.com/onnx/onnx/archive/2bb50465112feca9003e1ed654d77f01ff1415ca.tar.gz
+    sha256: fc8cd173cd3a942eb30cb04a95b10d91d9d7d86f6d34222cb931021129075d03
     folder: thirdparty/onnx/onnx
 
 build:
@@ -163,6 +164,37 @@ outputs:
         - test -f $PREFIX/lib/libopenvino_onnx_frontend.so.{{ version_postfix }}     # [linux]
         - test -f $PREFIX/lib/libopenvino_onnx_frontend.{{ version_postfix }}.dylib  # [osx]
         - if not exist %LIBRARY_BIN%\openvino_onnx_frontend.dll exit 1               # [win]
+
+  - name: libopenvino-gguf-frontend
+    version: {{ version }}
+    script: install/install_gguf.sh
+    about:
+      summary: OpenVINO GGUF Frontend
+      license: Apache-2.0
+      license_file:
+        - LICENSE
+        - licensing/third-party-programs.txt
+        - licensing/onednn_third-party-programs.txt
+        - licensing/runtime-third-party-programs.txt
+    build:
+      run_exports:
+        - {{ pin_subpackage('libopenvino-gguf-frontend', max_pin='x.x.x') }}
+    requirements:
+      build:
+        - {{ compiler('cxx') }}
+        - {{ compiler('c') }}
+        - {{ stdlib("c") }}
+        - cmake
+      host:
+        - tbb-devel
+        - {{ pin_subpackage('libopenvino', exact=True) }}
+      run:
+        - {{ pin_subpackage('libopenvino', exact=True) }}
+    test:
+      commands:
+        - test -f $PREFIX/lib/libopenvino_gguf_frontend.so.{{ version_postfix }}     # [linux]
+        - test -f $PREFIX/lib/libopenvino_gguf_frontend.{{ version_postfix }}.dylib  # [osx]
+        - if not exist %LIBRARY_BIN%\openvino_gguf_frontend.dll exit 1               # [win]
 
   - name: libopenvino-paddle-frontend
     version: {{ version }}
@@ -609,6 +641,7 @@ outputs:
         - {{ pin_subpackage('libopenvino-auto-batch-plugin', max_pin='x.x.x') }}
         - {{ pin_subpackage('libopenvino-ir-frontend', max_pin='x.x.x') }}
         - {{ pin_subpackage('libopenvino-onnx-frontend', max_pin='x.x.x') }}
+        - {{ pin_subpackage('libopenvino-gguf-frontend', max_pin='x.x.x') }}
         - {{ pin_subpackage('libopenvino-paddle-frontend', max_pin='x.x.x') }}
         - {{ pin_subpackage('libopenvino-pytorch-frontend', max_pin='x.x.x') }}
         - {{ pin_subpackage('libopenvino-tensorflow-frontend', max_pin='x.x.x') }}
@@ -624,6 +657,7 @@ outputs:
       run:
         # the subpackages below can be linked with
         - {{ pin_subpackage('libopenvino-onnx-frontend', exact=True) }}
+        - {{ pin_subpackage('libopenvino-gguf-frontend', exact=True) }}
         - {{ pin_subpackage('libopenvino-paddle-frontend', exact=True) }}
         - {{ pin_subpackage('libopenvino-pytorch-frontend', exact=True) }}
         - {{ pin_subpackage('libopenvino-tensorflow-frontend', exact=True) }}
@@ -661,6 +695,7 @@ outputs:
         - test -f $PREFIX/lib/libopenvino_paddle_frontend${SHLIB_EXT}               # [unix]
         - test -f $PREFIX/lib/libopenvino_pytorch_frontend${SHLIB_EXT}              # [unix]
         - test -f $PREFIX/lib/libopenvino_onnx_frontend${SHLIB_EXT}                 # [unix]
+        - test -f $PREFIX/lib/libopenvino_gguf_frontend${SHLIB_EXT}                 # [unix]
         - test -f $PREFIX/lib/libopenvino_tensorflow_frontend${SHLIB_EXT}           # [unix]
         - test -f $PREFIX/lib/libopenvino_tensorflow_lite_frontend${SHLIB_EXT}      # [unix]
 
@@ -669,6 +704,7 @@ outputs:
         - if not exist %LIBRARY_BIN%\openvino_paddle_frontend.dll exit 1            # [win]
         - if not exist %LIBRARY_BIN%\openvino_pytorch_frontend.dll exit 1           # [win]
         - if not exist %LIBRARY_BIN%\openvino_onnx_frontend.dll exit 1              # [win]
+        - if not exist %LIBRARY_BIN%\openvino_gguf_frontend.dll exit 1              # [win]
         - if not exist %LIBRARY_BIN%\openvino_tensorflow_frontend.dll exit 1        # [win]
         - if not exist %LIBRARY_BIN%\openvino_tensorflow_lite_frontend.dll exit 1   # [win]
 
@@ -704,6 +740,7 @@ outputs:
         - {{ pin_subpackage('libopenvino-auto-batch-plugin', max_pin='x.x.x') }}
         - {{ pin_subpackage('libopenvino-ir-frontend', max_pin='x.x.x') }}
         - {{ pin_subpackage('libopenvino-onnx-frontend', max_pin='x.x.x') }}
+        - {{ pin_subpackage('libopenvino-gguf-frontend', max_pin='x.x.x') }}
         - {{ pin_subpackage('libopenvino-paddle-frontend', max_pin='x.x.x') }}
         - {{ pin_subpackage('libopenvino-pytorch-frontend', max_pin='x.x.x') }}
         - {{ pin_subpackage('libopenvino-tensorflow-frontend', max_pin='x.x.x') }}
