@@ -33,7 +33,16 @@ file(GLOB_RECURSE XML_SRC CONFIGURE_DEPENDS ${OpenVINO_SOURCE_DIR}/src/core/xml_
 # here with default visibility so those symbols are exported by this support lib.
 set(UTIL_XML_SRC ${OpenVINO_SOURCE_DIR}/src/common/util/src/xml_parse_utils.cpp)
 
-add_library(${SUPPORT_TARGET} SHARED ${AL_SRC} ${OPS_SRC} ${LOG_SRC} ${XML_SRC} ${UTIL_XML_SRC})
+# The NPU compiler also calls ov::util::load_shared_object/get_symbol (extension
+# library loading) and the openvino::itt::internal task hooks, which live in the
+# same hidden openvino_util / itt components. itt.cpp registers a shutdown
+# callback, so shutdown.cpp comes along with it.
+set(UTIL_EXTRA_SRC
+    ${OpenVINO_SOURCE_DIR}/src/common/util/src/os/lin/lin_shared_object_loader.cpp
+    ${OpenVINO_SOURCE_DIR}/src/common/itt/src/itt.cpp
+    ${OpenVINO_SOURCE_DIR}/src/common/shutdown/shutdown.cpp)
+
+add_library(${SUPPORT_TARGET} SHARED ${AL_SRC} ${OPS_SRC} ${LOG_SRC} ${XML_SRC} ${UTIL_XML_SRC} ${UTIL_EXTRA_SRC})
 
 set_target_properties(${SUPPORT_TARGET} PROPERTIES
     CXX_VISIBILITY_PRESET default
@@ -46,7 +55,9 @@ target_include_directories(${SUPPORT_TARGET} PRIVATE
     $<TARGET_PROPERTY:openvino::npu_ops,INTERFACE_INCLUDE_DIRECTORIES>
     $<TARGET_PROPERTY:openvino::xml_util,INTERFACE_INCLUDE_DIRECTORIES>
     $<TARGET_PROPERTY:openvino::npu_logger_utils,INTERFACE_INCLUDE_DIRECTORIES>
-    ${OpenVINO_SOURCE_DIR}/src/common/util/include)
+    ${OpenVINO_SOURCE_DIR}/src/common/util/include
+    ${OpenVINO_SOURCE_DIR}/src/common/itt/include
+    ${OpenVINO_SOURCE_DIR}/src/common/shutdown/include)
 
 target_link_libraries(${SUPPORT_TARGET} PRIVATE
     openvino::runtime

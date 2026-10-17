@@ -490,6 +490,9 @@ outputs:
         # compiler's deserializers need (defined in common/util/xml_parse_utils.cpp)
         - test -n "$(nm -D -C $PREFIX/lib/libopenvino_npu_compiler_support.so | grep ' T ' | grep 'pugixml::get_uint64_attr')"  # [linux64]
         - test -n "$(nm -D -C $PREFIX/lib/libopenvino_npu_compiler_support.so | grep ' T ' | grep 'pugixml::get_str_attr')"     # [linux64]
+        - test -n "$(nm -D -C $PREFIX/lib/libopenvino_npu_compiler_support.so | grep ' T ' | grep 'ov::util::load_shared_object')"  # [linux64]
+        - test -n "$(nm -D -C $PREFIX/lib/libopenvino_npu_compiler_support.so | grep ' T ' | grep 'ov::util::get_symbol')"          # [linux64]
+        - test -n "$(nm -D -C $PREFIX/lib/libopenvino_npu_compiler_support.so | grep ' T ' | grep 'openvino::itt::internal::taskBegin')"  # [linux64]
         # ... and keeps the absorbed internal reference impls hidden (no static lib leaked)
         - test -z "$(nm -D -C $PREFIX/lib/libopenvino_npu_compiler_support.so | grep ' T ' | grep 'ov::reference')"  # [linux64]
 
