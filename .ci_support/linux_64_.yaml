@@ -1,3 +1,5 @@
+DOCKER_PLATFORM:
+- linux/amd64
 c_compiler:
 - gcc
 c_compiler_version:
@@ -19,9 +21,9 @@ docker_image:
 flatbuffers:
 - 25.9.23
 libabseil:
-- '20260526'
+- '20260817'
 libopenvino:
-- 2026.4.0
+- 2026.4.1
 libprotobuf:
 - 7.35.1
 pin_run_as_build:
